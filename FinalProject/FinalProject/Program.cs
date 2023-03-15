@@ -36,7 +36,7 @@ namespace FinalProject
 
                 case "MSSQL":
                     connection = db.ConnectionString;
-                    //builder.Services.AddDbContext<Context>(options => options.UseSqlServer(connection));
+                    builder.Services.AddDbContext<Context>(options => options.UseSqlServer(connection));
                     break;
 
                 default:
