@@ -33,6 +33,10 @@ namespace FinalProject
                     connection = db.ConnectionString;
                     builder.Services.AddDbContext<Context>(options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 11))));
                     break;
+                case "MSSQL":
+                    connection = db.ConnectionString;
+                    //builder.Services.AddDbContext<Context>(options => options.UseSqlServer(connection));
+                    break;
                 default:
                     break;
             }
