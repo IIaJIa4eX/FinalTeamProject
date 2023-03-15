@@ -1,5 +1,8 @@
 using DatabaseConnector;
+using DatabaseConnector.Interfaces;
+using DatabaseConnector.Migrations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System.Text.Json;
 
 namespace FinalProject
@@ -43,11 +46,13 @@ namespace FinalProject
                     break;
             }
 
+            builder.Services.AddScoped<EFGenericRepository<User>>();
+            builder.Services.AddScoped<EFGenericRepository<Comment>>();
+            builder.Services.AddScoped<EFGenericRepository<Post>>();
+            builder.Services.AddScoped<EFGenericRepository<Issue>>();
+            builder.Services.AddScoped<EFGenericRepository<SessionInfo>>();
 
-
-
-
-
+            
 
             var app = builder.Build();
 
@@ -61,11 +66,11 @@ namespace FinalProject
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.MapGet("/api/users", async (Context db) => await db.Users.ToListAsync());
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-
+            
             app.Run();
         }
     }
