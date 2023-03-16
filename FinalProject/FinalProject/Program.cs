@@ -89,7 +89,7 @@ public class Program
                 break;
         }
 
-        builder.Services.AddScoped<EFGenericRepository<User>>();
+        builder.Services.AddScoped<EFGenericRepository<FinalProject.Data.User>>();
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();
