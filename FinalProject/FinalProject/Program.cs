@@ -65,6 +65,7 @@ public class Program
   "ConnectionString": "Server=localhost;Port=3306;Database=FinalProjectDatabase;Uid=bzic;Pwd=393318156a404056792b;"
 }
 */
+
             }
         }
 
@@ -88,7 +89,7 @@ public class Program
                 break;
         }
 
-        builder.Services.AddScoped<EFGenericRepository<User>>();
+        builder.Services.AddScoped<EFGenericRepository<FinalProject.Data.User>>();
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();
