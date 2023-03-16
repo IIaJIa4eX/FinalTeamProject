@@ -38,22 +38,6 @@ public class Program
 }
 */
 
-                case "Postgre":
-                    connection = db.ConnectionString;
-                    builder.Services.AddDbContext<Context>(options => options.UseNpgsql(connection));
-                    break;
-                case "MySQL":
-                    connection = db.ConnectionString;
-                    builder.Services.AddDbContext<Context>(options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 11))));
-                    break;
-
-                case "MSSQL":
-                    connection = db.ConnectionString;
-                    builder.Services.AddDbContext<Context>(options => options.UseSqlServer(connection));
-                    break;
-
-                default:
-                    break;
 
             }
         }
