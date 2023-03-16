@@ -1,6 +1,4 @@
 using FinalProject.Data;
-using FinalProject.Services;
-using FinalProject.Services.Impl;
 using Microsoft.AspNetCore.HttpLogging;
 using NLog.Web;
 using DatabaseConnector;
