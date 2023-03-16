@@ -37,24 +37,6 @@ public class Program
   "ConnectionString": "Server=localhost;Port=3306;Database=FinalProjectDatabase;Uid=bzic;Pwd=393318156a404056792b;"
 }
 */
-
-                case "Postgre":
-                    connection = db.ConnectionString;
-                    builder.Services.AddDbContext<Context>(options => options.UseNpgsql(connection));
-                    break;
-                case "MySQL":
-                    connection = db.ConnectionString;
-                    builder.Services.AddDbContext<Context>(options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 11))));
-                    break;
-
-                case "MSSQL":
-                    connection = db.ConnectionString;
-                    builder.Services.AddDbContext<Context>(options => options.UseSqlServer(connection));
-                    break;
-
-                default:
-                    break;
-
             }
         }
 
