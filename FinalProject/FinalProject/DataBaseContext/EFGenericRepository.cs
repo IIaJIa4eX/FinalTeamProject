@@ -1,8 +1,10 @@
 ﻿using DatabaseConnector.Interfaces;
+using FinalProject.Interfaces;
 using Microsoft.EntityFrameworkCore;
 //using Microsoft.EntityFrameworkCore.Extensions;
 
-namespace DatabaseConnector;
+namespace FinalProject.DataBaseContext;
+
 
 public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
 {
