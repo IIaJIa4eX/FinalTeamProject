@@ -15,7 +15,7 @@ namespace FinalProject.Data
         public Guid PostId { get; set; }
 
         [ForeignKey(nameof(User))]
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
 
         [Column]
         [StringLength(255)]

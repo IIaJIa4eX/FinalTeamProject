@@ -44,10 +44,10 @@ namespace FinalProject.Services.Impl
                         cards.Add(new Posts
                         {
                             PostId = new Guid(reader["PostId"].ToString()),
-                            CardNo = reader["CardNo"]?.ToString(),
-                            Name = reader["Name"]?.ToString(),
+                            ContentText = reader["ContentText"]?.ToString(),
+                            Rating = reader["Rating"]?.ToString(),
                             CVV2 = reader["CVV2"]?.ToString(),
-                            ExpDate = Convert.ToDateTime(reader["ExpDate"])
+                            CreationDate = Convert.ToDateTime(reader["ExpDate"])
                         });
                     }
                 }

@@ -1,4 +1,5 @@
-using FinalProject.Data;
+ using FinalProject.Data;
+using FinalProject.Models;
 using FinalProject.Services;
 using FinalProject.Services.Impl;
 using Microsoft.AspNetCore.HttpLogging;
@@ -12,6 +13,10 @@ namespace FinalProject
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.Configure<DatabaseOptions>(options =>
+            {
+                builder.Configuration.GetSection("Settings:DatabaseOptions:").Bind(options);
+            });
             builder.Services.AddDbContext<FinalProjectDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration["Settings:DatabaseOptions:ConnectionString"]);
