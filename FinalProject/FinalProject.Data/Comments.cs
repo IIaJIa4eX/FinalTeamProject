@@ -12,7 +12,7 @@ namespace FinalProject.Data
     public class Comments
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CommentId { get; set; }
+        public Guid CommentId { get; set; }
 
         [ForeignKey(nameof(User))]
         public int UserId { get; set; }

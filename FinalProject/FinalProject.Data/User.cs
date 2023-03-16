@@ -12,7 +12,7 @@ namespace FinalProject.Data
     public class User
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
 
         [Column]
         [StringLength(255)]

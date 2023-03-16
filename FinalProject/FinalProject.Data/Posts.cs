@@ -12,7 +12,7 @@ namespace FinalProject.Data
     public class Posts
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int PostId { get; set; }
+        public Guid PostId { get; set; }
 
         [ForeignKey(nameof(User))]
         public int UserId { get; set; }
