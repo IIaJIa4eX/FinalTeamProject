@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FinalProject.Data
 {
-    [Table("Comments")]
+    /*[Table("Comments")]
     public class Comments
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -31,5 +31,5 @@ namespace FinalProject.Data
         public DateTime CreationDate { get; set; }
 
         public virtual User Users { get; set; }
-    }
+    }*/
 }
