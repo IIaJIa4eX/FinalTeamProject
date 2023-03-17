@@ -1,4 +1,4 @@
-﻿{
+{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
@@ -10,13 +10,13 @@
   "profiles": {
     "FinalProject": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
       "launchBrowser": true,
+      "launchUrl": "http://localhost:5062/Home/Index",
       "applicationUrl": "http://localhost:5062",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "launchUrl": "http://localhost:5062/Home/Index"
+      "dotnetRunMessages": true
     },
     "IIS Express": {
       "commandName": "IISExpress",
