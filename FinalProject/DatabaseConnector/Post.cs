@@ -32,7 +32,7 @@ public class Post : IMessage
     public string? Category { get; set; }
 
     [ForeignKey(nameof(DatabaseConnector.Content))]
-    public Content? Content { get; set; }
+    public Content? IssueContent { get; set; }
 
     public virtual User? Users { get; set; }
 }

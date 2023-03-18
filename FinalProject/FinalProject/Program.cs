@@ -64,28 +64,8 @@ public class Program
 
             }
         }
-
-        switch (db.Name)
-        {
-            case "Postgre":
-                connection = db.ConnectionString;
-                builder.Services.AddDbContext<Context>(options => options.UseNpgsql(connection));
-                break;
-            case "MySQL":
-                connection = db.ConnectionString;
-                builder.Services.AddDbContext<Context>(options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 28))));
-                break;
-
-            case "MSSQL":
-                connection = db.ConnectionString;
-                builder.Services.AddDbContext<Context>(options => options.UseSqlServer(connection));
-                break;
-
-            default:
-                break;
-        }
-
-        
+        connection = db.ConnectionString;
+        builder.Services.AddDbContext<Context>(options => options.UseNpgsql(connection));
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();

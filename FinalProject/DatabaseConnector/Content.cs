@@ -19,4 +19,6 @@ public class Content
 
     [Column]
     public string? Text { get; set; }
+
+    public virtual Content? Contents { get; set; }
 }

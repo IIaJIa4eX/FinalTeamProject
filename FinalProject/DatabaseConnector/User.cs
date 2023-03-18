@@ -49,6 +49,6 @@ public class User
     [InverseProperty(nameof(Comment.Users))]
     public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
 
-    [InverseProperty(nameof(Issue.UserId))]
+    [InverseProperty(nameof(Issue.Users))]
     public virtual ICollection<Issue> Issues { get; set; } = new HashSet<Issue>();
 }

@@ -11,5 +11,5 @@ public interface IMessage
     public string? ContentText { get; }
     public bool IsVisible { get; }
     public DateTime CreationDate { get; }
-    public Content Content { get;  }
+    public Content IssueContent { get;  }
 }
