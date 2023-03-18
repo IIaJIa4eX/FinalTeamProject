@@ -1,6 +1,4 @@
 using FinalProject.Data;
-using FinalProject.Services;
-using FinalProject.Services.Impl;
 using Microsoft.AspNetCore.HttpLogging;
 using NLog.Web;
 using DatabaseConnector;
@@ -88,7 +86,7 @@ public class Program
                 break;
         }
 
-        builder.Services.AddScoped<EFGenericRepository<User>>();
+        builder.Services.AddScoped<EFGenericRepository<DatabaseConnector.User>>();
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();
