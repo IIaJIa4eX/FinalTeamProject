@@ -27,5 +27,5 @@ public class Issue : IMessage
     public short IssueType { get; set; }
 
     [ForeignKey(nameof(DatabaseConnector.Content))]
-    public Content Content { get; set; }
+    public Content IssueContent { get; set; }
 }

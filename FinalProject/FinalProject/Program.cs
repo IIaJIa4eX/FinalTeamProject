@@ -48,8 +48,6 @@ public class Program
             {
 
                 db = JsonSerializer.Deserialize<Database>(fs)!;
-                {
-                }
                 /*
                 {
                   "Name": "Postgre",
