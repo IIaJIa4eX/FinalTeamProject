@@ -8,17 +8,17 @@ using System.Threading.Tasks;
 
 namespace FinalProject.Data
 {
-    [Table("Comments")]
+    /*[Table("Comments")]
     public class Comments
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid CommentId { get; set; }
 
         [ForeignKey(nameof(User))]
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
 
         [ForeignKey(nameof(Posts))]
-        public int PostId { get; set; }
+        public Guid PostId { get; set; }
 
         [Column]
         [StringLength(255)]
@@ -31,5 +31,5 @@ namespace FinalProject.Data
         public DateTime CreationDate { get; set; }
 
         public virtual User Users { get; set; }
-    }
+    }*/
 }

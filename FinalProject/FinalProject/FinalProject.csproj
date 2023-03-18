@@ -26,8 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FinalProject.Data\FinalProject.Data.csproj" />
-    <ProjectReference Include="..\DatabaseConnector\DatabaseConnector.csproj" />
+        <ProjectReference Include="..\DatabaseConnector\DatabaseConnector.csproj" />
   </ItemGroup>
 
 </Project>
