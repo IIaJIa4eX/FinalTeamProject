@@ -14,7 +14,7 @@ public class Issue : IMessage
     public Guid UserId { get; set; }
 
     [ForeignKey(nameof(Content))]
-    public Guid Contents { get; set; }
+    public Guid ContentId { get; set; }
 
     [Column]
     [StringLength(255)]
@@ -29,8 +29,7 @@ public class Issue : IMessage
     [Column]
     public short IssueType { get; set; }
 
-    [ForeignKey(nameof(DatabaseConnector.Content))]
-    public Content? IssueContent { get; set; }
+    public virtual User User { get; set; } = null;
 
-    public virtual User? Users { get; set; }
+    public virtual Content Content { get; set; } = null;
 }
