@@ -44,11 +44,7 @@ public class Program
             // builder.Services.AddControllersWithViews();
 
         
-        if (!app.Environment.IsDevelopment())
-        {
-            app.UseExceptionHandler("/Home/Error");
-        }
-        app.UseStaticFiles();
+      
 
             using (var fs = new FileStream("dbcstring.json", FileMode.Open))
             {
