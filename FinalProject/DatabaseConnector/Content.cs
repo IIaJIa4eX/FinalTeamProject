@@ -16,3 +16,4 @@ public class Content
     public bool IsVisible { get; set; }
 
 }
+
