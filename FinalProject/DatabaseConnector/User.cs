@@ -43,12 +43,12 @@ public class User
     [Column]
     public bool IsBanned { get; set; }
 
-    [InverseProperty(nameof(Post.User))]
-    public virtual ICollection<Post> Posts { get; set; } = new HashSet<Post>();
+    [InverseProperty(nameof(DatabaseConnector.Post.Users))]
+    public virtual ICollection<Post> Post { get; set; } = new HashSet<Post>();
 
-    [InverseProperty(nameof(Comment.User))]
+    [InverseProperty(nameof(Comment.Users))]
     public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
 
-    [InverseProperty(nameof(Issue.User))]
+    [InverseProperty(nameof(Issue.UserId))]
     public virtual ICollection<Issue> Issues { get; set; } = new HashSet<Issue>();
 }

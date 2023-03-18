@@ -13,12 +13,13 @@ public class Post : IMessage
     [ForeignKey(nameof(User))]
     public Guid UserId { get; set; }
 
-    [ForeignKey(nameof(Content))]
-    public Guid ContentId { get; set; }
-
     [Column]
     [StringLength(255)]
     public int Rating { get; set; }
+
+    [Column]
+    [StringLength(255)]
+    public string? ContentText { get; set; }
 
     [Column]
     public DateTime CreationDate { get; set; }
@@ -30,10 +31,8 @@ public class Post : IMessage
     [StringLength(255)]
     public string? Category { get; set; }
 
-    public virtual User? User { get; set; } = null;
+    /*[ForeignKey(nameof(DatabaseConnector.Content))]
+    public Content Content { get; set; }*/
 
-    public virtual Content? Content { get; set; } = null;
-
-    [InverseProperty(nameof(Comment.Post))]
-    public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
+    public virtual User? Users { get; set; }
 }
