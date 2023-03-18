@@ -15,10 +15,5 @@ public class Context : DbContext
     public DbSet<SessionInfo> SessionInfo { get; set; }
     public DbSet<Content> Content { get; set; }
 
-    public Context(DbContextOptions<Context> options) : base(options)
-    {
-        //Database.EnsureDeleted();
-        //Database.EnsureCreated();
-        
-    }
+    public Context(DbContextOptions<Context> options) : base(options) { }
 }

@@ -1,12 +1,12 @@
-using Microsoft.AspNetCore.HttpLogging;
-using NLog.Web;
 using DatabaseConnector;
-using DatabaseConnector.Interfaces;
-//using DatabaseConnector.Migrations;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System.Text.Json;
 using FinalProject.DataBaseContext;
+using FinalProject.Models;
+using FinalProject.Services;
+using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using NLog.Web;
+using System.Text.Json;
 
 namespace FinalProject;
 
@@ -15,15 +15,11 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.Services.AddControllersWithViews();
         Database db = null;
         string connection = "";
         if (File.Exists("dbcstring.json"))
         {
-            //builder.Services.AddDbContext<FinalProjectDbContext>(options =>
-            //{
-            //    options.UseSqlServer(builder.Configuration["Settings:DatabaseOptions:ConnectionString"]);
-            //});
+
             builder.Services.AddHttpLogging(logging =>
             {
                 logging.LoggingFields = HttpLoggingFields.All | HttpLoggingFields.RequestQuery;
@@ -49,18 +45,7 @@ public class Program
                 db = JsonSerializer.Deserialize<Database>(fs)!;
                 {
                 }
-                /*
-                {
-                  "Name": "Postgre",
-                  "UserName": "Ivan",
-                  "ConnectionString": "Host=localhost;Port=5432;Database=TheForumDB;Username=postgres;Password=393318156a"
-                }
-                {
-                  "Name": "MySQL",
-                  "UserName": "Ivan",
-                  "ConnectionString": "Server=localhost;Port=3306;Database=FinalProjectDatabase;Uid=bzic;Pwd=393318156a404056792b;"
-                }
-                */
+
 
             }
         }
@@ -70,20 +55,26 @@ public class Program
         builder.Services.AddDbContext<Context>(options => options.UseNpgsql(connection));
 
 
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();
         builder.Services.AddScoped<EFGenericRepository<SessionInfo>>();
+        builder.Services.AddControllers();
 
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "FinalProject", Version = "v1" });
+        });
 
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())
-        {
-            //app.UseExceptionHandler("/Home/Error");
+            {
+                //app.UseExceptionHandler("/Home/Error");
             app.UseSwagger();
             app.UseSwaggerUI();
         }
@@ -93,6 +84,7 @@ public class Program
 
         app.UseAuthorization();
         app.UseHttpLogging();
+        app.MapControllers();
         app.MapGet("/users", async (Context db) => await db.Users.ToListAsync());
         app.MapControllerRoute(
             name: "default",

@@ -1,7 +1,5 @@
-﻿using DatabaseConnector.Interfaces;
-using FinalProject.Interfaces;
+﻿using FinalProject.Interfaces;
 using Microsoft.EntityFrameworkCore;
-//using Microsoft.EntityFrameworkCore.Extensions;
 
 namespace FinalProject.DataBaseContext;
 
