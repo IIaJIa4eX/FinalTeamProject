@@ -85,7 +85,7 @@ public class Program
                 break;
         }
 
-        
+        builder.Services.AddScoped<EFGenericRepository<User>>();
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();
@@ -96,9 +96,9 @@ public class Program
 
         var app = builder.Build();
 
-        if (!app.Environment.IsDevelopment())
+        if (app.Environment.IsDevelopment())
         {
-            app.UseExceptionHandler("/Home/Error");
+            //app.UseExceptionHandler("/Home/Error");
             app.UseSwagger();
             app.UseSwaggerUI();
         }

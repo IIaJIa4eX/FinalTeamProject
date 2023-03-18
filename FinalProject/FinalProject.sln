@@ -5,8 +5,6 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalProject", "FinalProject\FinalProject.csproj", "{AF148B7D-C32A-4589-92D5-0675F96DCF2A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinalProject.Data", "FinalProject.Data\FinalProject.Data.csproj", "{8FC0F9A9-ED62-4DCA-9E38-4FF1C6D8255D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseConnector", "DatabaseConnector\DatabaseConnector.csproj", "{9D4BF17A-35BA-48C1-99A2-19A440B47020}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{AF148B7D-C32A-4589-92D5-0675F96DCF2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF148B7D-C32A-4589-92D5-0675F96DCF2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF148B7D-C32A-4589-92D5-0675F96DCF2A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8FC0F9A9-ED62-4DCA-9E38-4FF1C6D8255D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8FC0F9A9-ED62-4DCA-9E38-4FF1C6D8255D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8FC0F9A9-ED62-4DCA-9E38-4FF1C6D8255D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8FC0F9A9-ED62-4DCA-9E38-4FF1C6D8255D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9D4BF17A-35BA-48C1-99A2-19A440B47020}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9D4BF17A-35BA-48C1-99A2-19A440B47020}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D4BF17A-35BA-48C1-99A2-19A440B47020}.Release|Any CPU.ActiveCfg = Release|Any CPU
