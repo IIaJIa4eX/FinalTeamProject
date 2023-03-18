@@ -1,7 +1,22 @@
-﻿namespace DatabaseConnector;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
+namespace DatabaseConnector;
+
+[Table("Content")]
 public class Content
 {
-    public int Id { get; set; }
-    public string Text { get; set; }
+    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Id { get; set; }
+
+    [Column]
+    public DateTime CreationDate { get; set; }
+
+    [Column]
+    public bool IsVisible { get; set; }
+
+    public virtual User? Users { get; set; }
+
+    /*[Column]
+    public string? Text { get; set; }*/
 }
