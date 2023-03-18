@@ -15,9 +15,4 @@ public class Content
     [Column]
     public bool IsVisible { get; set; }
 
-    [ForeignKey(nameof(User))]
-    public Guid UserId { get; set; }
-
-    [Column]
-    public string? Text { get; set; }
 }
