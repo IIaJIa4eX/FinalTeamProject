@@ -45,7 +45,7 @@ namespace FinalProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ContentId");
 
                     b.HasIndex("PostId");
 
@@ -98,7 +98,7 @@ namespace FinalProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Content");
+                    b.HasIndex("ContentId");
 
                     b.HasIndex("UserId");
 
@@ -133,7 +133,7 @@ namespace FinalProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ContentId");
 
                     b.HasIndex("UserId");
 
@@ -207,9 +207,9 @@ namespace FinalProject.Migrations
 
             modelBuilder.Entity("DatabaseConnector.Comment", b =>
                 {
-                    b.HasOne("DatabaseConnector.User", "Users")
-                        .WithMany("Comments")
-                        .HasForeignKey("UserId")
+                    b.HasOne("DatabaseConnector.Content", "Content")
+                        .WithMany()
+                        .HasForeignKey("ContentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -234,9 +234,9 @@ namespace FinalProject.Migrations
 
             modelBuilder.Entity("DatabaseConnector.Issue", b =>
                 {
-                    b.HasOne("DatabaseConnector.Content", "IssueContent")
+                    b.HasOne("DatabaseConnector.Content", "Content")
                         .WithMany()
-                        .HasForeignKey("Content")
+                        .HasForeignKey("ContentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -253,9 +253,9 @@ namespace FinalProject.Migrations
 
             modelBuilder.Entity("DatabaseConnector.Post", b =>
                 {
-                    b.HasOne("DatabaseConnector.User", "Users")
-                        .WithMany("Post")
-                        .HasForeignKey("UserId")
+                    b.HasOne("DatabaseConnector.Content", "Content")
+                        .WithMany()
+                        .HasForeignKey("ContentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
