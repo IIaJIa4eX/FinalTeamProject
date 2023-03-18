@@ -65,19 +65,12 @@ public class Program
             }
         }
 
-        switch (db.Name)
-        {
-            case "Postgre":
-                connection = db.ConnectionString;
-                builder.Services.AddDbContext<Context>(options => options.UseNpgsql(connection));
-                break;
-            
 
-            default:
-                break;
-        }
+        connection = db.ConnectionString;
+        builder.Services.AddDbContext<Context>(options => options.UseNpgsql(connection));
 
-        
+
+
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();
