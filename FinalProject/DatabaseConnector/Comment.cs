@@ -22,8 +22,10 @@ public class Comment : IMessage
     [Column]
     public DateTime CreationDate { get; set; }
 
-    /*[ForeignKey(nameof(DatabaseConnector.Content))]
-    public Content Content { get; set; }*/
+    [ForeignKey(nameof(DatabaseConnector.Content))]
+    public Content Content { get; set; }
 
     public virtual User? Users { get; set; }
+
+    public string? ContentText => throw new NotImplementedException();
 }
