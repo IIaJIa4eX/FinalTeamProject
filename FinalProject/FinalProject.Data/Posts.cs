@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace FinalProject.Data
 {
-    [Table("Posts")]
+    /*[Table("Posts")]
     public class Posts
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid PostId { get; set; }
 
         [ForeignKey(nameof(User))]
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
 
         [Column]
         [StringLength(255)]
@@ -36,5 +36,5 @@ namespace FinalProject.Data
         public string? Category { get; set; }
 
         public virtual User Users { get; set; }
-    }
+    }*/
 }
