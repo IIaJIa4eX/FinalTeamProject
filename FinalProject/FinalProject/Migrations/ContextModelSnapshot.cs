@@ -28,8 +28,9 @@ namespace FinalProject.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ContentId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ContentText")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp with time zone");
@@ -45,13 +46,9 @@ namespace FinalProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContentId");
-
-                    b.HasIndex("PostId");
-
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comment");
+                    b.ToTable("Comment", (string)null);
                 });
 
             modelBuilder.Entity("DatabaseConnector.Content", b =>
@@ -66,9 +63,15 @@ namespace FinalProject.Migrations
                     b.Property<bool>("IsVisible")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("Text")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Content");
+                    b.ToTable("Content", (string)null);
                 });
 
             modelBuilder.Entity("DatabaseConnector.Issue", b =>
@@ -77,7 +80,7 @@ namespace FinalProject.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("ContentId")
+                    b.Property<Guid>("Content")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ContentText")
@@ -98,11 +101,9 @@ namespace FinalProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContentId");
+                    b.HasIndex("Content");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Issue");
+                    b.ToTable("Issue", (string)null);
                 });
 
             modelBuilder.Entity("DatabaseConnector.Post", b =>
@@ -115,8 +116,9 @@ namespace FinalProject.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)");
 
-                    b.Property<Guid>("ContentId")
-                        .HasColumnType("uuid");
+                    b.Property<string>("ContentText")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<DateTime>("CreationDate")
                         .HasColumnType("timestamp with time zone");
@@ -133,11 +135,9 @@ namespace FinalProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ContentId");
-
                     b.HasIndex("UserId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("DatabaseConnector.SessionInfo", b =>
@@ -157,7 +157,7 @@ namespace FinalProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SessionInfo");
+                    b.ToTable("SessionInfo", (string)null);
                 });
 
             modelBuilder.Entity("DatabaseConnector.User", b =>
@@ -202,86 +202,47 @@ namespace FinalProject.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("DatabaseConnector.Comment", b =>
                 {
-                    b.HasOne("DatabaseConnector.Content", "Content")
-                        .WithMany()
-                        .HasForeignKey("ContentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DatabaseConnector.Post", "Post")
-                        .WithMany("Comments")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DatabaseConnector.User", "User")
+                    b.HasOne("DatabaseConnector.User", "Users")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Content");
-
-                    b.Navigation("Post");
-
-                    b.Navigation("User");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("DatabaseConnector.Issue", b =>
                 {
-                    b.HasOne("DatabaseConnector.Content", "Content")
+                    b.HasOne("DatabaseConnector.Content", "IssueContent")
                         .WithMany()
-                        .HasForeignKey("ContentId")
+                        .HasForeignKey("Content")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DatabaseConnector.User", "User")
-                        .WithMany("Issues")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Content");
-
-                    b.Navigation("User");
+                    b.Navigation("IssueContent");
                 });
 
             modelBuilder.Entity("DatabaseConnector.Post", b =>
                 {
-                    b.HasOne("DatabaseConnector.Content", "Content")
-                        .WithMany()
-                        .HasForeignKey("ContentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DatabaseConnector.User", "User")
-                        .WithMany("Posts")
+                    b.HasOne("DatabaseConnector.User", "Users")
+                        .WithMany("Post")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Content");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DatabaseConnector.Post", b =>
-                {
-                    b.Navigation("Comments");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("DatabaseConnector.User", b =>
                 {
                     b.Navigation("Comments");
 
-                    b.Navigation("Issues");
-
-                    b.Navigation("Posts");
+                    b.Navigation("Post");
                 });
 #pragma warning restore 612, 618
         }
