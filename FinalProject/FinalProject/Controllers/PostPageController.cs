@@ -13,12 +13,10 @@ public class PostPageController : ControllerBase
     //private readonly IPostsRepository _postsRepository;
     public PostPageController(ILogger<PostPageController> logger /*IPostsRepository postsRepository*/)
     {
-        private readonly ILogger<PostPageController> _logger;
-        public PostPageController(ILogger<PostPageController> logger)
-        {
-            _logger = logger;
-        }
+        _logger = logger;
+        
     }
+}
     //[HttpPost("create")]
     //[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     //public IActionResult Create([FromBody] CreatePostRequest request)
@@ -79,4 +77,3 @@ public class PostPageController : ControllerBase
     //        });
     //    }
     //}
-}

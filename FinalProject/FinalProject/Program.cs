@@ -44,8 +44,6 @@ public class Program
             // builder.Services.AddControllersWithViews();
 
         
-      
-
             using (var fs = new FileStream("dbcstring.json", FileMode.Open))
             {
 
@@ -67,8 +65,27 @@ public class Program
 
             }
         }
-        connection = db.ConnectionString;
-        builder.Services.AddDbContext<Context>(options => options.UseNpgsql(connection));
+
+        switch (db.Name)
+        {
+            case "Postgre":
+                connection = db.ConnectionString;
+                builder.Services.AddDbContext<Context>(options => options.UseNpgsql(connection));
+                break;
+            case "MySQL":
+                connection = db.ConnectionString;
+                builder.Services.AddDbContext<Context>(options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 28))));
+                break;
+
+            case "MSSQL":
+                connection = db.ConnectionString;
+                builder.Services.AddDbContext<Context>(options => options.UseSqlServer(connection));
+                break;
+
+            default:
+                break;
+        }
+
         builder.Services.AddScoped<EFGenericRepository<DatabaseConnector.User>>();
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
@@ -80,9 +97,9 @@ public class Program
 
         var app = builder.Build();
 
-        if (!app.Environment.IsDevelopment())
+        if (app.Environment.IsDevelopment())
         {
-            app.UseExceptionHandler("/Home/Error");
+            //app.UseExceptionHandler("/Home/Error");
             app.UseSwagger();
             app.UseSwaggerUI();
         }
