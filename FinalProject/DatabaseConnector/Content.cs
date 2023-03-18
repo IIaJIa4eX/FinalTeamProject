@@ -17,6 +17,6 @@ public class Content
 
     public virtual User? Users { get; set; }
 
-    /*[Column]
-    public string? Text { get; set; }*/
+    [Column]
+    public string? Text { get; set; }
 }
