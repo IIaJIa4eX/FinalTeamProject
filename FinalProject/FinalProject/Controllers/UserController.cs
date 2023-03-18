@@ -1,21 +1,16 @@
-﻿using FinalProject.Data;
-using FinalProject.Models.Requests;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Runtime.CompilerServices;
+﻿using Microsoft.AspNetCore.Mvc;
 
-namespace FinalProject.Controllers;
-
-[Route("api/[controller]")]
-[ApiController]
-public class UserController : ControllerBase
+namespace FinalProject.Controllers
 {
-    private readonly ILogger<UserController> _logger;
-    //private readonly IUserRepository _userRepository;
-    public UserController(ILogger<UserController> logger/*, IUserRepository userRepository*/)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
     {
-        //_userRepository = userRepository;
-        _logger = logger;
+        private readonly ILogger<UserController> _logger;
+        public UserController(ILogger<UserController> logger)
+        {
+            _logger = logger;
+        }
     }
     //[HttpPost("create")]
     //[ProducesResponseType(typeof(CreateUserResponse), StatusCodes.Status200OK)]

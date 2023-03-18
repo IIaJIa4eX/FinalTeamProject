@@ -1,5 +1,4 @@
-﻿using FinalProject.Data;
-using FinalProject.Models;
+﻿using FinalProject.Models;
 using FinalProject.Models.Requests;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +13,11 @@ public class PostPageController : ControllerBase
     //private readonly IPostsRepository _postsRepository;
     public PostPageController(ILogger<PostPageController> logger /*IPostsRepository postsRepository*/)
     {
-        _logger = logger;
-        //_postsRepository = postsRepository;
+        private readonly ILogger<PostPageController> _logger;
+        public PostPageController(ILogger<PostPageController> logger)
+        {
+            _logger = logger;
+        }
     }
     //[HttpPost("create")]
     //[ProducesResponseType(typeof(string), StatusCodes.Status200OK)]

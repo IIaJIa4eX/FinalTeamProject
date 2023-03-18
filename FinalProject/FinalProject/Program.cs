@@ -1,4 +1,3 @@
-using FinalProject.Data;
 using Microsoft.AspNetCore.HttpLogging;
 using NLog.Web;
 using DatabaseConnector;
@@ -16,10 +15,7 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
-        // Add services to the container.
         builder.Services.AddControllersWithViews();
-        
         Database db = null;
         string connection = "";
         if (File.Exists("dbcstring.json"))
@@ -42,27 +38,30 @@ public class Program
                 logging.ClearProviders();
                 logging.AddConsole();
             }).UseNLog(new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = true });
-            
-            
-            // builder.Services.AddControllersWithViews();
-            
 
-            using (var fs = new FileStream("dbcstring.json",FileMode.Open))
+
+            // builder.Services.AddControllersWithViews();
+
+
+            using (var fs = new FileStream("dbcstring.json", FileMode.Open))
             {
 
                 db = JsonSerializer.Deserialize<Database>(fs)!;
-/*
-{
-  "Name": "Postgre",
-  "UserName": "Ivan",
-  "ConnectionString": "Host=localhost;Port=5432;Database=TheForumDB;Username=postgres;Password=393318156a"
-}
-{
-  "Name": "MySQL",
-  "UserName": "Ivan",
-  "ConnectionString": "Server=localhost;Port=3306;Database=FinalProjectDatabase;Uid=bzic;Pwd=393318156a404056792b;"
-}
-*/
+                {
+                }
+                /*
+                {
+                  "Name": "Postgre",
+                  "UserName": "Ivan",
+                  "ConnectionString": "Host=localhost;Port=5432;Database=TheForumDB;Username=postgres;Password=393318156a"
+                }
+                {
+                  "Name": "MySQL",
+                  "UserName": "Ivan",
+                  "ConnectionString": "Server=localhost;Port=3306;Database=FinalProjectDatabase;Uid=bzic;Pwd=393318156a404056792b;"
+                }
+                */
+
             }
         }
 
@@ -93,7 +92,7 @@ public class Program
         builder.Services.AddScoped<EFGenericRepository<SessionInfo>>();
 
         builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
 
@@ -101,7 +100,7 @@ public class Program
         {
             app.UseExceptionHandler("/Home/Error");
             app.UseSwagger();
-                app.UseSwaggerUI();
+            app.UseSwaggerUI();
         }
         app.UseStaticFiles();
 
@@ -113,7 +112,7 @@ public class Program
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
-        
+
         app.Run();
     }
 }

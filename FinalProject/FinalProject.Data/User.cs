@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FinalProject.Data
 {
-    [Table("User")]
+    /*[Table("User")]
     public class User
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -49,5 +49,5 @@ namespace FinalProject.Data
 
         [InverseProperty(nameof(Comments.Users))]
         public virtual ICollection<Comments> Comment { get; set; } = new HashSet<Comments>();
-    }
+    }*/
 }
