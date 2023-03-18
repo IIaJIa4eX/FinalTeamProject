@@ -15,9 +15,7 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
         builder.Services.AddControllersWithViews();
-
         Database db = null;
         string connection = "";
         if (File.Exists("dbcstring.json"))
@@ -41,9 +39,10 @@ public class Program
                 logging.AddConsole();
             }).UseNLog(new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = true });
 
+
             // builder.Services.AddControllersWithViews();
 
-        
+
             using (var fs = new FileStream("dbcstring.json", FileMode.Open))
             {
 
@@ -86,7 +85,7 @@ public class Program
                 break;
         }
 
-        builder.Services.AddScoped<EFGenericRepository<DatabaseConnector.User>>();
+        
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();
@@ -109,12 +108,11 @@ public class Program
 
         app.UseAuthorization();
         app.UseHttpLogging();
-
         app.MapGet("/users", async (Context db) => await db.Users.ToListAsync());
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
-            
+
         app.Run();
     }
 }

@@ -16,16 +16,18 @@ public class Comment : IMessage
     [ForeignKey(nameof(Post))]
     public Guid PostId { get; set; }
 
+    [ForeignKey(nameof(Content))]
+    public Guid ContentId { get; set; }
+
     [Column]
     public bool IsVisible { get; set; }
 
     [Column]
     public DateTime CreationDate { get; set; }
 
-    [ForeignKey(nameof(DatabaseConnector.Content))]
-    public Content Content { get; set; }
+    public virtual User? User { get; set; } = null;
 
-    public virtual User? Users { get; set; }
+    public virtual Post? Post { get; set; } = null;
 
-    public string? ContentText => throw new NotImplementedException();
+    public virtual Content? Content { get; set; } = null;
 }
