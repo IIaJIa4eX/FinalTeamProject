@@ -17,10 +17,6 @@ public class Comment : IMessage
     public Guid PostId { get; set; }
 
     [Column]
-    [StringLength(255)]
-    public string? ContentText { get; set; } 
-
-    [Column]
     public bool IsVisible { get; set; }
 
     [Column]
