@@ -1,10 +1,9 @@
-﻿using DatabaseConnector;
-//using DatabaseConnector.Migrations;
+﻿//using DatabaseConnector.Migrations;
 using Microsoft.EntityFrameworkCore;
 //using Microsoft.EntityFrameworkCore.Extensions;
 using Pomelo.EntityFrameworkCore.MySql;
 
-namespace FinalProject.DataBaseContext;
+namespace DatabaseConnector.Old;
 
 public class Context : DbContext
 {
@@ -16,7 +15,7 @@ public class Context : DbContext
 
     public Context(DbContextOptions<Context> options) : base(options)
     {
-        //Database.EnsureDeleted();
         //Database.EnsureCreated();
+        //Initial2.Up();
     }
 }
