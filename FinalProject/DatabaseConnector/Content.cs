@@ -15,5 +15,8 @@ public class Content
     [Column]
     public bool IsVisible { get; set; }
 
-}
+    public virtual User? Users { get; set; }
 
+    /*[Column]
+    public string? Text { get; set; }*/
+}
