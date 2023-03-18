@@ -355,3 +355,5 @@ MigrationBackup/
 /FinalProject/FinalProject/dbcstring.json
 /FinalProject/FinalProject/dbcstringPostgre.json
 /FinalProject/FinalProject/dbcstring.json
+/FinalProject/FinalProject/Migrations/20230318115243_Initial.cs
+/FinalProject/FinalProject/Migrations/ContextModelSnapshot.cs
