@@ -1,0 +1,11 @@
+﻿.PostContainer {
+    display: grid;
+}
+
+.PostCard {
+    padding: auto;
+    margin: auto;
+    position: relative;
+    width: 65%;
+    height: 70%;
+}
