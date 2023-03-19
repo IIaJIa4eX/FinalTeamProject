@@ -15,7 +15,6 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.Services.AddControllersWithViews();
         Database db = null;
         string connection = "";
         if (File.Exists("dbcstring.json"))
@@ -94,6 +93,9 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        builder.Services.AddControllersWithViews();
+        builder.Services.AddRazorPages();
+
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())
@@ -107,11 +109,15 @@ public class Program
         app.UseRouting();
 
         app.UseAuthorization();
+        app.UseAuthentication();
         app.UseHttpLogging();
         app.MapGet("/users", async (Context db) => await db.Users.ToListAsync());
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
+
+        app.MapDefaultControllerRoute();
+        app.MapRazorPages();  //без этого не будет страниц
 
         app.Run();
     }
