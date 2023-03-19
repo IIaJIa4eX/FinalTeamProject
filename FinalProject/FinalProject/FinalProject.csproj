@@ -25,9 +25,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
   </ItemGroup>
 
- <ItemGroup>
-
-        <ProjectReference Include="..\DatabaseConnector\DatabaseConnector.csproj" />
-
+  <ItemGroup>
+    <ProjectReference Include="..\DatabaseConnector\DatabaseConnector.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
 </Project>
