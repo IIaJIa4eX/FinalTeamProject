@@ -57,7 +57,7 @@ public class Program
 
         builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-
+        builder.Services.AddScoped<EFGenericRepository<Content>>();
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();
