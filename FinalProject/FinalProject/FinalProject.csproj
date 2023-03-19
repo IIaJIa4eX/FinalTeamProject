@@ -25,10 +25,15 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
   </ItemGroup>
 
+<<<<<<< HEAD
 
 
     <ItemGroup>
     <ProjectReference Include="..\FinalProject.Data\FinalProject.Data.csproj" />
     <ProjectReference Include="..\DatabaseConnector\DatabaseConnector.csproj" />
+=======
+  <ItemGroup>
+        <ProjectReference Include="..\DatabaseConnector\DatabaseConnector.csproj" />
+>>>>>>> CommonTeamBranch
   </ItemGroup>
 </Project>
