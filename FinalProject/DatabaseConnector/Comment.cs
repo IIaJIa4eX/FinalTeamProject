@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DatabaseConnector;
 
 [Table("Comment")]
-public class Comment : IMessage
+public class Comment //: IMessage
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
