@@ -45,6 +45,7 @@ public class Program
 
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddControllers();
+        builder.Services.AddSingleton<IAuthenticateService, AuthenticateService>();
 
 
         builder.Services.AddScoped<EFGenericRepository<Content>>();
