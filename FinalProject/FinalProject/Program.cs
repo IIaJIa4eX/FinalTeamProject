@@ -1,12 +1,9 @@
-using Microsoft.AspNetCore.HttpLogging;
-using NLog.Web;
 using DatabaseConnector;
-using DatabaseConnector.Interfaces;
-//using DatabaseConnector.Migrations;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System.Text.Json;
 using FinalProject.DataBaseContext;
+using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.EntityFrameworkCore;
+using NLog.Web;
+using System.Text.Json;
 
 namespace FinalProject;
 
