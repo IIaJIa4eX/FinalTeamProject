@@ -19,8 +19,6 @@
       },
       "launchUrl": "http://localhost:5062/Home/Index"
     },
-      "launchUrl": "http://localhost:5062/Users"
-    },
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
