@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+
     <Content Remove="dbcstringMySQL.json" />
+
   </ItemGroup>
 
 	<ItemGroup>

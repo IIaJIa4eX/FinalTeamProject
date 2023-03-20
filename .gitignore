@@ -354,3 +354,5 @@ MigrationBackup/
 .ionide/
 /FinalProject/FinalProject/dbcstring.json
 /FinalProject/FinalProject/dbcstringPostgre.json
+/FinalProject/FinalProject/Migrations/
+*.*

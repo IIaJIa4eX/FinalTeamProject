@@ -16,7 +16,8 @@
       "applicationUrl": "http://localhost:5062",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+    },
+      "launchUrl": "http://localhost:5062/Users"
     },
     "IIS Express": {
       "commandName": "IISExpress",
