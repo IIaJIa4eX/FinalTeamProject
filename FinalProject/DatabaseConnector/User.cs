@@ -41,7 +41,7 @@ public class User
     public string? UserRole { get; set; }
 
     [Column]
-    public bool IsBanned { get; set; } = false;
+    public bool IsBanned { get; set; }
 
     [InverseProperty(nameof(Post.User))]
     public virtual ICollection<Post> Posts { get; set; } = new HashSet<Post>();

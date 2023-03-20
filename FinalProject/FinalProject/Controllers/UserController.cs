@@ -2,6 +2,7 @@
 using FinalProject.Models.Requests;
 using FinalProject.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace FinalProject.Controllers
 {
@@ -29,7 +30,8 @@ namespace FinalProject.Controllers
                     LastName = request.LastName,
                     Patronymic = request.Patronymic,
                     Email = request.Email,
-                    Password = request.Password
+                    Password = request.Password,
+                    Birthday = request.Birthday
                 });
                 return Ok(new CreateUserResponse
                 {

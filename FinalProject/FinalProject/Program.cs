@@ -15,55 +15,42 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        Database db = null;
-        string connection = "";
+        builder.Services.AddControllersWithViews();
+        builder.Services.AddHttpLogging(logging =>
+        {
+            logging.LoggingFields = HttpLoggingFields.All | HttpLoggingFields.RequestQuery;
+            logging.RequestBodyLogLimit = 4096;
+            logging.ResponseBodyLogLimit = 4096;
+            logging.RequestHeaders.Add("Authorization");
+            logging.RequestHeaders.Add("X-Real-IP");
+            logging.RequestHeaders.Add("X-Forwared-For");
+        });
+        builder.Host.ConfigureLogging(logging =>
+        {
+            logging.ClearProviders();
+            logging.AddConsole();
+        }).UseNLog(new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = true });
         if (File.Exists("dbcstring.json"))
         {
-
-            builder.Services.AddHttpLogging(logging =>
-            {
-                logging.LoggingFields = HttpLoggingFields.All | HttpLoggingFields.RequestQuery;
-                logging.RequestBodyLogLimit = 4096;
-                logging.ResponseBodyLogLimit = 4096;
-                logging.RequestHeaders.Add("Authorization");
-                logging.RequestHeaders.Add("X-Real-IP");
-                logging.RequestHeaders.Add("X-Forwared-For");
-            });
-            builder.Host.ConfigureLogging(logging =>
-            {
-                logging.ClearProviders();
-                logging.AddConsole();
-            }).UseNLog(new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = true });
-
-
-            // builder.Services.AddControllersWithViews();
-
-
             using (var fs = new FileStream("dbcstring.json", FileMode.Open))
             {
-
-                db = JsonSerializer.Deserialize<Database>(fs)!;
-                {
-                }
-
-
+                string connection = JsonSerializer.Deserialize<Database>(fs)!.ConnectionString;
+                builder.Services.AddDbContext<Context>(options => options.UseNpgsql(connection));
             }
         }
-
-
-        connection = db.ConnectionString;
-        builder.Services.AddDbContext<Context>(options => options.UseNpgsql(connection));
-
+        else
+        {
+            throw new FileLoadException("dbcstring not exist, can`t find connection string for database!");
+        }
 
         builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddControllers();
+
 
         builder.Services.AddScoped<EFGenericRepository<Content>>();
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();
-        builder.Services.AddScoped<EFGenericRepository<SessionInfo>>();
-        builder.Services.AddControllers();
-
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(c =>
         {
@@ -73,8 +60,8 @@ public class Program
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())
-            {
-                //app.UseExceptionHandler("/Home/Error");
+        {
+            //app.UseExceptionHandler("/Home/Error");
             app.UseSwagger();
             app.UseSwaggerUI();
         }
