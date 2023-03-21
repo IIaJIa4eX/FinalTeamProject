@@ -1,6 +1,4 @@
-﻿using FinalProject.Models;
-using FinalProject.Models.Requests;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinalProject.Controllers
