@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DatabaseConnector;
 
 [Table("Comment")]
-public class Comment : IMessage
+public class Comment
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
@@ -15,7 +15,7 @@ public class Comment : IMessage
     [ForeignKey(nameof(Post))]
     public Guid PostId { get; set; }
 
-    [F oreignKey(nameof(Content))]
+    [ForeignKey(nameof(Content))]
     public Guid ContentId { get; set; }
 
     [Column]

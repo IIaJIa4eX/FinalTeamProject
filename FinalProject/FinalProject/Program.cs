@@ -27,11 +27,15 @@ public class Program
             logging.RequestHeaders.Add("X-Real-IP");
             logging.RequestHeaders.Add("X-Forwared-For");
         });
+
+
         builder.Host.ConfigureLogging(logging =>
         {
             logging.ClearProviders();
             logging.AddConsole();
         }).UseNLog(new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = true });
+
+
         if (File.Exists("dbcstring.json"))
         {
             using (var fs = new FileStream("dbcstring.json", FileMode.Open))
@@ -48,6 +52,8 @@ public class Program
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddControllers();
         builder.Services.AddSingleton<IAuthenticateService, AuthenticateService>();
+
+
         builder.Services.AddAuthentication(x =>
         {
             x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -73,7 +79,10 @@ public class Program
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();
+
+
         builder.Services.AddEndpointsApiExplorer();
+
         builder.Services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "FinalProjectForum", Version = "v1" });
