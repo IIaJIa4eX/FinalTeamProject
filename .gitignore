@@ -355,3 +355,12 @@ MigrationBackup/
 .ionide/
 /FinalProject/FinalProject/dbcstring.json
 /FinalProject/FinalProject/dbcstringPostgre.json
+/FinalProject/FinalProject/dbcstring.json
+/FinalProject/FinalProject/Migrations/20230318115243_Initial.cs
+/FinalProject/FinalProject/Migrations/ContextModelSnapshot.cs
+/FinalProject/FinalProject/appsettings.json
+FinalProject/FinalProject/Migrations/20230319191804_Initial.cs
+FinalProject/FinalProject/Migrations/20230319191804_Initial.Designer.cs
+FinalProject/FinalProject/Migrations/20230320132535_Initial.cs
+FinalProject/FinalProject/Migrations/20230320132535_Initial.Designer.cs
+FinalProject/FinalProject/Migrations/20230318115243_Initial.Designer.cs

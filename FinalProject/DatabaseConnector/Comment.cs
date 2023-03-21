@@ -1,4 +1,3 @@
-﻿using DatabaseConnector.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,7 +15,7 @@ public class Comment : IMessage
     [ForeignKey(nameof(Post))]
     public Guid PostId { get; set; }
 
-    [ForeignKey(nameof(Content))]
+    [F oreignKey(nameof(Content))]
     public Guid ContentId { get; set; }
 
     [Column]
@@ -31,3 +30,4 @@ public class Comment : IMessage
 
     public virtual Content? Content { get; set; } = null;
 }
+
