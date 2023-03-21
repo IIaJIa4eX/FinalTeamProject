@@ -1,4 +1,4 @@
-﻿namespace DatabaseConnector.Interfaces;
+namespace DatabaseConnector.Interfaces;
 
 
 public interface IMessage

@@ -27,14 +27,11 @@ public class Program
             logging.RequestHeaders.Add("X-Real-IP");
             logging.RequestHeaders.Add("X-Forwared-For");
         });
-
-
         builder.Host.ConfigureLogging(logging =>
         {
             logging.ClearProviders();
             logging.AddConsole();
         }).UseNLog(new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = true });
-
 
         if (File.Exists("dbcstring.json"))
         {
