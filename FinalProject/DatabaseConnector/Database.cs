@@ -2,7 +2,6 @@
 
 namespace DatabaseConnector;
 
-
 public class Database
 {
     [JsonPropertyName("ConnectionString")]
