@@ -1,10 +1,6 @@
-namespace DatabaseConnector.Interfaces;
+﻿namespace DatabaseConnector.Interfaces;
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> IVANdev
 public interface IMessage
 {
     public Guid Id { get; }

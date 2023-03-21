@@ -1,6 +1,5 @@
 using DatabaseConnector;
 using FinalProject.DataBaseContext;
-<<<<<<< HEAD
 using FinalProject.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpLogging;
@@ -9,11 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog.Web;
 using System.Text;
-=======
-using Microsoft.AspNetCore.HttpLogging;
-using Microsoft.EntityFrameworkCore;
-using NLog.Web;
->>>>>>> IVANdev
 using System.Text.Json;
 
 namespace FinalProject;
@@ -33,25 +27,18 @@ public class Program
             logging.RequestHeaders.Add("X-Real-IP");
             logging.RequestHeaders.Add("X-Forwared-For");
         });
-<<<<<<< HEAD
 
 
-=======
->>>>>>> IVANdev
         builder.Host.ConfigureLogging(logging =>
         {
             logging.ClearProviders();
             logging.AddConsole();
         }).UseNLog(new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = true });
-<<<<<<< HEAD
 
-=======
->>>>>>> IVANdev
 
         if (File.Exists("dbcstring.json"))
         {
             using (var fs = new FileStream("dbcstring.json", FileMode.Open))
-<<<<<<< HEAD
             {
                 string connection = JsonSerializer.Deserialize<Database>(fs)!.ConnectionString;
                 builder.Services.AddDbContext<Context>(options => options.UseNpgsql(connection));
@@ -88,18 +75,6 @@ public class Program
 
 
         builder.Services.AddScoped<EFGenericRepository<Content>>();
-=======
-            {
-                string connection = JsonSerializer.Deserialize<Database>(fs)!.ConnectionString;
-                builder.Services.AddDbContext<Context>(options => options.UseNpgsql(connection));
-            }
-        }
-        else
-        {
-            throw new FileLoadException("dbcstring not exist, can`t find connection string for database!");
-        }
-
->>>>>>> IVANdev
         builder.Services.AddScoped<EFGenericRepository<User>>();
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
@@ -149,10 +124,7 @@ public class Program
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseHttpLogging();
-<<<<<<< HEAD
         app.MapControllers();
-=======
->>>>>>> IVANdev
         app.MapGet("/users", async (Context db) => await db.Users.ToListAsync());
         app.MapControllerRoute(
             name: "default",
