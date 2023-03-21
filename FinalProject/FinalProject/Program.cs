@@ -32,6 +32,7 @@ public class Program
             logging.ClearProviders();
             logging.AddConsole();
         }).UseNLog(new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = true });
+
         if (File.Exists("dbcstring.json"))
         {
             using (var fs = new FileStream("dbcstring.json", FileMode.Open))
@@ -48,6 +49,8 @@ public class Program
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddControllers();
         builder.Services.AddSingleton<IAuthenticateService, AuthenticateService>();
+
+
         builder.Services.AddAuthentication(x =>
         {
             x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -71,7 +74,10 @@ public class Program
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();
+
+
         builder.Services.AddEndpointsApiExplorer();
+
         builder.Services.AddSwaggerGen(c =>
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "FinalProjectForum", Version = "v1" });
@@ -99,6 +105,9 @@ public class Program
             });
         });
 
+        builder.Services.AddControllersWithViews();
+        builder.Services.AddRazorPages();
+
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())
@@ -112,12 +121,16 @@ public class Program
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseAuthentication();
         app.UseHttpLogging();
         app.MapControllers();
         app.MapGet("/users", async (Context db) => await db.Users.ToListAsync());
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
+
+        app.MapDefaultControllerRoute();
+        app.MapRazorPages();  //без этого не будет страниц
 
         app.Run();
     }
