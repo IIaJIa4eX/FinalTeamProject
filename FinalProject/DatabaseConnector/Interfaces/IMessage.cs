@@ -1,10 +1,8 @@
-﻿namespace DatabaseConnector.Interfaces;
+namespace DatabaseConnector.Interfaces;
 
-/*public interface IEntity
-{
-    int Id { get; set; }
-}*/
-public interface IMessage /*: IEntity*/
+
+
+public interface IMessage
 {
     public Guid Id { get; }
     public Guid UserId { get; }
