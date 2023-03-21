@@ -9,6 +9,7 @@
   <ItemGroup>
 
     <Content Remove="dbcstringMySQL.json" />
+<<<<<<< HEAD
 
   </ItemGroup>
 
@@ -30,5 +31,26 @@
   <ItemGroup>
         <ProjectReference Include="..\DatabaseConnector\DatabaseConnector.csproj" />
   </ItemGroup>
+=======
+
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+
+		<PackageReference Include="NLog.Web.AspNetCore" Version="5.2.2" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+		<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DatabaseConnector\DatabaseConnector.csproj" />
+	</ItemGroup>
+>>>>>>> IVANdev
 
 </Project>
