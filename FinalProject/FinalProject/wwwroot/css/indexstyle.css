@@ -1,0 +1,16 @@
+﻿.CategoriesInIndex{
+    margin: 2%;
+    display: inline-flex;
+}
+
+.PostInMain {
+    display: grid;
+    margin: 2%;
+}
+.PostCard {
+    padding: auto;
+    margin: auto;
+    position: relative;
+    width: 65%;
+    height: 70%;
+}

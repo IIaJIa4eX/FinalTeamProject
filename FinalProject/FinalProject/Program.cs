@@ -1,12 +1,14 @@
-using Microsoft.AspNetCore.HttpLogging;
-using NLog.Web;
 using DatabaseConnector;
-using DatabaseConnector.Interfaces;
-//using DatabaseConnector.Migrations;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System.Text.Json;
 using FinalProject.DataBaseContext;
+using FinalProject.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using NLog.Web;
+using System.Text;
+using System.Text.Json;
 
 namespace FinalProject;
 
@@ -16,83 +18,97 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddControllersWithViews();
-        Database db = null;
-        string connection = "";
+        builder.Services.AddHttpLogging(logging =>
+        {
+            logging.LoggingFields = HttpLoggingFields.All | HttpLoggingFields.RequestQuery;
+            logging.RequestBodyLogLimit = 4096;
+            logging.ResponseBodyLogLimit = 4096;
+            logging.RequestHeaders.Add("Authorization");
+            logging.RequestHeaders.Add("X-Real-IP");
+            logging.RequestHeaders.Add("X-Forwared-For");
+        });
+        builder.Host.ConfigureLogging(logging =>
+        {
+            logging.ClearProviders();
+            logging.AddConsole();
+        }).UseNLog(new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = true });
+
         if (File.Exists("dbcstring.json"))
         {
-            //builder.Services.AddDbContext<FinalProjectDbContext>(options =>
-            //{
-            //    options.UseSqlServer(builder.Configuration["Settings:DatabaseOptions:ConnectionString"]);
-            //});
-            builder.Services.AddHttpLogging(logging =>
-            {
-                logging.LoggingFields = HttpLoggingFields.All | HttpLoggingFields.RequestQuery;
-                logging.RequestBodyLogLimit = 4096;
-                logging.ResponseBodyLogLimit = 4096;
-                logging.RequestHeaders.Add("Authorization");
-                logging.RequestHeaders.Add("X-Real-IP");
-                logging.RequestHeaders.Add("X-Forwared-For");
-            });
-            builder.Host.ConfigureLogging(logging =>
-            {
-                logging.ClearProviders();
-                logging.AddConsole();
-            }).UseNLog(new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = true });
-
-
-            // builder.Services.AddControllersWithViews();
-
-
             using (var fs = new FileStream("dbcstring.json", FileMode.Open))
             {
-
-                db = JsonSerializer.Deserialize<Database>(fs)!;
-                {
-                }
-                /*
-                {
-                  "Name": "Postgre",
-                  "UserName": "Ivan",
-                  "ConnectionString": "Host=localhost;Port=5432;Database=TheForumDB;Username=postgres;Password=393318156a"
-                }
-                {
-                  "Name": "MySQL",
-                  "UserName": "Ivan",
-                  "ConnectionString": "Server=localhost;Port=3306;Database=FinalProjectDatabase;Uid=bzic;Pwd=393318156a404056792b;"
-                }
-                */
-
+                string connection = JsonSerializer.Deserialize<Database>(fs)!.ConnectionString;
+                builder.Services.AddDbContext<Context>(options => options.UseNpgsql(connection));
             }
         }
-
-        switch (db.Name)
+        else
         {
-            case "Postgre":
-                connection = db.ConnectionString;
-                builder.Services.AddDbContext<Context>(options => options.UseNpgsql(connection));
-                break;
-            case "MySQL":
-                connection = db.ConnectionString;
-                builder.Services.AddDbContext<Context>(options => options.UseMySql(connection, new MySqlServerVersion(new Version(8, 0, 28))));
-                break;
-
-            case "MSSQL":
-                connection = db.ConnectionString;
-                builder.Services.AddDbContext<Context>(options => options.UseSqlServer(connection));
-                break;
-
-            default:
-                break;
+            throw new FileLoadException("dbcstring not exist, can`t find connection string for database!");
         }
 
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddControllers();
+        builder.Services.AddSingleton<IAuthenticateService, AuthenticateService>();
+
+
+        builder.Services.AddAuthentication(x =>
+        {
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(x =>
+        {
+            x.RequireHttpsMetadata = false;
+            x.SaveToken = true;
+            x.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AuthenticateService.SecretKey)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero,
+            };
+        });
+
+
+
+        builder.Services.AddScoped<EFGenericRepository<Content>>();
         builder.Services.AddScoped<EFGenericRepository<User>>();
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();
-        builder.Services.AddScoped<EFGenericRepository<SessionInfo>>();
+
 
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+
+        builder.Services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "FinalProjectForum", Version = "v1" });
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+            {
+                Description = "JWT Authorization header using the Bearer scheme(Example: 'Bearer 12345abcdef')",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer"
+            });
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+            {
+                {
+                    new OpenApiSecurityScheme()
+                    {
+                       Reference = new OpenApiReference()
+                       {
+                         Type = ReferenceType.SecurityScheme,
+                         Id = "Bearer"
+                       }
+                    },
+                    Array.Empty<string>()
+                }
+            });
+        });
+
+        builder.Services.AddControllersWithViews();
+        builder.Services.AddRazorPages();
 
         var app = builder.Build();
 
@@ -105,13 +121,18 @@ public class Program
         app.UseStaticFiles();
 
         app.UseRouting();
-
+        app.UseAuthentication();
         app.UseAuthorization();
+        app.UseAuthentication();
         app.UseHttpLogging();
+        app.MapControllers();
         app.MapGet("/users", async (Context db) => await db.Users.ToListAsync());
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
+
+        app.MapDefaultControllerRoute();
+        app.MapRazorPages();  //без этого не будет страниц
 
         app.Run();
     }

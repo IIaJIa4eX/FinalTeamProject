@@ -1,11 +1,10 @@
-﻿using DatabaseConnector.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseConnector;
 
 [Table("Comment")]
-public class Comment : IMessage
+public class Comment
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
@@ -31,3 +30,4 @@ public class Comment : IMessage
 
     public virtual Content? Content { get; set; } = null;
 }
+
