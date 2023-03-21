@@ -1,11 +1,10 @@
-﻿using DatabaseConnector.Interfaces;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseConnector;
 
 [Table("Posts")]
-public class Post : IMessage
+public class Post
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }

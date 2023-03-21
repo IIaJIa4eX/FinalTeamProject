@@ -66,7 +66,7 @@ public class Program
             };
         });
 
-
+        builder.Services.AddScoped<EFGenericRepository<User>>();
         builder.Services.AddScoped<EFGenericRepository<Content>>();
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
