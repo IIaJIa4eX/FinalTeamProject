@@ -107,6 +107,9 @@ public class Program
             });
         });
 
+        builder.Services.AddControllersWithViews();
+        builder.Services.AddRazorPages();
+
         var app = builder.Build();
 
         if (app.Environment.IsDevelopment())
@@ -120,12 +123,16 @@ public class Program
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseAuthentication();
         app.UseHttpLogging();
         app.MapControllers();
         app.MapGet("/users", async (Context db) => await db.Users.ToListAsync());
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
+
+        app.MapDefaultControllerRoute();
+        app.MapRazorPages();  //без этого не будет страниц
 
         app.Run();
     }
