@@ -62,8 +62,9 @@ dbcstring.Development.json
 dbcstring.json
 dbcstring.json.json
 project.lock.json
-project.fragment.lock.json
+project.fragment.lock.jsons
 artifacts/
+/FinalProject/FinalProject/Migrations/*
 
 # StyleCop
 StyleCopReport.xml
