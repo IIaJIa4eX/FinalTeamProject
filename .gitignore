@@ -356,3 +356,4 @@ MigrationBackup/
 /FinalProject/FinalProject/dbcstringPostgre.json
 /FinalProject/FinalProject/Migrations/
 *.*
+/FinalProject/FinalProject/Migrations/20230318094949_Initial.Designer.cs
