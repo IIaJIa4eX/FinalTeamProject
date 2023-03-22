@@ -3,7 +3,7 @@ using FinalProject.DataBaseContext;
 
 namespace FinalProject.Services
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository
     {
         private readonly Context _context;
         private readonly ILogger<UserRepository> _logger;

@@ -24,7 +24,7 @@ public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TE
     {
         return _dbSet.AsNoTracking().Where(predicate).ToList();
     }
-    public TEntity FindById(int id)
+    public TEntity FindById(Guid id)
     {
         return _dbSet.Find(id);
     }
