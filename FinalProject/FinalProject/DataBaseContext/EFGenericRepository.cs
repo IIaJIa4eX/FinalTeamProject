@@ -3,6 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FinalProject.DataBaseContext;
 
+public interface TEntity
+{
+    Guid Id { get; set; }
+}
+
 
 public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
 {
@@ -24,7 +29,7 @@ public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TE
     {
         return _dbSet.AsNoTracking().Where(predicate).ToList();
     }
-    public TEntity FindById(Guid id)
+    public TEntity FindById(int id)
     {
         return _dbSet.Find(id);
     }
@@ -33,6 +38,31 @@ public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TE
     {
         _dbSet.Add(item);
         _context.SaveChanges();
+    }
+    public int CreateAndGetGuid(TEntity item)
+    {
+        _dbSet.Add(item);
+        _context.SaveChanges();
+
+        dynamic dataTmp = item;
+
+        return (int)dataTmp.Id;
+
+    }
+
+    public int CreateAndGetGuidPK(TEntity item)
+    {
+       
+        _dbSet.Add(item);
+        _context.SaveChanges();
+
+        dynamic dataTmp = item;
+
+        return dataTmp.Id;
+        //var idProperty = item.GetType().GetProperty("Id").GetValue(item, null);
+
+        //return item.Id;
+
     }
     public void Update(TEntity item)
     {
@@ -44,4 +74,11 @@ public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TE
         _dbSet.Remove(item);
         _context.SaveChanges();
     }
+
+    public TEntity FindByGUID(Guid id)
+    {
+        return _dbSet.Find(id);
+    }
+
+   
 }

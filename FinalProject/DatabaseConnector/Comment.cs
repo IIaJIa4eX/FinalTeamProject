@@ -16,7 +16,7 @@ public class Comment
     public int PostId { get; set; }
 
     [ForeignKey(nameof(Content))]
-    public Guid ContentId { get; set; }
+    public int ContentId { get; set; }
 
     [Column]
     public bool IsVisible { get; set; }

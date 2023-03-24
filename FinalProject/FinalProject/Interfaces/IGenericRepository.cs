@@ -3,7 +3,11 @@
 public interface IGenericRepository<TEntity> where TEntity : class
 {
     void Create(TEntity item);
-    TEntity FindById(Guid id);
+
+    int CreateAndGetGuid(TEntity item);
+
+    TEntity FindById(int id);
+    TEntity FindByGUID(Guid id);
     IEnumerable<TEntity> Get();
     IEnumerable<TEntity> Get(Func<TEntity, bool> predicate);
     void Remove(TEntity item);

@@ -1,5 +1,6 @@
 using DatabaseConnector;
 using FinalProject.DataBaseContext;
+using FinalProject.Models.CommonModels;
 using FinalProject.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpLogging;
@@ -77,6 +78,8 @@ public class Program
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();
 
+        builder.Services.AddScoped<EFGenericRepository<CommonPostModel>>();
+
 
         builder.Services.AddEndpointsApiExplorer();
 
@@ -124,14 +127,18 @@ public class Program
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseAuthentication();
+
         app.UseHttpLogging();
+
         app.MapControllers();
+
         app.MapGet("/users", async (Context db) => await db.Users.ToListAsync());
+
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
 
-        app.MapDefaultControllerRoute();
+
         app.MapRazorPages();  //без этого не будет страниц
 
         app.Run();

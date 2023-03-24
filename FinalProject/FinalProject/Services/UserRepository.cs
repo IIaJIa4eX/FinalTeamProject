@@ -18,7 +18,7 @@ namespace FinalProject.Services
         {
             _context.Users.Add(data);
             _context.SaveChanges();
-            return data.Id;
+            return new Guid();
         }
 
         public int Delete(Guid id)

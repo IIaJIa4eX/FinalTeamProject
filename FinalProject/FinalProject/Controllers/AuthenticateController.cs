@@ -18,6 +18,7 @@ namespace FinalProject.Controllers
         {
             _authenticateService = authenticateService;
         }
+
         [AllowAnonymous]
         [HttpPost("login")]
         public IActionResult Login([FromBody] AuthenticationRequest authenticationRequest)
