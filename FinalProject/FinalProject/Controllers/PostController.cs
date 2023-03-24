@@ -25,9 +25,9 @@ namespace FinalProject.Controllers
 
         [HttpGet]
         [Route("/[action]/{id?}")]
-        public IActionResult Index(Guid id)
+        public IActionResult Index(int id)
         {
-            var post =  _postRepository.FindByGUID(id);
+            var post =  _postRepository.FindById(id);
 
             return Ok(post);
         }

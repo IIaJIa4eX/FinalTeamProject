@@ -4,9 +4,9 @@ using System.Linq.Expressions;
 
 namespace FinalProject.DataBaseContext;
 
-public interface TEntity
+public interface IEntity
 {
-    Guid Id { get; set; }
+    int Id { get; set; }
 }
 
 
@@ -35,50 +35,23 @@ public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TE
         return _dbSet.Find(id);
     }
 
-    public void Create(TEntity item)
+    public int Create(TEntity item)
     {
         _dbSet.Add(item);
-        _context.SaveChanges();
-    }
-    public int CreateAndGetGuid(TEntity item)
-    {
-        _dbSet.Add(item);
-        _context.SaveChanges();
 
-        dynamic dataTmp = item;
-
-        return (int)dataTmp.Id;
-
+        return _context.SaveChanges();
     }
 
-    public int CreateAndGetGuidPK(TEntity item)
-    {
-       
-        _dbSet.Add(item);
-        _context.SaveChanges();
-
-        dynamic dataTmp = item;
-
-        return dataTmp.Id;
-        //var idProperty = item.GetType().GetProperty("Id").GetValue(item, null);
-
-        //return item.Id;
-
-    }
-    public void Update(TEntity item)
+    public int Update(TEntity item)
     {
         _context.Entry(item).State = EntityState.Modified;
-        _context.SaveChanges();
+
+        return _context.SaveChanges();
     }
-    public void Remove(TEntity item)
+    public int Remove(TEntity item)
     {
         _dbSet.Remove(item);
-        _context.SaveChanges();
-    }
-
-    public TEntity FindByGUID(Guid id)
-    {
-        return _dbSet.Find(id);
+        return _context.SaveChanges();
     }
 
     public IEnumerable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties)
