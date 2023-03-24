@@ -7,12 +7,15 @@ namespace DatabaseConnector;
 public class Content
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 
     [Column]
     public DateTime CreationDate { get; set; }
 
     [Column]
     public bool IsVisible { get; set; }
+
+    [Column]
+    public string? Text { get; set; }
 
 }

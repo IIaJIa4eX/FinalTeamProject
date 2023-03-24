@@ -13,14 +13,14 @@ namespace DatabaseConnector
     public class AccountSession
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid SessionId { get; set; }
+        public int SessionId { get; set; }
 
         [Required]
         [StringLength(384)]
         public string SessionToken { get; set; }
 
         [ForeignKey(nameof(Account))]
-        public Guid AccountId { get; set; }
+        public int AccountId { get; set; }
 
         [Column/*(TypeName = "datetime2")*/]
         public DateTime TimeCreated { get; set; }
