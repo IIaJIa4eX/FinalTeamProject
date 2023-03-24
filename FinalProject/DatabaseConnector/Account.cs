@@ -7,7 +7,7 @@ namespace DatabaseConnector
     public class Account
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid AccountId { get; set; }
+        public int AccountId { get; set; }
 
         [StringLength(255)]
         public string EMail { get; set; }
