@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - FinalProject</title>
+
+    <!-- links -->
+    <partial name="Models/_Links" />
+</head>
+<body>
+    <!-- header -->
+    <partial name="Models/_Header" />
+
+    <!-- container for pages -->
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- footer -->
+    <partial name="Models/_Footer" />
+
+    <!-- scripts -->
+    <partial name="Models/_Scripts" />
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
