@@ -1,4 +1,6 @@
-﻿namespace FinalProject.Interfaces;
+﻿using System.Linq.Expressions;
+
+namespace FinalProject.Interfaces;
 
 public interface IGenericRepository<TEntity> where TEntity : class
 {
@@ -12,4 +14,8 @@ public interface IGenericRepository<TEntity> where TEntity : class
     IEnumerable<TEntity> Get(Func<TEntity, bool> predicate);
     void Remove(TEntity item);
     void Update(TEntity item);
+
+    public IEnumerable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties);
+    public IEnumerable<TEntity> GetWithInclude(Func<TEntity, bool> predicate,
+        params Expression<Func<TEntity, object>>[] includeProperties);
 }

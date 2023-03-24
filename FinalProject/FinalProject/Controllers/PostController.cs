@@ -33,7 +33,7 @@ namespace FinalProject.Controllers
         }
 
         [HttpPost]
-        [Route("/[action]/{postData?}")]
+        [Route("/[action]")]
         public IActionResult AddPost(CommonPostModel postData)
         {
             var id = _contentRepository.CreateAndGetGuid(new Content { Text = postData.Description });
