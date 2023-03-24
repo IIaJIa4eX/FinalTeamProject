@@ -2,7 +2,7 @@
 {
     public class AccountDto
     {
-        public Guid AccountId { get; set; }
+        public int AccountId { get; set; }
         public string EMail { get; set; }
         public bool Locked { get; set; }
         public string FirstName { get; set; }
