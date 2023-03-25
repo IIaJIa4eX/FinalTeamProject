@@ -1,4 +1,4 @@
-﻿using DatabaseConnector.Interfaces;
+using DatabaseConnector.Interfaces;
 using FinalProject.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

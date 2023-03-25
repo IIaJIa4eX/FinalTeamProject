@@ -47,7 +47,7 @@ public class Program
             throw new FileLoadException("dbcstring not exist, can`t find connection string for database!");
         }
 
-        builder.Services.AddScoped<IUserRepository, UserRepository>();
+       
         builder.Services.AddControllers();
         builder.Services.AddSingleton<IAuthenticateService, AuthenticateService>();
 
@@ -71,9 +71,9 @@ public class Program
         });
 
 
-
-        builder.Services.AddScoped<EFGenericRepository<Content>>();
+        
         builder.Services.AddScoped<EFGenericRepository<User>>();
+        builder.Services.AddScoped<EFGenericRepository<Content>>();
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();

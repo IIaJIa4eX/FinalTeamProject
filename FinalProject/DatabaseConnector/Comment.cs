@@ -1,4 +1,4 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseConnector;
@@ -33,4 +33,3 @@ public class Comment
 
     public virtual Content? Content { get; set; } 
 }
-
