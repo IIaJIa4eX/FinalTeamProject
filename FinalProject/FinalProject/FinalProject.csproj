@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -44,5 +44,6 @@
     <Folder Include="wwwroot\lib\" />
     <Folder Include="Views\PostPage\" />
     <Folder Include="Views\User\" />
+    <Folder Include="BusinessLogicLayer\" />
   </ItemGroup>
 </Project>

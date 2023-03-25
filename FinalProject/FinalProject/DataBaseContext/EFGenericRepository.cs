@@ -1,13 +1,10 @@
-﻿using FinalProject.Interfaces;
+﻿using DatabaseConnector.Interfaces;
+using FinalProject.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace FinalProject.DataBaseContext;
 
-public interface IEntity
-{
-    int Id { get; set; }
-}
 
 
 public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
@@ -40,6 +37,14 @@ public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TE
         _dbSet.Add(item);
 
         return _context.SaveChanges();
+    }
+
+    public int CreateAndGetId(TEntity item)
+    {
+        _dbSet.Add(item);
+        _context.SaveChanges();
+
+        return ((IEntity)item).Id;
     }
 
     public int Update(TEntity item)

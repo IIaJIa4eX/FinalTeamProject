@@ -2,20 +2,12 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace FinalProject.Models.CommonModels
+namespace FinalProject.Models.DTO.PostDTO
 {
-    public class CommonPostModel
+    public class CreatePostDTO
     {
 
-        public int Id { get; set; }
-
         public int UserId { get; set; }
-
-        public int Rating { get; set; }
-
-        public DateTime CreationDate { get; set; }
-
-        public bool IsVisible { get; set; }
 
         public string? Category { get; set; }
 
