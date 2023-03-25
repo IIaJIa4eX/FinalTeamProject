@@ -1,11 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DatabaseConnector
 {
@@ -19,7 +13,7 @@ namespace DatabaseConnector
         [StringLength(384)]
         public string SessionToken { get; set; }
 
-        [ForeignKey(nameof(Account))]
+        [ForeignKey(nameof(User))]
         public int AccountId { get; set; }
 
         [Column/*(TypeName = "datetime2")*/]
@@ -33,6 +27,6 @@ namespace DatabaseConnector
         [Column/*(TypeName = "datetime2")*/]
         public DateTime? TimeClosed { get; set; }
 
-        public virtual Account Account { get; set; }
+        public virtual User User { get; set; }
     }
 }

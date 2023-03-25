@@ -11,7 +11,6 @@ public class Context : DbContext
     public DbSet<Issue> Issues { get; set; }
     public DbSet<AccountSession> AccountSessions { get; set; }
     public DbSet<Content> Content { get; set; }
-    public DbSet<Account> Accounts { get; set; }
 
     public Context(DbContextOptions options) : base(options) { }
    

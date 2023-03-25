@@ -1,6 +1,5 @@
 using DatabaseConnector;
 using FinalProject.DataBaseContext;
-using FinalProject.Models.CommonModels;
 using FinalProject.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpLogging;
@@ -47,9 +46,10 @@ public class Program
             throw new FileLoadException("dbcstring not exist, can`t find connection string for database!");
         }
 
-       
+
         builder.Services.AddControllers();
         builder.Services.AddSingleton<IAuthenticateService, AuthenticateService>();
+        builder.Services.AddSingleton<IRegistrationService, RegistrationService>();
 
 
         builder.Services.AddAuthentication(x =>
@@ -71,14 +71,13 @@ public class Program
         });
 
 
-        
+
         builder.Services.AddScoped<EFGenericRepository<User>>();
         builder.Services.AddScoped<EFGenericRepository<Content>>();
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();
 
-        builder.Services.AddScoped<EFGenericRepository<CommonPostModel>>();
 
 
         builder.Services.AddEndpointsApiExplorer();
@@ -117,14 +116,12 @@ public class Program
 
         if (app.Environment.IsDevelopment())
         {
-            //app.UseExceptionHandler("/Home/Error");
             app.UseSwagger();
             app.UseSwaggerUI();
         }
         app.UseStaticFiles();
 
         app.UseRouting();
-        app.UseAuthentication();
         app.UseAuthorization();
         app.UseAuthentication();
 
