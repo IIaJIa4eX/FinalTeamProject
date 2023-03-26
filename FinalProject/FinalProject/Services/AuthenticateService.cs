@@ -68,8 +68,8 @@ namespace FinalProject.Services
             {
                 AccountId = account.Id,
                 SessionToken = CreateSessionToken(account),
-                TimeCreated = DateTime.UtcNow,
-                TimeLastRequest = DateTime.UtcNow,
+                TimeCreated = DateTime.Now,
+                TimeLastRequest = DateTime.Now,
                 IsClosed = false
             };
             context.AccountSessions.Add(session);

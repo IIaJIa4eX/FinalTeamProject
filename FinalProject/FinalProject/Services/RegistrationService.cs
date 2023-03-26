@@ -4,6 +4,7 @@ using FinalProject.Models;
 using FinalProject.Models.Requests;
 using FinalProject.Utils;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Principal;
 
 namespace FinalProject.Services
 {
@@ -18,6 +19,24 @@ namespace FinalProject.Services
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
             Context context = scope.ServiceProvider.GetService<Context>();
+            User email = context.Users.FirstOrDefault(x => x.Email.Equals(registrationRequest.Email));
+            if (email != null)
+            {
+                return new RegistrationResponse
+                {
+                    Status = RegistrationStatus.UserFound
+                };
+            }
+
+            User nickNamefound = context.Users.FirstOrDefault(x => x.NickName.Equals(registrationRequest.Nickname));
+            if (nickNamefound != null)
+            {
+                return new RegistrationResponse
+                {
+                    Status = RegistrationStatus.NickNameFound
+                };
+            }
+
             (string passSalt, string passHash) result = PasswordUtils.CreatePasswordHash(registrationRequest.Password);
             User user = new User
             {

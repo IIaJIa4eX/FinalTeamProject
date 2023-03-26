@@ -25,7 +25,6 @@ namespace FinalProject.Controllers
         public IActionResult Registration([FromQuery] RegistrationRequest registrationRequest)
         {
             RegistrationResponse registrationResponse = _registrationService.Registration(registrationRequest);
-           
             return Ok(registrationResponse);
         }
 
@@ -40,7 +39,7 @@ namespace FinalProject.Controllers
             }
             return Ok(authenticationResponse);
         }
-        
+
         [HttpGet("session")]
         public IActionResult GetSessionInfo()
         {
