@@ -18,13 +18,14 @@ namespace FinalProject.Services
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
             Context context = scope.ServiceProvider.GetService<Context>();
+            (string passSalt, string passHash) result = PasswordUtils.CreatePasswordHash(registrationRequest.Password);
             User user = new User
             {
                 NickName = registrationRequest.Nickname,
                 Email = registrationRequest.Email,
                 IsBanned = false,
-                PasswordSalt = PasswordUtils.CreatePasswordHash(registrationRequest.Password).passwordSalt,
-                PasswordHash = PasswordUtils.CreatePasswordHash(registrationRequest.Password).passwordHash
+                PasswordSalt = result.passSalt,
+                PasswordHash = result.passHash
             };
 
             context.Users.Add(user);
