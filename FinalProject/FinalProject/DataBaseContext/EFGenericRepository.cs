@@ -35,7 +35,7 @@ public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TE
     public int Create(TEntity item)
     {
         _dbSet.Add(item);
-
+        _context.SaveChanges();
         return _context.SaveChanges();
     }
 

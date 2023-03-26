@@ -32,10 +32,14 @@ public interface IGenericRepository<TEntity> where TEntity : IEntity
     /// <param name="item">объект для изменения</param>
     int Update(TEntity item);
 
-    /// <summary>Join</summary>
+    /// <summary>Получить элементы из таблицы и связанные элементы</summary>
     /// <param name="includeProperties"></param>
     /// <returns>Список объектов</returns>
     public IEnumerable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties);
+    
+    /// <summary>Получить отфильтрованные элементы из таблицы и связанные элементы</summary>
+    /// <param name="includeProperties"></param>
+    /// <returns>Список объектов</returns>
     public IEnumerable<TEntity> GetWithInclude(Func<TEntity, bool> predicate,
         params Expression<Func<TEntity, object>>[] includeProperties);
 }
