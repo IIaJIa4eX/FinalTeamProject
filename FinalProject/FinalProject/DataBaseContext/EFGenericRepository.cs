@@ -7,7 +7,7 @@ namespace FinalProject.DataBaseContext;
 
 
 
-public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class,IEntity
 {
     DbContext _context;
     DbSet<TEntity> _dbSet;
@@ -27,7 +27,7 @@ public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TE
     {
         return _dbSet.AsNoTracking().Where(predicate).ToList();
     }
-    public TEntity FindById(int id)
+    public TEntity? FindById(int id)
     {
         return _dbSet.Find(id);
     }
@@ -35,7 +35,7 @@ public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TE
     public int Create(TEntity item)
     {
         _dbSet.Add(item);
-
+        _context.SaveChanges();
         return _context.SaveChanges();
     }
 
@@ -44,7 +44,7 @@ public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TE
         _dbSet.Add(item);
         _context.SaveChanges();
 
-        return ((IEntity)item).Id;
+        return item.Id;
     }
 
     public int Update(TEntity item)

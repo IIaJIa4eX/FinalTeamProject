@@ -1,7 +1,7 @@
 ﻿namespace DatabaseConnector.Interfaces;
 
 
-public interface IMessage
+public interface IMessage : IEntity
 {
     public int Id { get; }
     public int UserId { get; }

@@ -6,12 +6,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DatabaseConnector.Interfaces;
 
 namespace DatabaseConnector
 {
     [Table("AccountSessions")]
-    public class AccountSession
+    public class AccountSession : IEntity
     {
+        public int Id { get => SessionId; set => SessionId = value; }
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SessionId { get; set; }
 
