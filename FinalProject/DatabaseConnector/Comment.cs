@@ -20,15 +20,17 @@ public class Comment : IEntity
     public int ContentId { get; set; }
 
     [Column]
+    public int ParentId { get; set; } = -1;
+
+    [Column]
     public bool IsVisible { get; set; }
 
     [Column]
     public DateTime CreationDate { get; set; }
 
-    public virtual User? User { get; set; } = null;
+    public virtual User? User { get; set; }
 
-    public virtual Post? Post { get; set; } = null;
+    public virtual Post? Post { get; set; }
 
-    public virtual Content? Content { get; set; } = null;
+    public virtual Content? Content { get; set; } 
 }
-

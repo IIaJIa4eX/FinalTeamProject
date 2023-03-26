@@ -1,6 +1,6 @@
 using DatabaseConnector;
+using FinalProject.BusinessLogicLayer;
 using FinalProject.DataBaseContext;
-using FinalProject.Models.CommonModels;
 using FinalProject.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpLogging;
@@ -47,7 +47,7 @@ public class Program
             throw new FileLoadException("dbcstring not exist, can`t find connection string for database!");
         }
 
-        builder.Services.AddScoped<IUserRepository, UserRepository>();
+       
         builder.Services.AddControllers();
         builder.Services.AddSingleton<IAuthenticateService, AuthenticateService>();
 
@@ -71,15 +71,14 @@ public class Program
         });
 
 
-
-        builder.Services.AddScoped<EFGenericRepository<Content>>();
+        
         builder.Services.AddScoped<EFGenericRepository<User>>();
+        builder.Services.AddScoped<EFGenericRepository<Content>>();
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();
 
-        builder.Services.AddScoped<EFGenericRepository<CommonPostModel>>();
-
+        builder.Services.AddScoped<PostDataHandler>();
 
         builder.Services.AddEndpointsApiExplorer();
 

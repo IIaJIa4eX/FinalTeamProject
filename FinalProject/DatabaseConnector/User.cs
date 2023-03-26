@@ -52,4 +52,5 @@ public class User : IEntity
 
     [InverseProperty(nameof(Issue.User))]
     public virtual ICollection<Issue> Issues { get; set; } = new HashSet<Issue>();
+
 }
