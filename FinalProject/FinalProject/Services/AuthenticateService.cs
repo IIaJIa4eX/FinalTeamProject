@@ -50,6 +50,7 @@ namespace FinalProject.Services
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
             Context context = scope.ServiceProvider.GetService<Context>();
             Account account = !string.IsNullOrWhiteSpace(authenticationRequest.Login) ? FindAccountByLogin(context, authenticationRequest.Login) : null;
+
             if (account == null)
             {
                 return new AuthenticationResponse
