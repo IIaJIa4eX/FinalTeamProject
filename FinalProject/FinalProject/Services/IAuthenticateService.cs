@@ -6,6 +6,6 @@ namespace FinalProject.Services
     public interface IAuthenticateService
     {
         AuthenticationResponse Login(AuthenticationRequest authenticationRequest);
-        public SessionInfo GetSessionInfo(string sessionToken); 
+        public SessionInfo GetSessionInfo(string sessionToken);
     }
 }

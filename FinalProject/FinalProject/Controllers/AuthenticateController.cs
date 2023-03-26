@@ -40,7 +40,7 @@ namespace FinalProject.Controllers
             }
             return Ok(authenticationResponse);
         }
-
+        
         [HttpGet("session")]
         public IActionResult GetSessionInfo()
         {

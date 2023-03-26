@@ -1,13 +1,12 @@
 ﻿using DatabaseConnector;
-using FinalProject.Models.Requests;
+using FinalProject.DataBaseContext;
 using FinalProject.Models;
+using FinalProject.Models.Requests;
 using FinalProject.Utils;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using FinalProject.DataBaseContext;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Principal;
 
 namespace FinalProject.Services
 {
@@ -19,7 +18,7 @@ namespace FinalProject.Services
         public AuthenticateService(IServiceScopeFactory serviceScopeFactory)
         {
             _serviceScopeFactory = serviceScopeFactory;
-        } 
+        }
         public SessionInfo GetSessionInfo(string sessionToken)
         {
             SessionInfo sessionInfo;
@@ -58,13 +57,13 @@ namespace FinalProject.Services
                     Status = AuthenticationStatus.UserNotFound
                 };
             }
-            /*if (!PasswordUtils.VerifyPassword(authenticationRequest.Password, account.PasswordSalt, account.PasswordHash))
+            if (!PasswordUtils.VerifyPassword(authenticationRequest.Password, account.PasswordSalt, account.PasswordHash))
             {
                 return new AuthenticationResponse
                 {
                     Status = AuthenticationStatus.InvalidPassword
                 };
-            }*/
+            }
             AccountSession session = new AccountSession
             {
                 AccountId = account.Id,
