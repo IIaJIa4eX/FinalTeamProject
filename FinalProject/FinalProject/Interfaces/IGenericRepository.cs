@@ -1,10 +1,11 @@
-﻿using System.Linq.Expressions;
+﻿using DatabaseConnector.Interfaces;
+using System.Linq.Expressions;
 
 namespace FinalProject.Interfaces;
 
-public interface IGenericRepository<TEntity> where TEntity : class
+public interface IGenericRepository<TEntity> where TEntity : IEntity
 {
-    void Create(TEntity item);
+    int Create(TEntity item);
 
     int CreateAndGetGuid(TEntity item);
 

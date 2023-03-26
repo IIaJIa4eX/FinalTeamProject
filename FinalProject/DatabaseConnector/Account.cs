@@ -6,6 +6,7 @@ namespace DatabaseConnector
     [Table("Accounts")]
     public class Account
     {
+        public int Id { get => AccountId; set => AccountId = value; }
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AccountId { get; set; }
 
