@@ -22,7 +22,8 @@ namespace FinalProject.Utils
         }
         public static bool VerifyPassword(string password, string passwordSalt, string passwordHash)
         {
-            return GetPasswordHash(password, passwordSalt) == passwordHash;
+            string Hash = GetPasswordHash(password, passwordSalt);
+            return Hash == passwordHash;
         }
         public static string GetPasswordHash(string password, string passwordSalt)
         {

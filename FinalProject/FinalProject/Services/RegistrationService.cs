@@ -4,6 +4,8 @@ using FinalProject.Models;
 using FinalProject.Models.Requests;
 using FinalProject.Utils;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Cryptography.X509Certificates;
+using System.Security.Policy;
 
 namespace FinalProject.Services
 {
@@ -16,15 +18,19 @@ namespace FinalProject.Services
         }
         public RegistrationResponse Registration(RegistrationRequest registrationRequest)
         {
+ 
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
             Context context = scope.ServiceProvider.GetService<Context>();
+
+            (string passSalt, string passHash) result = PasswordUtils.CreatePasswordHash(registrationRequest.Password);
+
             User user = new User
             {
                 NickName = registrationRequest.Nickname,
                 Email = registrationRequest.Email,
                 IsBanned = false,
-                PasswordSalt = PasswordUtils.CreatePasswordHash(registrationRequest.Password).passwordSalt,
-                PasswordHash = PasswordUtils.CreatePasswordHash(registrationRequest.Password).passwordHash
+                PasswordSalt = result.passSalt,
+                PasswordHash = result.passHash,
             };
 
             context.Users.Add(user);

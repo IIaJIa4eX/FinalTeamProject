@@ -58,13 +58,13 @@ namespace FinalProject.Services
                     Status = AuthenticationStatus.UserNotFound
                 };
             }
-            /*if (!PasswordUtils.VerifyPassword(authenticationRequest.Password, account.PasswordSalt, account.PasswordHash))
+            if (!PasswordUtils.VerifyPassword(authenticationRequest.Password, account.PasswordSalt, account.PasswordHash))
             {
                 return new AuthenticationResponse
                 {
                     Status = AuthenticationStatus.InvalidPassword
                 };
-            }*/
+            }
             AccountSession session = new AccountSession
             {
                 AccountId = account.Id,
