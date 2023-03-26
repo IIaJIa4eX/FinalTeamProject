@@ -1,4 +1,4 @@
-﻿using DatabaseConnector.Interfaces;
+using DatabaseConnector.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -33,9 +33,16 @@ public class User : IEntity
     [StringLength(255)]
     public string? Email { get; set; }
 
-    [Column]
+    /*[Column]
     [StringLength(255)]
-    public string? Password { get; set; }
+    public string? Password { get; set; }*/
+
+    
+    [StringLength(100)]
+    public string PasswordSalt { get; set; }
+
+    [StringLength(100)]
+    public string PasswordHash { get; set; }
 
     [Column]
     [StringLength(255)]
@@ -53,4 +60,6 @@ public class User : IEntity
     [InverseProperty(nameof(Issue.User))]
     public virtual ICollection<Issue> Issues { get; set; } = new HashSet<Issue>();
 
+    [InverseProperty(nameof(AccountSession.User))]
+    public virtual ICollection<AccountSession> Sessions { get; set; } = new HashSet<AccountSession>();
 }

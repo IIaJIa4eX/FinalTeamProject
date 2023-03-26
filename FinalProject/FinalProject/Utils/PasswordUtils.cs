@@ -16,6 +16,8 @@ namespace FinalProject.Utils
             //create hash
             string passwordSalt = Convert.ToBase64String(buffer);
             string passwordHash = GetPasswordHash(password, passwordSalt);
+
+            //done
             return (passwordSalt, passwordHash);
         }
         public static bool VerifyPassword(string password, string passwordSalt, string passwordHash)

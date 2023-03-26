@@ -1,4 +1,4 @@
-﻿using DatabaseConnector;
+using DatabaseConnector;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinalProject.DataBaseContext;

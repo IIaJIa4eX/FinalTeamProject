@@ -47,9 +47,10 @@ public class Program
             throw new FileLoadException("dbcstring not exist, can`t find connection string for database!");
         }
 
-       
+
         builder.Services.AddControllers();
         builder.Services.AddSingleton<IAuthenticateService, AuthenticateService>();
+        builder.Services.AddSingleton<IRegistrationService, RegistrationService>();
 
 
         builder.Services.AddAuthentication(x =>
@@ -71,7 +72,7 @@ public class Program
         });
 
 
-        
+
         builder.Services.AddScoped<EFGenericRepository<User>>();
         builder.Services.AddScoped<EFGenericRepository<Content>>();
         builder.Services.AddScoped<EFGenericRepository<Comment>>();
@@ -116,14 +117,12 @@ public class Program
 
         if (app.Environment.IsDevelopment())
         {
-            //app.UseExceptionHandler("/Home/Error");
             app.UseSwagger();
             app.UseSwaggerUI();
         }
         app.UseStaticFiles();
 
         app.UseRouting();
-        app.UseAuthentication();
         app.UseAuthorization();
         app.UseAuthentication();
 
