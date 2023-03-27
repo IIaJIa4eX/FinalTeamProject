@@ -18,15 +18,15 @@ namespace DatabaseConnector
         [ForeignKey(nameof(User))]
         public int AccountId { get; set; }
 
-        [Column/*(TypeName = "datetime2")*/]
+        [Column(TypeName = "Timestamp")]
         public DateTime TimeCreated { get; set; }
 
-        [Column/*(TypeName = "datetime2")*/]
+        [Column(TypeName = "Timestamp")]
         public DateTime TimeLastRequest { get; set; }
 
         public bool IsClosed { get; set; }
 
-        [Column/*(TypeName = "datetime2")*/]
+        [Column(TypeName = "Timestamp")]
         public DateTime? TimeClosed { get; set; }
 
         public virtual User User { get; set; }

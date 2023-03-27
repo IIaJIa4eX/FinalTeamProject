@@ -33,11 +33,6 @@ public class User : IEntity
     [StringLength(255)]
     public string? Email { get; set; }
 
-    /*[Column]
-    [StringLength(255)]
-    public string? Password { get; set; }*/
-
-    
     [StringLength(100)]
     public string PasswordSalt { get; set; }
 

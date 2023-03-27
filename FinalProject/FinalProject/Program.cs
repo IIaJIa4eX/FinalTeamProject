@@ -95,19 +95,19 @@ public class Program
                 Scheme = "Bearer"
             });
             c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-            {
                 {
-                    new OpenApiSecurityScheme()
                     {
-                       Reference = new OpenApiReference()
-                       {
-                         Type = ReferenceType.SecurityScheme,
-                         Id = "Bearer"
-                       }
-                    },
-                    Array.Empty<string>()
-                }
-            });
+                        new OpenApiSecurityScheme()
+                        {
+                            Reference = new OpenApiReference()
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
         });
 
         builder.Services.AddControllersWithViews();
@@ -121,7 +121,7 @@ public class Program
             app.UseSwaggerUI();
         }
         app.UseStaticFiles();
-
+        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         app.UseRouting();
         app.UseAuthorization();
         app.UseAuthentication();
