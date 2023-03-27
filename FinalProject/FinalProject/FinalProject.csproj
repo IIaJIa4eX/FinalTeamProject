@@ -40,11 +40,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
   </ItemGroup>
 
-<ItemGroup>
-    <ProjectReference Include="..\DatabaseConnector\DatabaseConnector.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup>
     <None Remove="Pages\Shared\Models\" />
     <None Remove="Pages\PostPage\" />
@@ -57,4 +52,9 @@
     <Folder Include="Pages\User\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DatabaseConnector\DatabaseConnector.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
