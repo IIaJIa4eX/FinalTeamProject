@@ -14,23 +14,14 @@ namespace FinalProject.Controllers
     public class AuthenticateController : ControllerBase
     {
         private readonly IAuthenticateService _authenticateService;
-        private readonly IRegistrationService _registrationService;
-        public AuthenticateController(IAuthenticateService authenticateService, IRegistrationService registrationService)
+        public AuthenticateController(IAuthenticateService authenticateService)
         {
-            _registrationService = registrationService;
             _authenticateService = authenticateService;
-        }
-        [AllowAnonymous]
-        [HttpPost("registration")]
-        public IActionResult Registration([FromQuery] RegistrationRequest registrationRequest)
-        {
-            RegistrationResponse registrationResponse = _registrationService.Registration(registrationRequest);
-            return Ok(registrationResponse);
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public IActionResult Login([FromQuery] AuthenticationRequest authenticationRequest)
+        public IActionResult Login([FromBody] AuthenticationRequest authenticationRequest)
         {
             AuthenticationResponse authenticationResponse = _authenticateService.Login(authenticationRequest);
             if (authenticationResponse.Status == Models.AuthenticationStatus.Success)
