@@ -1,10 +1,11 @@
-using DatabaseConnector.Interfaces;
+﻿using DatabaseConnector.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+
 namespace DatabaseConnector;
 
 [Table("Posts")]
-public class Post : IEntity
+public class Post : IMessage
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
@@ -29,9 +30,9 @@ public class Post : IEntity
     [StringLength(255)]
     public string? Category { get; set; }
 
-    public virtual User? User { get; set; }
+    public virtual User? User { get; set; } = null;
 
-    public virtual Content? Content { get; set; }
+    public virtual Content? Content { get; set; } = null;
 
     [InverseProperty(nameof(Comment.Post))]
     public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();

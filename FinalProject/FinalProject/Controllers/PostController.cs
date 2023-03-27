@@ -1,8 +1,6 @@
 ﻿using DatabaseConnector;
-using FinalProject.BusinessLogicLayer;
 using FinalProject.DataBaseContext;
-using FinalProject.Models.DTO;
-using FinalProject.Models.DTO.PostDTO;
+using FinalProject.Models.CommonModels;
 using FinalProject.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,66 +12,34 @@ namespace FinalProject.Controllers
     public class PostController : Controller
     {
 
-        PostDataHandler _postDataHandler;
+        EFGenericRepository<CommonPostModel> _postRepository;
+        EFGenericRepository<Content> _contentRepository;
 
-        public PostController(PostDataHandler postDataHandler)
+        public PostController(EFGenericRepository<CommonPostModel> postRepository, EFGenericRepository<Content> contentRepository)
         {
-            _postDataHandler = postDataHandler;
+            _postRepository = postRepository;
+            _contentRepository = contentRepository;
         }
 
 
+
         [HttpGet]
-        [Route("/[action]")]
-        public IActionResult Index(int id)
+        [Route("/[action]/{id?}")]
+        public IActionResult Index(Guid id)
         {
-            var post = _postDataHandler.GetById(id);
+            var post =  _postRepository.FindByGUID(id);
 
             return Ok(post);
         }
 
         [HttpPost]
-        [Route("/[action]")]
-        public IActionResult AddPost(CreatePostDTO postData)
+        [Route("/[action]/{postData?}")]
+        public IActionResult AddPost(CommonPostModel postData)
         {
-            bool success = _postDataHandler.Create(postData);
+            var id = _contentRepository.CreateAndGetGuid(new Content { Text = postData.Description });
+            //_postRepository.Create(postData);
 
-            return Ok(success);
-        }
-
-        [HttpPost]
-        [Route("/[action]")]
-        public IActionResult Edit(EditPostDTO postData)
-        {
-            bool success = _postDataHandler.Edit(postData);
-
-            return Ok(success);
-        }
-
-        [HttpPost]
-        [Route("/[action]")]
-        public IActionResult Delete(EditPostDTO postData)
-        {
-            bool success = _postDataHandler.Delete(postData);
-
-            return Ok(success);
-        }
-
-        [HttpGet]
-        [Route("/[action]")]
-        public IActionResult PostRating(string rating, int id)
-        {
-            bool success = _postDataHandler.Rating(rating, id);
-
-            return Ok(success);
-        }
-
-        [HttpPost]
-        [Route("/[action]")]
-        public IActionResult AddPostComment(CommentDTO comment)
-        {
-            bool success = _postDataHandler.AddComment(comment);
-
-            return Ok(success);
+            return Ok();
         }
 
     }

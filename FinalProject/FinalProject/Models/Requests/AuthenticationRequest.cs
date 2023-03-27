@@ -1,13 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace FinalProject.Models.Requests
+﻿namespace FinalProject.Models.Requests
 {
     public class AuthenticationRequest
     {
-        [Required]
-        public string Email { get; set; }
-
-        [Required]
+        public string Login { get; set; }
         public string Password { get; set; }
     }
 }

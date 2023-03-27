@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DatabaseConnector;
 
 [Table("Issue")]
-public class Issue : IEntity
+public class Issue : IMessage
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
