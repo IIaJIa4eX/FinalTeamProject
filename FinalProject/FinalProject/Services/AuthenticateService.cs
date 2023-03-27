@@ -1,12 +1,12 @@
-﻿using DatabaseConnector;
-using FinalProject.Models.Requests;
+using DatabaseConnector;
+using FinalProject.DataBaseContext;
 using FinalProject.Models;
+using FinalProject.Models.Requests;
 using FinalProject.Utils;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using FinalProject.DataBaseContext;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
 
 namespace FinalProject.Services
 {
@@ -33,7 +33,7 @@ namespace FinalProject.Services
                 AccountSession session = context.AccountSessions.FirstOrDefault(item => item.SessionToken == sessionToken);
                 if (session == null)
                     return null;
-                Account account = context.Accounts.FirstOrDefault(item => item.AccountId == session.AccountId);
+                User account = context.Users.FirstOrDefault(item => item.Id == session.AccountId);
                 sessionInfo = GetSessionInfo(account, session);
                 if (sessionInfo != null)
                 {
@@ -49,7 +49,7 @@ namespace FinalProject.Services
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
             Context context = scope.ServiceProvider.GetService<Context>();
-            Account account = !string.IsNullOrWhiteSpace(authenticationRequest.Login) ? FindAccountByLogin(context, authenticationRequest.Login) : null;
+            User account = !string.IsNullOrWhiteSpace(authenticationRequest.Email) ? FindAccountByLogin(context, authenticationRequest.Email) : null;
             if (account == null)
             {
                 return new AuthenticationResponse
@@ -66,11 +66,11 @@ namespace FinalProject.Services
             }
             AccountSession session = new AccountSession
             {
-                AccountId = account.AccountId,
+                AccountId = account.Id,
                 SessionToken = CreateSessionToken(account),
                 TimeCreated = DateTime.Now,
                 TimeLastRequest = DateTime.Now,
-                IsClosed = false,
+                IsClosed = false
             };
             context.AccountSessions.Add(session);
             context.SaveChanges();
@@ -85,24 +85,26 @@ namespace FinalProject.Services
                 SessionInfo = sessionInfo
             };
         }
-        private SessionInfo GetSessionInfo(Account account, AccountSession accountSession)
+        private SessionInfo GetSessionInfo(User account, AccountSession accountSession)
         {
             return new SessionInfo
             {
                 SessionId = accountSession.SessionId,
                 SessionToken = accountSession.SessionToken,
-                Account = new AccountDto
+                Account = new UserDto
                 {
-                    AccountId = account.AccountId,
-                    EMail = account.EMail,
+                    Id = account.Id,
+                    NickName = account.NickName,
                     FirstName = account.FirstName,
                     LastName = account.LastName,
-                    SecondName = account.SecondName,
-                    Locked = account.Locked,
+                    Patronymic = account.Patronymic,
+                    Birthday = account.Birthday,
+                    Email = account.Email,
+                    IsBanned = account.IsBanned
                 }
             };
         }
-        private string CreateSessionToken(Account account)
+        private string CreateSessionToken(User user)
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             byte[] key = Encoding.ASCII.GetBytes(SecretKey);
@@ -110,8 +112,8 @@ namespace FinalProject.Services
             {
                 Subject = new ClaimsIdentity(
                     new Claim[] {
-                    new Claim(ClaimTypes.NameIdentifier, account.AccountId.ToString()),
-                    new Claim(ClaimTypes.Email, account.EMail),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id .ToString()),
+                    new Claim(ClaimTypes.Email, user.Email),
                     }),
                 Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -119,9 +121,9 @@ namespace FinalProject.Services
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
-        private Account FindAccountByLogin(Context context, string login)
+        private User FindAccountByLogin(Context context, string login)
         {
-            return context.Accounts.FirstOrDefault(account => account.EMail == login);
+            return context.Users.FirstOrDefault(account => account.Email == login);
         }
     }
 }
