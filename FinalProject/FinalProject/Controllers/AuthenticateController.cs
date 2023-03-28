@@ -11,7 +11,7 @@ namespace FinalProject.Controllers
     [Authorize]
     [Route("api/auth")]
     [ApiController]
-    public class AuthenticateController : ControllerBase
+    public class AuthenticateController : Controller
     {
         private readonly IAuthenticateService _authenticateService;
         private readonly IRegistrationService _registrationService;
