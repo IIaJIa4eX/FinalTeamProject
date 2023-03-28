@@ -20,6 +20,7 @@ namespace FinalProject.Controllers
             _registrationService = registrationService;
             _authenticateService = authenticateService;
         }
+
         [AllowAnonymous]
         [HttpPost("registration")]
         public IActionResult Registration([FromQuery] RegistrationRequest registrationRequest)

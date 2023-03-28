@@ -14,7 +14,6 @@ namespace FinalProject.Models.Requests
         [Required]
         public string Password { get; set; }
 
-        [NotMapped]
         [Required]
         [Compare("Password", ErrorMessage = "Confirm password doesn't match, Type again !")]
         public string ConfirmPassword { get; set; }
