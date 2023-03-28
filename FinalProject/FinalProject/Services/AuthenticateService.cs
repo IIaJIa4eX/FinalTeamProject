@@ -115,7 +115,7 @@ namespace FinalProject.Services
                     new Claim(ClaimTypes.NameIdentifier, user.Id .ToString()),
                     new Claim(ClaimTypes.Email, user.Email),
                     }),
-                Expires = DateTime.UtcNow.AddMinutes(15),
+                Expires = DateTime.Now.AddMinutes(15),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
