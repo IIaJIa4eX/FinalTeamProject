@@ -8,9 +8,7 @@ using System.Net.Http.Headers;
 
 namespace FinalProject.Controllers
 {
-    [Authorize]
     [Route("api/auth")]
-    [ApiController]
     public class AuthenticateController : Controller
     {
         private readonly IAuthenticateService _authenticateService;
@@ -40,7 +38,7 @@ namespace FinalProject.Controllers
             }
             return Ok(authenticationResponse);
         }
-
+        
         [HttpGet("session")]
         public IActionResult GetSessionInfo()
         {
