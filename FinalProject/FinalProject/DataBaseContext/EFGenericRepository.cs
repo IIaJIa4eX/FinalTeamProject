@@ -3,12 +3,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FinalProject.DataBaseContext;
 
-public interface TEntity
-{
-    Guid Id { get; set; }
-}
-
-
 public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
 {
     DbContext _context;

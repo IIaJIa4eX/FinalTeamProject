@@ -50,6 +50,11 @@ namespace FinalProject.Services
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
             Context context = scope.ServiceProvider.GetService<Context>();
             User account = !string.IsNullOrWhiteSpace(authenticationRequest.Email) ? FindAccountByLogin(context, authenticationRequest.Email) : null;
+            if (account.Sessions == context.AccountSessions)
+            {
+                return (AuthenticationResponse)account.Sessions;
+               
+            }
             if (account == null)
             {
                 return new AuthenticationResponse
@@ -70,7 +75,8 @@ namespace FinalProject.Services
                 SessionToken = CreateSessionToken(account),
                 TimeCreated = DateTime.Now,
                 TimeLastRequest = DateTime.Now,
-                IsClosed = false
+                IsClosed = false,
+                TimeClosed = DateTime.Now.AddMinutes(15)
             };
             context.AccountSessions.Add(session);
             context.SaveChanges();
