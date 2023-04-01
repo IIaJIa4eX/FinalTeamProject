@@ -25,7 +25,7 @@ namespace FinalProject.BusinessLogicLayer
                 (
                 post => post.Id == id,
                 comms => comms.Comments.Take(50),
-                cont => cont,
+                cont => cont.Content,
                 usr => usr.User
                 )
                 .FirstOrDefault();

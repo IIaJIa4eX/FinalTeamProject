@@ -28,7 +28,7 @@ namespace FinalProject.Controllers
         {
             var post = _postDataHandler.GetById(id);
 
-            return Ok(post);
+            return Ok($"{post.CreationDate}, {post.ContentId}, {post.User.NickName}");
         }
 
         [HttpPost]

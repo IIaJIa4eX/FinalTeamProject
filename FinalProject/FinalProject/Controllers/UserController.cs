@@ -1,5 +1,6 @@
 ﻿using DatabaseConnector;
 using FinalProject.Models.Requests;
+using FinalProject.Models.Validations;
 using FinalProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,22 +10,54 @@ using System.Net.Http.Headers;
 namespace FinalProject.Controllers
 {
     [Authorize]
-    [Route("api/auth")]
+    [Route("[controller]")]
     [ApiController]
-    public class AuthenticateController : ControllerBase
+    public class UserController : Controller
     {
         private readonly IAuthenticateService _authenticateService;
         private readonly IRegistrationService _registrationService;
-        public AuthenticateController(IAuthenticateService authenticateService, IRegistrationService registrationService)
+        public UserController(IAuthenticateService authenticateService, IRegistrationService registrationService)
         {
             _registrationService = registrationService;
             _authenticateService = authenticateService;
         }
+
+
+
+        [Route("/[action]")]        
+        [HttpGet]
         [AllowAnonymous]
-        [HttpPost("registration")]
-        public IActionResult Registration([FromQuery] RegistrationRequest registrationRequest)
+        public IActionResult Registration()
         {
-            RegistrationResponse registrationResponse = _registrationService.Registration(registrationRequest);
+            
+            return View();
+        }
+
+        [Route("/[action]")]
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult UserRegistration([FromForm] RegistrationRequest user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(user);
+            }
+
+            RegistrationResponse registrationResponse = _registrationService.Registration(user);
+            return Ok(registrationResponse);
+        }
+
+        [Route("/[action]")]
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Login([FromForm] RegistrationRequest user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(user);
+            }
+
+            RegistrationResponse registrationResponse = _registrationService.Registration(user);
             return Ok(registrationResponse);
         }
 
