@@ -3,8 +3,6 @@ using FinalProject.DataBaseContext;
 using FinalProject.Models;
 using FinalProject.Models.Requests;
 using FinalProject.Utils;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Principal;
 
 namespace FinalProject.Services
 {
