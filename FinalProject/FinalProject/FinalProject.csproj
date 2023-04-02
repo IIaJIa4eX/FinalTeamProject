@@ -7,6 +7,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="BusinessLogicLayer\**" />
+	  <Content Remove="BusinessLogicLayer\**" />
+	  <EmbeddedResource Remove="BusinessLogicLayer\**" />
+	  <None Remove="BusinessLogicLayer\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Content Remove="dbcstringMySQL.json" />
 	</ItemGroup>
 
@@ -33,7 +40,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BusinessLogicLayer\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
   <ItemGroup>
