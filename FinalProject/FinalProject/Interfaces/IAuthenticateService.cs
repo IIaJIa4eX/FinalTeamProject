@@ -1,7 +1,7 @@
 ﻿using DatabaseConnector;
 using FinalProject.Models.Requests;
 
-namespace FinalProject.Services
+namespace FinalProject.Interfaces
 {
     public interface IAuthenticateService
     {

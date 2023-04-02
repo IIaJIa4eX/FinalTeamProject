@@ -1,7 +1,7 @@
 ﻿using DatabaseConnector;
+using FinalProject.Interfaces;
 using FinalProject.Models.Requests;
 using FinalProject.Models.Validations;
-using FinalProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
@@ -29,7 +29,6 @@ namespace FinalProject.Controllers
         [AllowAnonymous]
         public IActionResult Registration()
         {
-            
             return View();
         }
 

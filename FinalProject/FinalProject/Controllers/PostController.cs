@@ -1,9 +1,9 @@
 ﻿using DatabaseConnector;
-using FinalProject.BusinessLogicLayer;
 using FinalProject.DataBaseContext;
 using FinalProject.Models.DTO;
 using FinalProject.Models.DTO.PostDTO;
 using FinalProject.Models.Requests;
+using FinalProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime;
@@ -24,6 +24,7 @@ namespace FinalProject.Controllers
 
         [HttpGet]
         [Route("/[action]")]
+        [AllowAnonymous]
         public IActionResult Index(int id)
         {
             var post = _postDataHandler.GetById(id);

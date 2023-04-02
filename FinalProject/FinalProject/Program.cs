@@ -1,6 +1,6 @@
 using DatabaseConnector;
-using FinalProject.BusinessLogicLayer;
 using FinalProject.DataBaseContext;
+using FinalProject.Interfaces;
 using FinalProject.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpLogging;
