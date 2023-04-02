@@ -5,6 +5,8 @@ namespace FinalProject.Models.Requests
 {
     public class RegistrationRequest : IValidatableObject
     {
+
+
         [Required(ErrorMessage = "Nickname должен быть заполнен!")]
         [Display(Name = "Никнейм")]
         [StringLength(20, MinimumLength = 5, ErrorMessage = "Максимальная длина строки 20 символов, минимальная длина строки 3 символа.")]

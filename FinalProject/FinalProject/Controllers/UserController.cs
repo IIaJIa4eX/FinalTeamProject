@@ -50,21 +50,23 @@ namespace FinalProject.Controllers
         [Route("/[action]")]
         [AllowAnonymous]
         [HttpGet]
-        public IActionResult Login([FromForm] RegistrationRequest user)
+        public IActionResult Login()
         {
-            if (!ModelState.IsValid)
-            {
-                return View(user);
-            }
+                return View();
 
-            RegistrationResponse registrationResponse = _registrationService.Registration(user);
-            return Ok(registrationResponse);
         }
 
+        [Route("/[action]")]
         [AllowAnonymous]
-        [HttpPost("login")]
-        public IActionResult Login([FromQuery] AuthenticationRequest authenticationRequest)
+        [HttpPost]
+        public IActionResult Login([FromForm] AuthenticationRequest authenticationRequest)
         {
+
+            if (!ModelState.IsValid)
+            {
+                return View(authenticationRequest);
+            }
+
             AuthenticationResponse authenticationResponse = _authenticateService.Login(authenticationRequest);
             if (authenticationResponse.Status == Models.AuthenticationStatus.Success)
             {
