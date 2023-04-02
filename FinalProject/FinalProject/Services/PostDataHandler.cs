@@ -3,7 +3,7 @@ using FinalProject.DataBaseContext;
 using FinalProject.Models.DTO;
 using FinalProject.Models.DTO.PostDTO;
 
-namespace FinalProject.BusinessLogicLayer
+namespace FinalProject.Services
 {
     public class PostDataHandler
     {

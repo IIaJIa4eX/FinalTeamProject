@@ -11,6 +11,7 @@ using System.Runtime;
 namespace FinalProject.Controllers
 {
     [Route("[controller]")]
+    [Authorize]
     public class PostController : Controller
     {
 
@@ -21,7 +22,7 @@ namespace FinalProject.Controllers
             _postDataHandler = postDataHandler;
         }
 
-
+       
         [HttpGet]
         [Route("/[action]")]
         public IActionResult Index(int id)
@@ -30,6 +31,7 @@ namespace FinalProject.Controllers
 
             return Ok($"{post.CreationDate}, {post.ContentId}, {post.User.NickName}");
         }
+
 
         [HttpPost]
         [Route("/[action]")]
