@@ -37,12 +37,23 @@ namespace FinalProject.Controllers
         [HttpPost]
         public IActionResult Registration([FromForm] RegistrationRequest user)
         {
+
+
             if (!ModelState.IsValid)
             {
                 return View(user);
             }
 
             RegistrationResponse registrationResponse = _registrationService.Registration(user);
+            if(registrationResponse.Status == 0)
+            {
+                return RedirectToAction("Login", new AuthenticationRequest
+                {
+                    Email = user.Email,
+                    Password = user.Password
+                });
+            }
+
             return Ok(registrationResponse);
         }
 
@@ -51,8 +62,7 @@ namespace FinalProject.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-                return View();
-
+              return View();
         }
 
         [Route("/[action]")]
@@ -70,8 +80,10 @@ namespace FinalProject.Controllers
             if (authenticationResponse.Status == Models.AuthenticationStatus.Success)
             {
                 Response.Headers.Add("X-Session-Token", authenticationResponse.SessionInfo.SessionToken);
+                Response.Cookies.Append("X-Session-Token", authenticationResponse.SessionInfo?.SessionToken);
+                return Redirect("~/Home/Index");
             }
-            return Ok(authenticationResponse);
+            return View("Home/Index");
         }
 
         [HttpGet("session")]

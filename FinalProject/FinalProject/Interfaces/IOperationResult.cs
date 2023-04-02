@@ -1,4 +1,4 @@
-﻿using NLog.Filters;
+using NLog.Filters;
 
 namespace FinalProject.Interfaces
 {
