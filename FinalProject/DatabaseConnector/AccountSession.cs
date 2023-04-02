@@ -1,11 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using DatabaseConnector.Interfaces;
 
 namespace DatabaseConnector
 {
     [Table("AccountSessions")]
-    public class AccountSession
+    public class AccountSession : IEntity
     {
+        public int Id { get => SessionId; set => SessionId = value; }
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SessionId { get; set; }
 

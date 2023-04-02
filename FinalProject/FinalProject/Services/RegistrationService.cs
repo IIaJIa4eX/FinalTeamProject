@@ -1,8 +1,12 @@
-﻿using DatabaseConnector;
+using DatabaseConnector;
 using FinalProject.DataBaseContext;
 using FinalProject.Models;
 using FinalProject.Models.Requests;
 using FinalProject.Utils;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Cryptography.X509Certificates;
+using System.Security.Policy;
+using System.Security.Principal;
 
 namespace FinalProject.Services
 {
@@ -15,6 +19,7 @@ namespace FinalProject.Services
         }
         public RegistrationResponse Registration(RegistrationRequest registrationRequest)
         {
+ 
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
             Context context = scope.ServiceProvider.GetService<Context>();
             User email = context.Users.FirstOrDefault(x => x.Email.Equals(registrationRequest.Email));

@@ -1,4 +1,5 @@
 using DatabaseConnector;
+using FinalProject.BusinessLogicLayer;
 using FinalProject.DataBaseContext;
 using FinalProject.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -80,7 +81,7 @@ public class Program
         builder.Services.AddScoped<EFGenericRepository<Post>>();
         builder.Services.AddScoped<EFGenericRepository<Issue>>();
 
-
+        builder.Services.AddScoped<PostDataHandler>();
 
         builder.Services.AddEndpointsApiExplorer();
 

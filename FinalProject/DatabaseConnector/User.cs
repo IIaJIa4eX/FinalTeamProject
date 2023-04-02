@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+using DatabaseConnector.Interfaces;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseConnector;
 
-[Table("Users")]
-public class User
+[Table("User")]
+public class User : IEntity
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
