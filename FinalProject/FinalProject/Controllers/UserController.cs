@@ -5,13 +5,13 @@ using FinalProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
+using System;
 using System.Net.Http.Headers;
 
 namespace FinalProject.Controllers
 {
     [Authorize]
     [Route("[controller]")]
-    [ApiController]
     public class UserController : Controller
     {
         private readonly IAuthenticateService _authenticateService;
@@ -36,7 +36,7 @@ namespace FinalProject.Controllers
         [Route("/[action]")]
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult UserRegistration([FromForm] RegistrationRequest user)
+        public IActionResult Registration([FromForm] RegistrationRequest user)
         {
             if (!ModelState.IsValid)
             {
