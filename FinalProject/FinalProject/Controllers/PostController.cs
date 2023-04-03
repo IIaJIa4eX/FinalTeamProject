@@ -10,7 +10,7 @@ using System.Runtime;
 
 namespace FinalProject.Controllers
 {
-    [Route("[controller]")]
+    [Route("Post")]
     [Authorize]
     public class PostController : Controller
     {
@@ -24,18 +24,51 @@ namespace FinalProject.Controllers
 
        
         [HttpGet]
-        [Route("/[action]")]
+        [Route("{id}")]
         [AllowAnonymous]
-        public IActionResult Index(int id)
+        public IActionResult Index([FromRoute]int id)
         {
-            var post = _postDataHandler.GetById(id);
-
-            return Ok($"{post.CreationDate}, {post.ContentId}, {post.User.NickName}");
+            //var post = _postDataHandler.GetById(id);
+            Post post = new Post()
+            {
+                CreationDate = DateTime.Now,
+                Id = id,
+                ContentId = 1,
+                Rating = 1,
+                IsVisible = true,
+                Category = "Cat",
+                User = new User()
+                {
+                    Id = 1,
+                    FirstName = "fName",
+                    LastName = "lName",
+                    NickName = "nName",
+                    Birthday = DateTime.Now,
+                    Email = "asd@asd.as",
+                    PasswordHash = "qwer",
+                    PasswordSalt = "asdf",
+                    IsBanned = false,
+                    UserRole = "a",
+                    Patronymic = "patronymic"
+                },
+                Content = new Content() 
+                {
+                    Text = "Content",
+                    Id=1,
+                    CreationDate= DateTime.Now,
+                    IsVisible=true
+                },
+                Comments = new List<Comment>(),
+                UserId = 1
+            };
+            //return Ok($"{post.CreationDate}, {post.ContentId}, {post.User.NickName}");
+            return View(post);
         }
 
 
         [HttpPost]
         [Route("/[action]")]
+        [AllowAnonymous]
         public IActionResult AddPost(CreatePostDTO postData)
         {
             bool success = _postDataHandler.Create(postData);
