@@ -22,7 +22,7 @@ public interface IGenericRepository<TEntity> where TEntity : IEntity
     /// <summary>Получить отфильтрованный список из БД</summary>
     /// <param name="predicate">Фильтр</param>
     /// <returns>Список объектов</returns>
-    IEnumerable<TEntity> Get(Func<TEntity, bool> predicate);
+    IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> predicate);
 
     /// <summary>Удалить элемент из БД</summary>
     /// <param name="item">объект БД</param>
@@ -40,6 +40,6 @@ public interface IGenericRepository<TEntity> where TEntity : IEntity
     /// <summary>Получить отфильтрованные элементы из таблицы и связанные элементы</summary>
     /// <param name="includeProperties"></param>
     /// <returns>Список объектов</returns>
-    public IEnumerable<TEntity> GetWithInclude(Func<TEntity, bool> predicate,
+    public IEnumerable<TEntity> GetWithInclude(Expression<Func<TEntity, bool>> predicate,
         params Expression<Func<TEntity, object>>[] includeProperties);
 }

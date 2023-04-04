@@ -11,10 +11,13 @@ namespace FinalProject.Services
         EFGenericRepository<Content> _contentRepository;
         EFGenericRepository<Comment> _commentRepository;
 
-        public PostDataHandler(EFGenericRepository<Post> postRepository, EFGenericRepository<Content> contentRepository)
+        public PostDataHandler(EFGenericRepository<Post> postRepository, 
+            EFGenericRepository<Content> contentRepository,
+            EFGenericRepository<Comment> commentRepository)
         {
             _postRepository = postRepository;
             _contentRepository = contentRepository;
+            _commentRepository = commentRepository;
         }
 
 

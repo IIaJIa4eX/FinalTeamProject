@@ -1,4 +1,4 @@
-﻿namespace FinalProject.Models
+﻿namespace FinalProject.Models.DTO
 {
     public class UserDto
     {
