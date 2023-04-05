@@ -61,11 +61,41 @@ namespace FinalProject.Controllers
                 Comments = new List<Comment>(),
                 UserId = 1
             };
+            post.Comments.Add(new Comment()
+            {
+                Content = new Content()
+                {
+                    Id = 1,
+                    CreationDate = DateTime.Now,
+                    IsVisible = true,
+                    Text = "Visible text"
+                },
+                CreationDate= DateTime.Now,
+                IsVisible=true,
+                Id=1,
+                UserId = 1
+            });
             //return Ok($"{post.CreationDate}, {post.ContentId}, {post.User.NickName}");
             return View(post);
         }
 
+        [HttpGet]
+        [Route("/create/new")]
+        [AllowAnonymous]
+        public IActionResult CreateNew()
+        {
+            var userid = HttpContext.Request.Headers.SingleOrDefault(x => x.Key == "UserId").Value.ToString();
+            ViewBag.UserId = userid;
+            return View();
+        }
 
+        [HttpPost]
+        [Route("/create/new")]
+        [AllowAnonymous]
+        public IActionResult CreateNew([FromForm] Content content)
+        {
+            return View(content);
+        }
         [HttpPost]
         [Route("/[action]")]
         [AllowAnonymous]
