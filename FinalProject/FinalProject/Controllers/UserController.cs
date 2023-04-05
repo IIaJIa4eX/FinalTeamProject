@@ -1,7 +1,8 @@
 ﻿using DatabaseConnector;
+using FinalProject.Interfaces;
+using FinalProject.Models;
 using FinalProject.Models.Requests;
 using FinalProject.Models.Validations;
-using FinalProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
@@ -10,7 +11,7 @@ using System.Net.Http.Headers;
 
 namespace FinalProject.Controllers
 {
-    [Authorize]
+
     [Route("[controller]")]
     public class UserController : Controller
     {
@@ -63,8 +64,9 @@ namespace FinalProject.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+         
               return View();
-        }
+        } 
 
         [Route("/[action]")]
         [AllowAnonymous]
@@ -78,13 +80,23 @@ namespace FinalProject.Controllers
             }
 
             AuthenticationResponse authenticationResponse = _authenticateService.Login(authenticationRequest);
-            if (authenticationResponse.Status == Models.AuthenticationStatus.Success)
+            if (authenticationResponse.Status == AuthenticationStatus.Success)
             {
                 Response.Headers.Add("X-Session-Token", authenticationResponse.SessionInfo.SessionToken);
-                Response.Cookies.Append("X-Session-Token", authenticationResponse.SessionInfo?.SessionToken);
+
+                var option = new CookieOptions
+                {
+                    //option.Expires = DateTime.Now.AddHours(24);
+                    SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict,
+                    HttpOnly = true,
+                    //Secure = true,//works only for https
+                    IsEssential = true
+                };
+                Response.Cookies.Append("X-Session-Token", authenticationResponse.SessionInfo?.SessionToken, option);
+                
                 return Redirect("~/Home/Index");
             }
-            return View("Home/Index");
+            return View("Index");
         }
 
         [HttpGet("session")]

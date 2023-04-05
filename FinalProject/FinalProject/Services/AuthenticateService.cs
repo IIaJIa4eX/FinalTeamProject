@@ -1,11 +1,13 @@
 using DatabaseConnector;
 using FinalProject.DataBaseContext;
+using FinalProject.Interfaces;
 using FinalProject.Models;
 using FinalProject.Models.Requests;
 using FinalProject.Utils;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 
 namespace FinalProject.Services
@@ -108,13 +110,13 @@ namespace FinalProject.Services
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             byte[] key = Encoding.ASCII.GetBytes(SecretKey);
-            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+            SecurityTokenDescriptor tokenDescriptor = new
+            SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(
-                    new Claim[] {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id .ToString()),
-                    new Claim(ClaimTypes.Email, user.Email),
-                    }),
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.Email)
+                }),
                 Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };

@@ -33,7 +33,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="BusinessLogicLayer\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
   <ItemGroup>

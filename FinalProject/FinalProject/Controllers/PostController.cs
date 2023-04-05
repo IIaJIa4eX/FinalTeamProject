@@ -1,9 +1,9 @@
 ﻿using DatabaseConnector;
-using FinalProject.BusinessLogicLayer;
 using FinalProject.DataBaseContext;
 using FinalProject.Models.DTO;
 using FinalProject.Models.DTO.PostDTO;
 using FinalProject.Models.Requests;
+using FinalProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime;
