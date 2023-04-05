@@ -9,4 +9,5 @@ public class PostDTO
     public ICollection<CommentDTO> Comments { get; set; } = new List<CommentDTO>(0);
     public int Rating { get; set; }
     public string Category { get; set; }
+    public bool IsVisible { get; set; }
 }

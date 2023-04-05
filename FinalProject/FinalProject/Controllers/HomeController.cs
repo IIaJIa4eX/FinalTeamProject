@@ -26,8 +26,10 @@ namespace FinalProject.Controllers
         }
         //[HttpGet]
         //[Route("/[action]")]
+        //[Authorize]        
         public IActionResult Categories()
         {
+            //var auth = User.Identity.IsAuthenticated;
             return View();
         }
 
