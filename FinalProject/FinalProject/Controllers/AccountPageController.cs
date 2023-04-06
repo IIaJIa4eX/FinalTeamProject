@@ -7,6 +7,11 @@ using Microsoft.Net.Http.Headers;
 using System.Net.Http.Headers;
 using System.Net;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using System.Runtime.CompilerServices;
+using System.Security.Principal;
+using FinalProject.Services;
+using FinalProject.Interfaces;
 
 namespace FinalProject.Controllers
 {
@@ -15,35 +20,40 @@ namespace FinalProject.Controllers
     public class AccountPageController : Controller
     {
         private readonly EFGenericRepository<User> _userRepository;
-        public readonly Context _context;
+        private readonly IAuthenticateService _authenticateService;
 
-        public AccountPageController(EFGenericRepository<User> userRepository, Context context)
+        public AccountPageController(EFGenericRepository<User> userRepository, IAuthenticateService authenticateService)
         {
-            _context = context;
             _userRepository = userRepository;
+            _authenticateService = authenticateService;
         }
 
         [Route("/[action]")]
         [HttpGet]
-        public async Task<User> Details(Guid id)
+        public ActionResult Details()
         {
-            return await _context.Users.FindAsync(id);
-
-
-
-
-
-
-
-            //  return View(employee);
-            //return View(new UserDto
-            //{
-            //    Id = user.Id,
-            //    LastName = user.LastName,
-            //    FirstName = user.FirstName,
-            //    Patronymic = user.Patronymic,
-            //    Birthday = user.Birthday,
-            //});
+            var authorization = Request.Headers[HeaderNames.Authorization];
+            if (AuthenticationHeaderValue.TryParse(authorization, out var headerValue))
+            {
+                var scheme = headerValue.Scheme;
+                var sessionToken = headerValue.Parameter;
+                if (string.IsNullOrEmpty(sessionToken))
+                    return Unauthorized();
+                SessionInfo sessionInfo = _authenticateService.GetSessionInfo(sessionToken);
+                var users = _userRepository.Get(x => x.Id == sessionInfo.Account.Id);
+                if (users.Any())
+                   return View(new UserDto
+                   {
+                       Id = sessionInfo.Account.Id,
+                       NickName = sessionInfo.Account.NickName,
+                       FirstName = sessionInfo.Account.FirstName,
+                       LastName = sessionInfo.Account.LastName,
+                       Patronymic = sessionInfo.Account.Patronymic,
+                       Birthday = sessionInfo.Account.Birthday,
+                       Email = sessionInfo.Account.Email
+                   });
+            }
+            return View();
         }
     }
 }

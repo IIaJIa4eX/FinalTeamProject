@@ -1,4 +1,5 @@
 using DatabaseConnector;
+using FinalProject.Controllers;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
 using FinalProject.Services;
@@ -50,7 +51,7 @@ public class Program
         }
 
 
-        //builder.Services.AddControllers();
+        
         builder.Services.AddSingleton<IAuthenticateService, AuthenticateService>();
         builder.Services.AddSingleton<IRegistrationService, RegistrationService>();
 
@@ -58,7 +59,7 @@ public class Program
         builder.Services.AddAuthentication(x =>
         {
             x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-           // x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         }).AddJwtBearer(x =>
         {
             x.RequireHttpsMetadata = false;
@@ -83,6 +84,7 @@ public class Program
         builder.Services.AddScoped<EFGenericRepository<Issue>>();
 
         builder.Services.AddScoped<PostDataHandler>();
+
 
         builder.Services.AddEndpointsApiExplorer();
 

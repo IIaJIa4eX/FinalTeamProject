@@ -72,8 +72,8 @@ namespace FinalProject.Controllers
             if (authenticationResponse.Status == Models.AuthenticationStatus.Success)
             {
                 Response.Headers.Add("X-Session-Token", authenticationResponse.SessionInfo.SessionToken);
-                Response.Cookies.Append("X-Session-Token", authenticationResponse.SessionInfo?.SessionToken);
-                return Redirect("~/Home/Index");
+                Response.Cookies.Append("X-Session-Token", authenticationResponse.SessionInfo.SessionToken);
+                return Redirect("~/Home");
             }
             return View("Home/Index");
         }

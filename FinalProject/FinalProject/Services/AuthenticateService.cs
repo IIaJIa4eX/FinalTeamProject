@@ -114,7 +114,7 @@ namespace FinalProject.Services
             {
                 Subject = new ClaimsIdentity(
                     new Claim[] {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id .ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, user.Email),
                     }),
                 Expires = DateTime.Now.AddMinutes(15),
@@ -127,5 +127,6 @@ namespace FinalProject.Services
         {
             return context.Users.FirstOrDefault(account => account.Email == login);
         }
+
     }
 }
