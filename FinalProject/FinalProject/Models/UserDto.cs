@@ -7,7 +7,7 @@
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Patronymic { get; set; }
-        public DateTime Birthday { get; set; } = DateTime.MinValue;
+        public DateTime? Birthday { get; set; }
         public string? Email { get; set; }
         public bool IsBanned { get; set; }
     }
