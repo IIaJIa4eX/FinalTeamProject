@@ -58,7 +58,7 @@ public class Program
         builder.Services.AddAuthentication(x =>
         {
             x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+           // x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         }).AddJwtBearer(x =>
         {
             x.RequireHttpsMetadata = false;
@@ -124,6 +124,20 @@ public class Program
         app.UseSession();
         app.UseStaticFiles();
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+        app.Use((context, next) =>
+        {
+
+            if (string.IsNullOrWhiteSpace(context.Request.Cookies["X-Session-Token"]))
+            {
+                context.Request.Headers["Authorization"] = "";
+            }
+
+            context.Request.Headers["Authorization"] = "Bearer " + context.Request.Cookies["X-Session-Token"];
+            var ss = context.Request.Headers["Authorization"];
+            return next.Invoke();
+        });
+
         app.UseRouting();
         app.UseAuthorization();
         app.UseAuthentication();

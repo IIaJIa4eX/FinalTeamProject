@@ -1,49 +1,49 @@
 ﻿using DatabaseConnector;
 using FinalProject.DataBaseContext;
 using FinalProject.Models;
-using FinalProject.Models.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Npgsql;
-using System.IdentityModel.Tokens.Jwt;
+using Microsoft.Net.Http.Headers;
+using System.Net.Http.Headers;
+using System.Net;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinalProject.Controllers
 {
-    //[Authorize]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("[controller]")]
     public class AccountPageController : Controller
     {
         private readonly EFGenericRepository<User> _userRepository;
+        public readonly Context _context;
 
-        public AccountPageController(EFGenericRepository<User> userRepository)
+        public AccountPageController(EFGenericRepository<User> userRepository, Context context)
         {
+            _context = context;
             _userRepository = userRepository;
         }
 
-        /*[Route("/[action]")]
-        [HttpGet]
-        public IActionResult Details()
-        {
-            return View();
-        }*/
-
-
         [Route("/[action]")]
         [HttpGet]
-        public IActionResult Details()
+        public async Task<User> Details(Guid id)
         {
-            /*var user = _userRepository.Get();
-            return View(user);
-            var user = _userRepository.FindById(id);
-            if (user is null)
-                return NotFound();*/
-            return View(new UserDto
-            {
-                Id = 2,
-                LastName ="ewgwegewgwge",
-                FirstName = "ewgwegewgwge",
-                Patronymic = "ewgwegewgwge"
-            });
+            return await _context.Users.FindAsync(id);
+
+
+
+
+
+
+
+            //  return View(employee);
+            //return View(new UserDto
+            //{
+            //    Id = user.Id,
+            //    LastName = user.LastName,
+            //    FirstName = user.FirstName,
+            //    Patronymic = user.Patronymic,
+            //    Birthday = user.Birthday,
+            //});
         }
     }
 }
