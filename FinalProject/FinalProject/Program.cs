@@ -68,6 +68,7 @@ public class Program
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AuthenticateService.SecretKey)),
                 ValidateIssuer = false,
+                ValidateLifetime = true,
                 ValidateAudience = false,
                 ClockSkew = TimeSpan.Zero,
             };

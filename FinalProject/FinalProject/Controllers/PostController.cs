@@ -3,6 +3,7 @@ using FinalProject.Models.DTO.PostDTO;
 using FinalProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using FinalProject.Services;
 
 namespace FinalProject.Controllers
 {

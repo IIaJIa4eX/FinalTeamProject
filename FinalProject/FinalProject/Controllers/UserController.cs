@@ -8,7 +8,6 @@ using System.Net.Http.Headers;
 
 namespace FinalProject.Controllers
 {
-    [Authorize]
     [Route("[controller]")]
     public class UserController : Controller
     {
@@ -20,19 +19,15 @@ namespace FinalProject.Controllers
             _authenticateService = authenticateService;
         }
 
-
-
-        [Route("/[action]")]        
+        [Route("/[action]")]
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Registration()
         {
-            
+
             return View();
         }
 
         [Route("/[action]")]
-        [AllowAnonymous]
         [HttpPost]
         public IActionResult Registration([FromForm] RegistrationRequest user)
         {
@@ -44,7 +39,7 @@ namespace FinalProject.Controllers
             }
 
             RegistrationResponse registrationResponse = _registrationService.Registration(user);
-            if(registrationResponse.Status == 0)
+            if (registrationResponse.Status == 0)
             {
                 return RedirectToAction("Login", new AuthenticationRequest
                 {
@@ -57,15 +52,13 @@ namespace FinalProject.Controllers
         }
 
         [Route("/[action]")]
-        [AllowAnonymous]
         [HttpGet]
         public IActionResult Login()
         {
-              return View();
+            return View();
         }
 
         [Route("/[action]")]
-        [AllowAnonymous]
         [HttpPost]
         public IActionResult Login([FromForm] AuthenticationRequest authenticationRequest)
         {
