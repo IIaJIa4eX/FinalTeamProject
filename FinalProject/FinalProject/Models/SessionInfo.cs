@@ -1,6 +1,4 @@
-﻿using FinalProject.Models;
-
-namespace DatabaseConnector;
+﻿namespace FinalProject.Models;
 
 public class SessionInfo
 {

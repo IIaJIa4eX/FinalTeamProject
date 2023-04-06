@@ -50,7 +50,7 @@ public class Program
         }
 
 
-        builder.Services.AddControllers();
+        //builder.Services.AddControllers();
         builder.Services.AddSingleton<IAuthenticateService, AuthenticateService>();
         builder.Services.AddSingleton<IRegistrationService, RegistrationService>();
 
