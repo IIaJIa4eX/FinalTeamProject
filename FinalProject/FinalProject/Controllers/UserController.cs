@@ -1,12 +1,9 @@
-﻿using DatabaseConnector;
-using FinalProject.Interfaces;
+﻿using FinalProject.Interfaces;
+using FinalProject.Models;
 using FinalProject.Models.Requests;
-using FinalProject.Models.Validations;
-using FinalProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
-using System;
 using System.Net.Http.Headers;
 
 namespace FinalProject.Controllers
