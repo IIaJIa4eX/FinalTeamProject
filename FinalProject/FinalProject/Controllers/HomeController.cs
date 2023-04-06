@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
@@ -24,7 +24,6 @@ namespace FinalProject.Controllers
             return View();
         }
 
-        //[Authorize(AuthenticationSchemes = "Bearer")]
         [Authorize]
         [HttpGet]
         [Route("/[action]")]

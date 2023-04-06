@@ -1,4 +1,4 @@
-﻿using DatabaseConnector;
+using DatabaseConnector;
 using FinalProject.Interfaces;
 using FinalProject.Models;
 using FinalProject.Models.Requests;
@@ -6,7 +6,6 @@ using FinalProject.Models.Validations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
-using System;
 using System.Net.Http.Headers;
 
 namespace FinalProject.Controllers
@@ -23,19 +22,15 @@ namespace FinalProject.Controllers
             _authenticateService = authenticateService;
         }
 
-
-
-        [Route("/[action]")]        
+        [Route("/[action]")]
         [HttpGet]
-        [AllowAnonymous]
         public IActionResult Registration()
         {
-            
+
             return View();
         }
 
         [Route("/[action]")]
-        [AllowAnonymous]
         [HttpPost]
         public IActionResult Registration([FromForm] RegistrationRequest user)
         {
@@ -47,7 +42,7 @@ namespace FinalProject.Controllers
             }
 
             RegistrationResponse registrationResponse = _registrationService.Registration(user);
-            if(registrationResponse.Status == 0)
+            if (registrationResponse.Status == 0)
             {
                 return RedirectToAction("Login", new AuthenticationRequest
                 {
@@ -60,16 +55,13 @@ namespace FinalProject.Controllers
         }
 
         [Route("/[action]")]
-        [AllowAnonymous]
         [HttpGet]
         public IActionResult Login()
         {
-         
-              return View();
-        } 
+            return View();
+        }
 
         [Route("/[action]")]
-        [AllowAnonymous]
         [HttpPost]
         public IActionResult Login([FromForm] AuthenticationRequest authenticationRequest)
         {

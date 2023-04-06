@@ -1,4 +1,4 @@
-﻿using DatabaseConnector;
+using DatabaseConnector;
 using FinalProject.DataBaseContext;
 using FinalProject.Models.DTO;
 using FinalProject.Models.DTO.PostDTO;
@@ -6,7 +6,7 @@ using FinalProject.Models.Requests;
 using FinalProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Runtime;
+using FinalProject.Services;
 
 namespace FinalProject.Controllers
 {

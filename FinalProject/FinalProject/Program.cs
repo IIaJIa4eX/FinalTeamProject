@@ -1,4 +1,5 @@
 using DatabaseConnector;
+using FinalProject.Controllers;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
 using FinalProject.Services;
@@ -82,6 +83,7 @@ public class Program
 
         builder.Services.AddScoped<PostDataHandler>();
 
+
         builder.Services.AddEndpointsApiExplorer();
 
         builder.Services.AddSwaggerGen(c =>
@@ -96,22 +98,20 @@ public class Program
                 Scheme = "Bearer"
             });
             c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-                {
-                    {
-                        new OpenApiSecurityScheme()
-                        {
-                            Reference = new OpenApiReference()
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        Array.Empty<string>()
-                    }
-                });
+            {
+                 {
+                     new OpenApiSecurityScheme()
+                     {
+                         Reference = new OpenApiReference()
+                         {
+                             Type = ReferenceType.SecurityScheme,
+                             Id = "Bearer"
+                         }
+                     },
+                     Array.Empty<string>()
+                 }
+            });
         });
-
-        builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
 
         var app = builder.Build();

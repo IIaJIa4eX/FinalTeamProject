@@ -7,6 +7,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="BusinessLogicLayer\**" />
+	  <Content Remove="BusinessLogicLayer\**" />
+	  <EmbeddedResource Remove="BusinessLogicLayer\**" />
+	  <None Remove="BusinessLogicLayer\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Content Remove="dbcstringMySQL.json" />
 	</ItemGroup>
 
@@ -23,6 +30,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
 
 		<PackageReference Include="NLog.Web.AspNetCore" Version="5.2.2" />
 	</ItemGroup>
@@ -50,7 +58,6 @@
     <None Include="Views\Shared\_Layout.cshtml" />
     <None Include="Views\Shared\_LoginPartial.cshtml" />
     <None Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
-    <None Include="Views\User\AccountPage.cshtml" />
     <None Include="Views\_ViewImports.cshtml" />
     <None Include="Views\_ViewStart.cshtml" />
   </ItemGroup>

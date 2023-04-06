@@ -72,7 +72,8 @@ namespace FinalProject.Services
                 SessionToken = CreateSessionToken(account),
                 TimeCreated = DateTime.Now,
                 TimeLastRequest = DateTime.Now,
-                IsClosed = false
+                IsClosed = false,
+                TimeClosed = DateTime.Now.AddMinutes(15)
             };
             context.AccountSessions.Add(session);
             context.SaveChanges();
@@ -127,5 +128,6 @@ namespace FinalProject.Services
         {
             return context.Users.FirstOrDefault(account => account.Email == login);
         }
+
     }
 }
