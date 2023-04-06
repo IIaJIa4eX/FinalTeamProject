@@ -116,5 +116,17 @@ namespace FinalProject.Controllers
             }
             return Unauthorized();
         }
+
+
+        [Route("/[action]")]
+        [HttpGet]
+        public IActionResult LogOut()
+        {
+
+            Response.Cookies.Delete("X-Session-Token");
+
+            return Redirect("~/Home/Index");
+        }
     }
+
 }
