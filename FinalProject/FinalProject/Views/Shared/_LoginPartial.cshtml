@@ -10,7 +10,7 @@
     @if (@User.Identity.IsAuthenticated)
 {
     <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="" asp-page="/Account/Manage/Index" title="Manage">@User.Identity?.Name</a>
+            <a class="nav-link text-dark" asp-controller="AccountPage" asp-action="Details" method="get" title="Manage">@User.Identity?.Name</a>
     </li>
     <li class="nav-item">
             <form class="form-inline" asp-controller="User" asp-action="LogOut" method="get">

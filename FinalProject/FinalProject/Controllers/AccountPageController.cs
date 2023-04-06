@@ -9,7 +9,7 @@ using System.Net.Http.Headers;
 
 namespace FinalProject.Controllers
 {
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     [Route("[controller]")]
     public class AccountPageController : Controller
     {
