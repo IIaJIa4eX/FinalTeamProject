@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
+using FinalProject.DataBaseContext;
 
 namespace FinalProject.Controllers
 {
@@ -22,14 +23,17 @@ namespace FinalProject.Controllers
         //[Route("/[action]")]
         public IActionResult Index()
         {
+            bool ss = User.Identity.IsAuthenticated;
             return View();
         }
-        //[HttpGet]
-        //[Route("/[action]")]
-        //[Authorize]        
+
+        //[Authorize(AuthenticationSchemes = "Bearer")]
+        [Authorize]
+        [HttpGet]
+        [Route("/[action]")]
         public IActionResult Categories()
         {
-            //var auth = User.Identity.IsAuthenticated;
+            bool ss = User.Identity.IsAuthenticated;
             return View();
         }
 

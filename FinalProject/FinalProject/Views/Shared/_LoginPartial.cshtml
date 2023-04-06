@@ -7,7 +7,7 @@
 }
 
 <ul class="navbar-nav">
-@if (1<0)
+    @if (@User.Identity.IsAuthenticated)
 {
     <li class="nav-item">
         <a  class="nav-link text-dark" asp-area="" asp-page="/Account/Manage/Index" title="Manage">@User.Identity?.Name!</a>
