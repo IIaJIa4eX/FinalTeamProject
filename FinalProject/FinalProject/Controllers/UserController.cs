@@ -64,15 +64,6 @@ namespace FinalProject.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-         
-              return View();
-        } 
-
-        [Route("/[action]")]
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult Login()
-        {
               return View();
         }
 
