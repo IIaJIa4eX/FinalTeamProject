@@ -17,7 +17,6 @@ namespace FinalProject.Services
             _contentRepository = contentRepository;
         }
 
-
         public Post GetById(int id)
         {
 
