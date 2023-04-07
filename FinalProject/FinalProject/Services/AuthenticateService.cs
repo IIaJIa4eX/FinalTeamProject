@@ -118,7 +118,7 @@ namespace FinalProject.Services
                 {
                     new Claim(ClaimTypes.Name, user.NickName),
                     new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, user.UserRole)
+                    //new Claim(ClaimTypes.Role, user.UserRole)
 
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(15),

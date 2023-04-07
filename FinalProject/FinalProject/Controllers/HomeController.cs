@@ -20,7 +20,6 @@ namespace FinalProject.Controllers
 
         public IActionResult Index()
         {
-            bool ss = User.Identity.IsAuthenticated;
             return View();
         }
 

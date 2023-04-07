@@ -23,7 +23,7 @@ namespace FinalProject.Services
             var tmpPost = _postRepository.GetWithInclude
                 (
                 post => post.Id == id,
-                comms => comms.Comments.Take(50),
+                comms => comms.Comments.Take(10),
                 cont => cont.Content,
                 usr => usr.User
                 )
