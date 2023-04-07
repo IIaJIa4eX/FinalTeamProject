@@ -1,4 +1,5 @@
 using DatabaseConnector.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -27,7 +28,7 @@ public class User : IEntity
     public string? Patronymic { get; set; }
 
     [Column]
-    public DateTime Birthday { get; set; }
+    public DateTime? Birthday { get; set; } = null;
 
     [Column]
     [StringLength(255)]

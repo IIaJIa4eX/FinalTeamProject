@@ -73,7 +73,8 @@ namespace FinalProject.Services
                 SessionToken = CreateSessionToken(account),
                 TimeCreated = DateTime.Now,
                 TimeLastRequest = DateTime.Now,
-                IsClosed = false
+                IsClosed = false,
+                TimeClosed = DateTime.Now.AddMinutes(15)
             };
             context.AccountSessions.Add(session);
             context.SaveChanges();
@@ -114,11 +115,12 @@ namespace FinalProject.Services
             SecurityTokenDescriptor tokenDescriptor = new
             SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.Email)
-                }),
-                Expires = DateTime.UtcNow.AddMinutes(15),
+                Subject = new ClaimsIdentity(
+                    new Claim[] {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    }),
+                Expires = DateTime.Now.AddMinutes(15),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
@@ -128,5 +130,6 @@ namespace FinalProject.Services
         {
             return context.Users.FirstOrDefault(account => account.Email == login);
         }
+
     }
 }

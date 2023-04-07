@@ -1,6 +1,6 @@
-﻿using FinalProject.Models.DTO;
+using FinalProject.Models.DTO;
 
-namespace DatabaseConnector;
+namespace FinalProject.Models;
 
 public class SessionInfo
 {

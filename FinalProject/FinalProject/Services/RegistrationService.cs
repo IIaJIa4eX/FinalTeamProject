@@ -4,10 +4,6 @@ using FinalProject.Interfaces;
 using FinalProject.Models;
 using FinalProject.Models.Requests;
 using FinalProject.Utils;
-using Microsoft.AspNetCore.Identity;
-using System.Security.Cryptography.X509Certificates;
-using System.Security.Policy;
-using System.Security.Principal;
 
 namespace FinalProject.Services
 {

@@ -27,7 +27,6 @@ namespace FinalProject.Controllers
             return View();
         }
 
-        //[Authorize(AuthenticationSchemes = "Bearer")]
         [Authorize]
         [HttpGet]
         [Route("/[action]")]
