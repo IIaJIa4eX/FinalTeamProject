@@ -32,17 +32,21 @@ namespace FinalProject.Controllers
                 SessionInfo sessionInfo = _authenticateService.GetSessionInfo(headerValue.Parameter!);
                 var users = _userRepository.Get(x => x.Id == sessionInfo.Account.Id);
                 if (users.Any())
+                {
+                    var user = users.First();
                     return View(new UserDto
                     {
-                        Id = sessionInfo.Account.Id,
-                        NickName = sessionInfo.Account.NickName,
-                        FirstName = sessionInfo.Account.FirstName,
-                        LastName = sessionInfo.Account.LastName,
-                        Patronymic = sessionInfo.Account.Patronymic,
-                        Birthday = sessionInfo.Account.Birthday,
-                        Email = sessionInfo.Account.Email
+                        Id = user.Id, //sessionInfo.Account.Id,
+                        NickName = user.NickName, //sessionInfo.Account.NickName,
+                        FirstName = user.FirstName, //sessionInfo.Account.FirstName,
+                        LastName = user.LastName, //sessionInfo.Account.LastName,
+                        Patronymic = user.Patronymic, //sessionInfo.Account.Patronymic,
+                        Birthday = user.Birthday, //sessionInfo.Account.Birthday,
+                        Email = user.Email // sessionInfo.Account.Email
+
 
                     });
+                }
             }
             return View();
         }
