@@ -14,7 +14,7 @@ public interface IGenericRepository<TEntity> where TEntity : IEntity
     /// <param name="id">Id элемента</param>
     /// <returns>объект из БД</returns>
     TEntity? FindById(int id);
-    
+
     /// <summary>Получить все элементы из БД</summary>
     /// <returns>Список объектов</returns>
     IEnumerable<TEntity> Get();
@@ -36,7 +36,7 @@ public interface IGenericRepository<TEntity> where TEntity : IEntity
     /// <param name="includeProperties"></param>
     /// <returns>Список объектов</returns>
     public IEnumerable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties);
-    
+
     /// <summary>Получить отфильтрованные элементы из таблицы и связанные элементы</summary>
     /// <param name="includeProperties"></param>
     /// <returns>Список объектов</returns>

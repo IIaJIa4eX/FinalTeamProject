@@ -7,7 +7,7 @@ namespace FinalProject.DataBaseContext;
 
 
 
-public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class,IEntity
+public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class, IEntity
 {
     DbContext _context;
     DbSet<TEntity> _dbSet;

@@ -22,11 +22,11 @@ namespace FinalProject.Controllers
             _postDataHandler = postDataHandler;
         }
 
-       
+
         [HttpGet]
         [Route("{id}")]
         [AllowAnonymous]
-        public IActionResult Index([FromRoute]int id)
+        public IActionResult Index([FromRoute] int id)
         {
             //var post = _postDataHandler.GetById(id);
             Post post = new Post()
@@ -51,12 +51,12 @@ namespace FinalProject.Controllers
                     UserRole = "a",
                     Patronymic = "patronymic"
                 },
-                Content = new Content() 
+                Content = new Content()
                 {
                     Text = "Content",
-                    Id=1,
-                    CreationDate= DateTime.Now,
-                    IsVisible=true
+                    Id = 1,
+                    CreationDate = DateTime.Now,
+                    IsVisible = true
                 },
                 Comments = new List<Comment>(),
                 UserId = 1
@@ -70,9 +70,9 @@ namespace FinalProject.Controllers
                     IsVisible = true,
                     Text = "Visible text"
                 },
-                CreationDate= DateTime.Now,
-                IsVisible=true,
-                Id=1,
+                CreationDate = DateTime.Now,
+                IsVisible = true,
+                Id = 1,
                 UserId = 1
             });
             //return Ok($"{post.CreationDate}, {post.ContentId}, {post.User.NickName}");

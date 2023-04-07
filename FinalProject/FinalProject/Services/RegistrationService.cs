@@ -16,7 +16,7 @@ namespace FinalProject.Services
         }
         public RegistrationResponse Registration(RegistrationRequest registrationRequest)
         {
- 
+
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
             Context context = scope.ServiceProvider.GetService<Context>();
             User email = context.Users.FirstOrDefault(x => x.Email.Equals(registrationRequest.Email));
