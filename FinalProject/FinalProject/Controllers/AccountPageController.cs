@@ -29,9 +29,7 @@ namespace FinalProject.Controllers
             var authorization = Request.Headers[HeaderNames.Authorization];
             if (AuthenticationHeaderValue.TryParse(authorization, out var headerValue))
             {
-                var scheme = headerValue.Scheme;
-                var sessionToken = headerValue.Parameter;
-                SessionInfo sessionInfo = _authenticateService.GetSessionInfo(sessionToken);
+                SessionInfo sessionInfo = _authenticateService.GetSessionInfo(headerValue.Parameter!);
                 var users = _userRepository.Get(x => x.Id == sessionInfo.Account.Id);
                 if (users.Any())
                     return View(new UserDto
