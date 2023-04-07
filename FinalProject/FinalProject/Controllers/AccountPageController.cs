@@ -23,7 +23,12 @@ namespace FinalProject.Controllers
             _userRepository = userRepository;
             _authenticateService = authenticateService;
         }
-
+        [Route("Index")]
+        [HttpGet]
+        public ActionResult Index()
+        {
+            return View();
+        }
         [Route("/[action]")]
         [HttpGet]
         public ActionResult Details()

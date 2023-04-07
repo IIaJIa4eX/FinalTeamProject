@@ -1,6 +1,7 @@
 ﻿using DatabaseConnector;
 using Microsoft.EntityFrameworkCore;
 using FinalProject.Models;
+using FinalProject.Models.DTO;
 
 namespace FinalProject.DataBaseContext;
 
@@ -18,4 +19,6 @@ public class Context : DbContext
     {
 
     }
+
+    public DbSet<FinalProject.Models.DTO.UserDto>? UserDto { get; set; }
 }

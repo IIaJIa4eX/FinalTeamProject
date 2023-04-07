@@ -54,7 +54,6 @@ public class Program
         builder.Services.AddSingleton<IAuthenticateService, AuthenticateService>();
         builder.Services.AddSingleton<IRegistrationService, RegistrationService>();
 
-
         builder.Services.AddAuthentication(x =>
         {
             x.DefaultAuthenticateScheme =
