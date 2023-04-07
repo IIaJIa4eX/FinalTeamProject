@@ -8,6 +8,11 @@ public interface IGenericRepository<TEntity> where TEntity : IEntity
     /// <summary>Создать элемент в БД</summary>
     /// <param name="item">объект для добавления в БД</param>
     /// <returns>Id элемента в БД</returns>
+    int CreateAndGetId(TEntity item);
+
+    /// <summary>Создать элемент в БД</summary>
+    /// <param name="item">объект для добавления в БД</param>
+    /// <returns>результат сохранения</returns>
     int Create(TEntity item);
 
     /// <summary>Поиск элемента в БД по Id</summary>
@@ -35,11 +40,11 @@ public interface IGenericRepository<TEntity> where TEntity : IEntity
     /// <summary>Получить элементы из таблицы и связанные элементы</summary>
     /// <param name="includeProperties"></param>
     /// <returns>Список объектов</returns>
-    public IEnumerable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties);
+    IEnumerable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties);
 
     /// <summary>Получить отфильтрованные элементы из таблицы и связанные элементы</summary>
     /// <param name="includeProperties"></param>
     /// <returns>Список объектов</returns>
-    public IEnumerable<TEntity> GetWithInclude(Expression<Func<TEntity, bool>> predicate,
+    IEnumerable<TEntity> GetWithInclude(Expression<Func<TEntity, bool>> predicate,
         params Expression<Func<TEntity, object>>[] includeProperties);
 }

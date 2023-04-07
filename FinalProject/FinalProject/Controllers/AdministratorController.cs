@@ -24,9 +24,9 @@ namespace FinalProject.Controllers
         }
         [Route("UsersList")]
         [HttpGet]
-        public IActionResult AllUsers() 
+        public IActionResult AllUsers()
         {
-            return View (MapUser(_users.Get()));
+            return View(MapUser(_users.Get()));
         }
         private IEnumerable<UserDto> MapUser(IEnumerable<User> array)
         {

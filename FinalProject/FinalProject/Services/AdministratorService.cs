@@ -32,7 +32,7 @@ namespace FinalProject.Services
             return MapUser(_users.Get());
 
         }
-        public IEnumerable<UserDto> GetUsers(Expression<Func<User,bool>> predicate)
+        public IEnumerable<UserDto> GetUsers(Expression<Func<User, bool>> predicate)
         {
             return MapUser(_users.Get(predicate));
         }

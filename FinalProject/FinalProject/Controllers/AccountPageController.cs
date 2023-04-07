@@ -79,11 +79,10 @@ namespace FinalProject.Controllers
                         Patronymic = user.Patronymic, //sessionInfo.Account.Patronymic,
                         Birthday = user.Birthday, //sessionInfo.Account.Birthday,
                         Email = user.Email // sessionInfo.Account.Email
-
                     });
                 }
             }
-                return View();
+            return View();
         }
         [Route("Edit")]
         [HttpPost]

@@ -1,6 +1,7 @@
 using DatabaseConnector;
 using FinalProject.DataBaseContext;
 using FinalProject.Models.DTO;
+using FinalProject.Models.DTO.Post;
 using FinalProject.Models.DTO.PostDTO;
 
 namespace FinalProject.Services
@@ -198,7 +199,23 @@ namespace FinalProject.Services
 
         }
 
+        public IEnumerable<PostDTO> Get(int count)
+        {
 
+            return _postRepository.Get(p=>p.Content.IsVisible).TakeLast(count);
+        }
+        private IEnumerable<PostDTO> Remap(IEnumerable<Post> posts)
+        {
+            List<PostDTO> dtos=new List<PostDTO>(posts.Count());
+            foreach (var post in posts)
+            {
+                dtos.Add(new PostDTO()
+                {
+                    Id = post.Id,
+                    Content=post.Content,
 
+                });
+            }
+        }
     }
 }
