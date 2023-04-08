@@ -41,6 +41,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="wwwroot\lib\" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Views\Error.cshtml" />
     <None Include="Views\Home\Categories.cshtml" />
     <None Include="Views\Home\Index.cshtml" />

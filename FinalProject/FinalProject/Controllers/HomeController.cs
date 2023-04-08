@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
@@ -23,7 +23,6 @@ namespace FinalProject.Controllers
         //[Route("/[action]")]
         public IActionResult Index()
         {
-            bool ss = User.Identity.IsAuthenticated;
             return View();
         }
 
