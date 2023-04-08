@@ -1,4 +1,4 @@
-﻿namespace FinalProject.Models.DTO.Post;
+﻿namespace DatabaseConnector.DTO.Post;
 
 public class ContentDTO
 {

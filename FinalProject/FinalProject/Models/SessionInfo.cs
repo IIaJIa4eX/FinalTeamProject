@@ -1,4 +1,4 @@
-using FinalProject.Models.DTO;
+using DatabaseConnector.DTO;
 
 namespace FinalProject.Models;
 

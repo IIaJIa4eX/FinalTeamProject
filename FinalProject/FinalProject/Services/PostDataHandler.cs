@@ -1,8 +1,11 @@
 using DatabaseConnector;
+using DatabaseConnector.DTO;
+using DatabaseConnector.DTO.Post;
+using DatabaseConnector.Extensions;
 using FinalProject.DataBaseContext;
-using FinalProject.Models.DTO;
-using FinalProject.Models.DTO.Post;
-using FinalProject.Models.DTO.PostDTO;
+//using FinalProject.Models.DTO;
+//using FinalProject.Models.DTO.Post;
+//using FinalProject.Models.DTO.PostDTO;
 
 namespace FinalProject.Services
 {
@@ -24,22 +27,18 @@ namespace FinalProject.Services
 
         public Post GetById(int id)
         {
-
-            var tmpPost = _postRepository.GetWithInclude
-                (
-                post => post.Id == id,
-                comms => comms.Comments.Take(50),
-                cont => cont.Content,
-                usr => usr.User
-                )
+            var tmpPost = _postRepository
+                .GetWithInclude(post => post.Id == id,
+                                comms => comms.Comments.Take(50),
+                                cont => cont.Content!,
+                                usr => usr.User!)
                 .FirstOrDefault();
 
-            return tmpPost;
+            return tmpPost!;
         }
 
         public bool Create(CreatePostDTO postData)
         {
-            bool result;
             try
             {
                 int contentId = _contentRepository.CreateAndGetId(new Content
@@ -57,77 +56,40 @@ namespace FinalProject.Services
                     UserId = postData.UserId,
                     CreationDate = DateTime.UtcNow,
                 });
-
-                if (entitiesNumb > 0)
-                {
-                    result = true;
-                }
-                else
-                {
-                    result = false;
-                }
-
+                return entitiesNumb > 0;
             }
             catch
             {
-                result = false;
+                return false;
             }
-
-
-            return result;
         }
 
         public bool Edit(EditPostDTO postData)
         {
-
             var post = _postRepository.FindById(postData.Id);
-
-            if (post == null)
+            if (post is not null)
             {
-                return false;
+                var content = _contentRepository.FindById(post.ContentId);
+                if (content is not null)
+                {
+                    content.CreationDate = DateTime.UtcNow;
+                    content.IsVisible = true;
+                    content.Text = postData.Description;
+                    return _contentRepository.Update(content) > 0;
+                }
             }
-
-            var content = _contentRepository.FindById(post.ContentId);
-
-            if (content == null)
-            {
-                return false;
-            }
-
-            content.CreationDate = DateTime.UtcNow;
-            content.IsVisible = true;
-            content.Text = postData.Description;
-
-            int res = _contentRepository.Update(content);
-
-            if (res > 0)
-            {
-                return true;
-            }
-
-            return false;
+            return false;            
         }
 
         public bool Delete(EditPostDTO postData)
         {
             var post = _postRepository.FindById(postData.Id);
-
-            if (post == null)
+            if (post is not null)
             {
-                return false;
+                post.IsVisible = false;
+                return _postRepository.Update(post) > 0;
             }
-            post.IsVisible = false;
-
-            int res = _postRepository.Update(post);
-
-            if (res > 0)
-            {
-                return true;
-            }
-
-
             return false;
-
         }
 
         public bool Rating(string postData, int Id)
@@ -135,44 +97,24 @@ namespace FinalProject.Services
             if (postData == "plus" || postData == "minus")
             {
                 var post = _postRepository.FindById(Id);
-
-                if (post != null)
+                if (post is not null)
                 {
-                    if (postData == "plus")
-                    {
-                        post.Rating += 1;
-                    }
-                    else
-                    {
-                        post.Rating -= 1;
-                    }
-
-                    int res = _postRepository.Update(post);
-
-                    if (res > 0)
-                    {
-                        return true;
-                    }
-
-                    return false;
+                    post.Rating = postData == "plus" ? post.Rating + 1 : post.Rating - 1;
+                    return _postRepository.Update(post) > 0;
                 }
-
             }
-
             return false;
-
         }
 
         public bool AddComment(CommentDTO comment)
         {
-
             try
             {
                 int contentId = _contentRepository.CreateAndGetId(new Content
                 {
                     CreationDate = DateTime.UtcNow,
                     IsVisible = true,
-                    Text = comment.Text
+                    Text = comment.Content.Text
                 });
 
                 int res = _commentRepository.Create(new Comment
@@ -183,14 +125,7 @@ namespace FinalProject.Services
                     ContentId = contentId
                 });
 
-                if (res > 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return res > 0;
             }
             catch
             {
@@ -199,23 +134,18 @@ namespace FinalProject.Services
 
         }
 
-        public IEnumerable<PostDTO> Get(int count)
+        public IEnumerable<PostDTO> GetLast(int count)
         {
-
-            return _postRepository.Get(p=>p.Content.IsVisible).TakeLast(count);
+            return Remap(_postRepository.Get(p => p.Content!.IsVisible).TakeLast(count));
         }
         private IEnumerable<PostDTO> Remap(IEnumerable<Post> posts)
         {
             List<PostDTO> dtos=new List<PostDTO>(posts.Count());
             foreach (var post in posts)
             {
-                dtos.Add(new PostDTO()
-                {
-                    Id = post.Id,
-                    Content=post.Content,
-
-                });
+                dtos.Add(post.Remap());
             }
-        }
+            return dtos;
+        }        
     }
 }

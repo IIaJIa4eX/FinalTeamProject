@@ -1,5 +1,6 @@
 ﻿using DatabaseConnector;
-using FinalProject.Models.DTO;
+using DatabaseConnector.DTO;
+using DatabaseConnector.DTO.Post;
 using System.Linq.Expressions;
 
 namespace FinalProject.Interfaces

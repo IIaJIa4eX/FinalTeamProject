@@ -2,7 +2,8 @@
 using DatabaseConnector.Interfaces;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
-using FinalProject.Models.DTO;
+using DatabaseConnector.DTO;
+using DatabaseConnector.DTO.Post;
 using System.Linq.Expressions;
 
 namespace FinalProject.Services

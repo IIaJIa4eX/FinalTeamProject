@@ -1,8 +1,9 @@
 using DatabaseConnector;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
-using FinalProject.Models;
-using FinalProject.Models.DTO;
+using DatabaseConnector.DTO;
+using DatabaseConnector.DTO.Post;
+using DatabaseConnector.Extensions;
 using FinalProject.Models.Requests;
 using FinalProject.Utils;
 using Microsoft.IdentityModel.Tokens;
@@ -10,6 +11,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
+using FinalProject.Models;
 
 namespace FinalProject.Services
 {
@@ -27,16 +29,16 @@ namespace FinalProject.Services
             SessionInfo sessionInfo;
             lock (_sessions)
             {
-                _sessions.TryGetValue(sessionToken, out sessionInfo);
+                _sessions.TryGetValue(sessionToken, out sessionInfo!);
             }
             if (sessionInfo == null)
             {
                 using IServiceScope scope = _serviceScopeFactory.CreateScope();
-                Context context = scope.ServiceProvider.GetService<Context>();
-                AccountSession session = context.AccountSessions.FirstOrDefault(item => item.SessionToken == sessionToken);
+                Context context = scope.ServiceProvider.GetService<Context>()!;
+                AccountSession session = context.AccountSessions.FirstOrDefault(item => item.SessionToken == sessionToken)!;
                 if (session == null)
                     return null;
-                User account = context.Users.FirstOrDefault(item => item.Id == session.AccountId);
+                User account = context.Users.FirstOrDefault(item => item.Id == session.AccountId)!;
                 sessionInfo = GetSessionInfo(account, session);
                 if (sessionInfo != null)
                 {
@@ -46,13 +48,13 @@ namespace FinalProject.Services
                     }
                 }
             }
-            return sessionInfo;
+            return sessionInfo!;
         }
         public AuthenticationResponse Login(AuthenticationRequest authenticationRequest)
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
-            Context context = scope.ServiceProvider.GetService<Context>();
-            User account = !string.IsNullOrWhiteSpace(authenticationRequest.Email) ? FindAccountByLogin(context, authenticationRequest.Email) : null;
+            Context context = scope.ServiceProvider.GetService<Context>()!;
+            User account = !string.IsNullOrWhiteSpace(authenticationRequest.Email) ? FindAccountByLogin(context, authenticationRequest.Email) : null!;
             if (account == null)
             {
                 return new AuthenticationResponse
@@ -60,7 +62,7 @@ namespace FinalProject.Services
                     Status = AuthenticationStatus.UserNotFound
                 };
             }
-            if (!PasswordUtils.VerifyPassword(authenticationRequest.Password, account.PasswordSalt, account.PasswordHash))
+            if (!PasswordUtils.VerifyPassword(authenticationRequest.Password!, account.PasswordSalt, account.PasswordHash))
             {
                 return new AuthenticationResponse
                 {
@@ -91,21 +93,12 @@ namespace FinalProject.Services
         }
         private SessionInfo GetSessionInfo(User account, AccountSession accountSession)
         {
+            
             return new SessionInfo
             {
                 SessionId = accountSession.SessionId,
                 SessionToken = accountSession.SessionToken,
-                Account = new UserDto
-                {
-                    Id = account.Id,
-                    NickName = account.NickName,
-                    FirstName = account.FirstName,
-                    LastName = account.LastName,
-                    Patronymic = account.Patronymic,
-                    Birthday = account.Birthday,
-                    Email = account.Email,
-                    IsBanned = account.IsBanned
-                }
+                Account = account.Remap()
             };
         }
         private string CreateSessionToken(User user)
@@ -129,7 +122,7 @@ namespace FinalProject.Services
         }
         private User FindAccountByLogin(Context context, string login)
         {
-            return context.Users.FirstOrDefault(account => account.Email == login);
+            return context.Users.FirstOrDefault(account => account.Email == login)!;
         }
 
     }
