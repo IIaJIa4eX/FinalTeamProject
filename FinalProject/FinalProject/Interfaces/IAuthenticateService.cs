@@ -1,11 +1,10 @@
 ﻿using DatabaseConnector;
 using FinalProject.Models.Requests;
 
-namespace FinalProject.Interfaces
+namespace FinalProject.Interfaces;
+
+public interface IAuthenticateService
 {
-    public interface IAuthenticateService
-    {
-        AuthenticationResponse Login(AuthenticationRequest authenticationRequest);
-        public SessionInfo GetSessionInfo(string sessionToken);
-    }
+    AuthenticationResponse Login(AuthenticationRequest authenticationRequest);
+    public SessionInfo GetSessionInfo(string sessionToken);
 }

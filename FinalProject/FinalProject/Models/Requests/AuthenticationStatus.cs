@@ -1,9 +1,8 @@
-﻿namespace FinalProject.Models.Requests
+﻿namespace FinalProject.Models.Requests;
+
+public enum AuthenticationStatus
 {
-    public enum AuthenticationStatus
-    {
-        Success = 0,
-        UserNotFound = 1,
-        InvalidPassword = 2
-    }
+    Success = 0,
+    UserNotFound = 1,
+    InvalidPassword = 2
 }
