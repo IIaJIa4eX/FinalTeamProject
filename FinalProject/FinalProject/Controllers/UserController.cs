@@ -20,8 +20,6 @@ public class UserController : Controller
         _authenticateService = authenticateService;
     }
 
-
-
     [Route("/[action]")]        
     [HttpGet]
     [AllowAnonymous]
@@ -35,24 +33,20 @@ public class UserController : Controller
     [HttpPost]
     public IActionResult Registration([FromForm] RegistrationRequest user)
     {
-
-
-        if (!ModelState.IsValid)
+        if (ModelState.IsValid)
         {
-            return View(user);
-        }
-
-        RegistrationResponse registrationResponse = _registrationService.Registration(user);
-        if(registrationResponse.Status == 0)
-        {
-            return RedirectToAction("Login", new AuthenticationRequest
+            RegistrationResponse registrationResponse = _registrationService.Registration(user);
+            if (registrationResponse.Status == 0)
             {
-                Email = user.Email,
-                Password = user.Password
-            });
+                return RedirectToAction("Login", new AuthenticationRequest
+                {
+                    Email = user.Email,
+                    Password = user.Password
+                });
+            }
+            return Ok(registrationResponse);
         }
-
-        return Ok(registrationResponse);
+        return View(user);
     }
 
     [Route("/[action]")]
@@ -60,7 +54,7 @@ public class UserController : Controller
     [HttpGet]
     public IActionResult Login()
     {
-          return View();
+        return View();
     }
 
     [Route("/[action]")]
@@ -68,20 +62,18 @@ public class UserController : Controller
     [HttpPost]
     public IActionResult Login([FromForm] AuthenticationRequest authenticationRequest)
     {
-
-        if (!ModelState.IsValid)
+        if (ModelState.IsValid)
         {
-            return View(authenticationRequest);
+            AuthenticationResponse authenticationResponse = _authenticateService.Login(authenticationRequest);
+            if (authenticationResponse.Status == AuthenticationStatus.Success)
+            {
+                Response.Headers.Add("X-Session-Token", authenticationResponse.SessionInfo.SessionToken);
+                Response.Cookies.Append("X-Session-Token", authenticationResponse.SessionInfo?.SessionToken!);
+                return Redirect("~/Home/Index");
+            }
+            return View("Home/Index");
         }
-
-        AuthenticationResponse authenticationResponse = _authenticateService.Login(authenticationRequest);
-        if (authenticationResponse.Status == AuthenticationStatus.Success)
-        {
-            Response.Headers.Add("X-Session-Token", authenticationResponse.SessionInfo.SessionToken);
-            Response.Cookies.Append("X-Session-Token", authenticationResponse.SessionInfo?.SessionToken!);
-            return Redirect("~/Home/Index");
-        }
-        return View("Home/Index");
+        return View(authenticationRequest);
     }
 
     [HttpGet("session")]
@@ -91,13 +83,12 @@ public class UserController : Controller
         if (AuthenticationHeaderValue.TryParse(authorization, out var headerValue))
         {
             var scheme = headerValue.Scheme;
-            var sessionToken = headerValue.Parameter;
-            if (string.IsNullOrEmpty(sessionToken))
-                return Unauthorized();
-            SessionInfo sessionInfo = _authenticateService.GetSessionInfo(sessionToken);
-            if (sessionInfo == null)
-                return Unauthorized();
-            return Ok(sessionInfo);
+            var sessionToken = headerValue.Parameter;            
+            if (!string.IsNullOrEmpty(sessionToken))
+            {
+                SessionInfo sessionInfo = _authenticateService.GetSessionInfo(sessionToken);
+                return sessionInfo == null ? Unauthorized() : Ok(sessionInfo);
+            }
         }
         return Unauthorized();
     }
