@@ -7,10 +7,11 @@ namespace FinalProject.DataBaseContext;
 
 
 
-public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class,IEntity
+public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class, IEntity
 {
     DbContext _context;
     DbSet<TEntity> _dbSet;
+
 
     public EFGenericRepository(Context context)
     {
@@ -23,7 +24,7 @@ public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TE
         return _dbSet.AsNoTracking().ToList();
     }
 
-    public IEnumerable<TEntity> Get(Func<TEntity, bool> predicate)
+    public IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> predicate)
     {
         return _dbSet.AsNoTracking().Where(predicate).ToList();
     }
@@ -63,7 +64,7 @@ public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TE
         return Include(includeProperties).ToList();
     }
 
-    public IEnumerable<TEntity> GetWithInclude(Func<TEntity, bool> predicate,
+    public IEnumerable<TEntity> GetWithInclude(Expression<Func<TEntity, bool>> predicate,
         params Expression<Func<TEntity, object>>[] includeProperties)
     {
         var query = Include(includeProperties);
@@ -76,5 +77,4 @@ public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TE
         return includeProperties
             .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
     }
-
 }

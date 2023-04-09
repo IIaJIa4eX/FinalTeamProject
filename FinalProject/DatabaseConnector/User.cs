@@ -42,7 +42,7 @@ public class User : IEntity
 
     [Column]
     [StringLength(255)]
-    public string? UserRole { get; set; }
+    public string? UserRole { get; set; } = "User";
 
     [Column]
     public bool IsBanned { get; set; } = false;

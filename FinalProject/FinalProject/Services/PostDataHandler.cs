@@ -1,7 +1,14 @@
 ﻿using DatabaseConnector;
 using FinalProject.DataBaseContext;
+using FinalProject.Interfaces;
 using FinalProject.Models.DTO;
 using FinalProject.Models.DTO.PostDTO;
+using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.Hosting;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
+using System.Net.Http.Headers;
+using System.Net;
+using FinalProject.Models;
 
 namespace FinalProject.Services
 {
@@ -10,11 +17,13 @@ namespace FinalProject.Services
         EFGenericRepository<Post> _postRepository;
         EFGenericRepository<Content> _contentRepository;
         EFGenericRepository<Comment> _commentRepository;
+        IAuthenticateService _authenticateService;
 
-        public PostDataHandler(EFGenericRepository<Post> postRepository, EFGenericRepository<Content> contentRepository)
+        public PostDataHandler(EFGenericRepository<Post> postRepository, EFGenericRepository<Content> contentRepository, IAuthenticateService authenticateService)
         {
             _postRepository = postRepository;
             _contentRepository = contentRepository;
+            _authenticateService = authenticateService;
         }
 
         public Post GetById(int id)
@@ -32,9 +41,27 @@ namespace FinalProject.Services
             return tmpPost;
         }
 
-        public bool Create(CreatePostDTO postData)
+        public bool Create(CreatePostDTO postData, string token)
         {
             bool result;
+
+            if (AuthenticationHeaderValue.TryParse(token, out var headerValue))
+            {
+                SessionInfo sessionInfo = _authenticateService.GetSessionInfo(headerValue.Parameter!);
+                if (sessionInfo != null)
+                {
+                    postData.UserId = sessionInfo.Account.Id;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+             
             try
             {
                 int contentId = _contentRepository.CreateAndGetId(new Content
@@ -194,6 +221,41 @@ namespace FinalProject.Services
 
         }
 
+        public IEnumerable<Post> GetPostsByCategory(string creationDate = "Desc", string category = "", int skip = 0)
+        {
+            if(creationDate == "Desc")
+            {
+                if (!string.IsNullOrEmpty(category))
+                {
+
+                    return _postRepository
+                           .Get(post => post.Category == category)
+                           .OrderByDescending(time => time.CreationDate).Skip(skip).Take(10);
+             
+                }
+                   
+            }
+
+
+            if (creationDate == "Asc")
+            {
+                if (string.IsNullOrEmpty(category))
+                {
+                    return _postRepository
+                           .Get()
+                           .OrderBy(time => time.CreationDate).Skip(skip).Take(10);
+                }
+
+                    return _postRepository
+                            .Get(post => post.Category == category)
+                            .OrderBy(time => time.CreationDate).Skip(skip).Take(10);
+            }
+
+            return _postRepository
+                           .Get()
+                           .OrderByDescending(time => time.CreationDate).Skip(skip).Take(10);
+
+        }
 
 
     }

@@ -7,6 +7,9 @@ using FinalProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using FinalProject.Services;
+using Microsoft.Net.Http.Headers;
+using FinalProject.Interfaces;
+using System.Net.Http.Headers;
 
 namespace FinalProject.Controllers
 {
@@ -16,13 +19,15 @@ namespace FinalProject.Controllers
     {
 
         PostDataHandler _postDataHandler;
+        IAuthenticateService _authenticateService;
 
-        public PostController(PostDataHandler postDataHandler)
+        public PostController(PostDataHandler postDataHandler, IAuthenticateService authenticateService)
         {
             _postDataHandler = postDataHandler;
+            _authenticateService = authenticateService;
         }
 
-       
+
         [HttpGet]
         [Route("/[action]")]
         public IActionResult Index(int id)
@@ -37,9 +42,14 @@ namespace FinalProject.Controllers
         [Route("/[action]")]
         public IActionResult AddPost(CreatePostDTO postData)
         {
-            bool success = _postDataHandler.Create(postData);
 
-            return Ok(success);
+                bool success = _postDataHandler.Create
+                (
+                    postData,
+                    Request.Headers[HeaderNames.Authorization]
+                );
+
+            return Ok();
         }
 
         [HttpPost]
@@ -49,6 +59,14 @@ namespace FinalProject.Controllers
             bool success = _postDataHandler.Edit(postData);
 
             return Ok(success);
+        }
+
+        [HttpGet]
+        [Route("/[action]")]
+        public IActionResult Edit()
+        { 
+
+            return View();
         }
 
         [HttpPost]

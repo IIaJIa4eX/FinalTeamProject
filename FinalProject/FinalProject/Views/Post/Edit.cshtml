@@ -1,0 +1,26 @@
+﻿@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<div class="col-md-4">
+    <form asp-controller="Post" asp-action="AddPost" method="post">
+
+        <div class="form-group">         
+            <input class="form-control" name="Category" />
+        </div>
+        <div class="form-group">          
+            <textarea id="editor" name="Description"></textarea>           
+        </div>
+        <button type="submit" class="w-100 btn btn-lg btn-primary">Create</button>
+    </form>
+</div>
+
+
+<script>
+    ClassicEditor
+        .create(document.querySelector('#editor'))
+        .catch(error => {
+            console.error(error);
+        });
+</script>

@@ -14,7 +14,7 @@ public interface IGenericRepository<TEntity> where TEntity : IEntity
     /// <param name="id">Id элемента</param>
     /// <returns>объект из БД</returns>
     TEntity? FindById(int id);
-    
+
     /// <summary>Получить все элементы из БД</summary>
     /// <returns>Список объектов</returns>
     IEnumerable<TEntity> Get();
@@ -22,7 +22,7 @@ public interface IGenericRepository<TEntity> where TEntity : IEntity
     /// <summary>Получить отфильтрованный список из БД</summary>
     /// <param name="predicate">Фильтр</param>
     /// <returns>Список объектов</returns>
-    IEnumerable<TEntity> Get(Func<TEntity, bool> predicate);
+    IEnumerable<TEntity> Get(Expression<Func<TEntity, bool>> predicate);
 
     /// <summary>Удалить элемент из БД</summary>
     /// <param name="item">объект БД</param>
@@ -36,10 +36,10 @@ public interface IGenericRepository<TEntity> where TEntity : IEntity
     /// <param name="includeProperties"></param>
     /// <returns>Список объектов</returns>
     public IEnumerable<TEntity> GetWithInclude(params Expression<Func<TEntity, object>>[] includeProperties);
-    
+
     /// <summary>Получить отфильтрованные элементы из таблицы и связанные элементы</summary>
     /// <param name="includeProperties"></param>
     /// <returns>Список объектов</returns>
-    public IEnumerable<TEntity> GetWithInclude(Func<TEntity, bool> predicate,
+    public IEnumerable<TEntity> GetWithInclude(Expression<Func<TEntity, bool>> predicate,
         params Expression<Func<TEntity, object>>[] includeProperties);
 }
