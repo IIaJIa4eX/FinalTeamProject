@@ -1,21 +1,25 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FinalProject.Models.Requests;
-
-public class AuthenticationRequest : IValidatableObject
+namespace FinalProject.Models.Requests
 {
-    [Required(ErrorMessage = "Почта должна быть указана!")]
-    [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", ErrorMessage = "Почта имеет неправильный формат")]
-    [Display(Name = "Почта")]
-    public string? Email { get; set; }
-
-    [Required(ErrorMessage = "Пароль должен быть указан!")]
-    [DataType(DataType.Password)]
-    [Display(Name = "Пароль")]
-    public string? Password { get; set; }
-
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    public class AuthenticationRequest : IValidatableObject
     {
-        yield return ValidationResult.Success!;
+
+
+        [Required(ErrorMessage = "Почта должна быть указана!")]
+        [RegularExpression(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", ErrorMessage = "Почта имеет неправильный формат")]
+        [Display(Name = "Почта")]
+        public string? Email { get; set; }
+
+
+        [Required(ErrorMessage = "Пароль должен быть указан!")]
+        [DataType(DataType.Password)]
+        [Display(Name = "Пароль")]
+        public string? Password { get; set; }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            yield return ValidationResult.Success!;
+        }
     }
 }

@@ -1,4 +1,8 @@
 using DatabaseConnector;
+using FinalProject.DataBaseContext;
+using FinalProject.Models.DTO;
+using FinalProject.Models.DTO.PostDTO;
+using FinalProject.Models.Requests;
 using FinalProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,21 +10,13 @@ using FinalProject.Services;
 using Microsoft.Net.Http.Headers;
 using FinalProject.Interfaces;
 using System.Net.Http.Headers;
-using DatabaseConnector.DTO.Post;
 
-namespace FinalProject.Controllers;
-
-[Route("Post")]
-[Authorize]
-public class PostController : Controller
+namespace FinalProject.Controllers
 {
-
-    PostDataHandler _postDataHandler;
-
-    public PostController(PostDataHandler postDataHandler)
+    [Route("[controller]")]
+    [Authorize]
+    public class PostController : Controller
     {
-        _postDataHandler = postDataHandler;
-    }
 
         PostDataHandler _postDataHandler;
         IAuthenticateService _authenticateService;
@@ -36,45 +32,11 @@ public class PostController : Controller
         [Route("/[action]")]
         public IActionResult Index(int id)
         {
-            Content = new Content()
-            {
-                Id = 1,
-                CreationDate = DateTime.Now,
-                IsVisible = true,
-                Text = "Visible text"
-            },
-            CreationDate = DateTime.Now,
-            IsVisible = true,
-            Id = 1,
-            UserId = 1
-        });
-        //return Ok($"{post.CreationDate}, {post.ContentId}, {post.User.NickName}");
-        return View(post);
-    }
+            var post = _postDataHandler.GetById(id);
 
-    [HttpGet]
-    [Route("/create/new")]
-    [AllowAnonymous]
-    public IActionResult CreateNew()
-    {
-        var userid = HttpContext.Request.Headers.SingleOrDefault(x => x.Key == "UserId").Value.ToString();
-        ViewBag.UserId = userid;
-        return View();
-    }
+            return Ok($"{post.CreationDate}, {post.ContentId}, {post.User.NickName}");
+        }
 
-    [HttpPost]
-    [Route("/create/new")]
-    [AllowAnonymous]
-    public IActionResult CreateNew([FromForm] Content content)
-    {
-        return View(content);
-    }
-    [HttpPost]
-    [Route("/[action]")]
-    [AllowAnonymous]
-    public IActionResult AddPost(CreatePostDTO postData)
-    {
-        bool success = _postDataHandler.Create(postData);
 
         [HttpPost]
         [Route("/[action]")]
@@ -90,14 +52,14 @@ public class PostController : Controller
             return Ok();
         }
 
-        return Ok(success);
-    }
+        [HttpPost]
+        [Route("/[action]")]
+        public IActionResult Edit(EditPostDTO postData)
+        {
+            bool success = _postDataHandler.Edit(postData);
 
-    [HttpPost]
-    [Route("/[action]")]
-    public IActionResult Delete(EditPostDTO postData)
-    {
-        bool success = _postDataHandler.Delete(postData);
+            return Ok(success);
+        }
 
         [HttpGet]
         [Route("/[action]")]
@@ -113,22 +75,26 @@ public class PostController : Controller
         {
             bool success = _postDataHandler.Delete(postData);
 
-    [HttpGet]
-    [Route("/[action]")]
-    public IActionResult PostRating(string rating, int id)
-    {
-        bool success = _postDataHandler.Rating(rating, id);
+            return Ok(success);
+        }
 
-        return Ok(success);
+        [HttpGet]
+        [Route("/[action]")]
+        public IActionResult PostRating(string rating, int id)
+        {
+            bool success = _postDataHandler.Rating(rating, id);
+
+            return Ok(success);
+        }
+
+        [HttpPost]
+        [Route("/[action]")]
+        public IActionResult AddPostComment(CommentDTO comment)
+        {
+            bool success = _postDataHandler.AddComment(comment);
+
+            return Ok(success);
+        }
+
     }
-
-    [HttpPost]
-    [Route("/[action]")]
-    public IActionResult AddPostComment(CommentDTO comment)
-    {
-        bool success = _postDataHandler.AddComment(comment);
-
-        return Ok(success);
-    }
-
 }

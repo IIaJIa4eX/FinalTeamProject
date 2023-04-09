@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
@@ -17,35 +18,38 @@ namespace FinalProject.Controllers
             _postDataHandler = postDataHandler;
         }
 
-    #region Constructor
+        #endregion
 
+        //public IActionResult Index()
+        //{
+        //    var posts = _postDataHandler.GetPostsByCategory();
+
+        //    return View(posts);
+        //}
+
+        //[HttpGet]
+        //[Route("/[action]")]
         public IActionResult Index(string creationDate, string category, int skip)
         {
             var posts = _postDataHandler.GetPostsByCategory(creationDate, category, skip);
 
-        }
             return View(posts);
+        }
 
-    #endregion
-    //[HttpGet]
-    //[Route("/[action]")]
-    public IActionResult Index()
-    {
-        return View();
+        [Authorize]
+        [HttpGet]
+        [Route("/[action]")]
+        public IActionResult Categories()
+        {
+            bool ss = User.Identity.IsAuthenticated;
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()  //это страница с ошибками, ее можно убрать
+        {
+            return View();
+        }
     }
-
-    [Authorize]
-    [HttpGet]
-    [Route("/[action]")]
-    public IActionResult Categories()
-    {
-        return View();
-    }
-
-    //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    //public IActionResult Error()  //это страница с ошибками, ее можно убрать
-    //{
-    //    return View("~/");
-    //}
 }
 

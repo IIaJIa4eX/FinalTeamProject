@@ -1,22 +1,18 @@
-using DatabaseConnector;
-using DatabaseConnector.DTO.Post;
-using DatabaseConnector.Extensions;
+﻿using DatabaseConnector;
 using FinalProject.DataBaseContext;
-using FinalProject.Models;
-using System.Net;
+using FinalProject.Interfaces;
+using FinalProject.Models.DTO;
+using FinalProject.Models.DTO.PostDTO;
+using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.Hosting;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
 using System.Net.Http.Headers;
+using System.Net;
+using FinalProject.Models;
 
-namespace FinalProject.Services;
-
-public class PostDataHandler
+namespace FinalProject.Services
 {
-    EFGenericRepository<Post> _postRepository;
-    EFGenericRepository<Content> _contentRepository;
-    EFGenericRepository<Comment> _commentRepository;
-
-    public PostDataHandler(EFGenericRepository<Post> postRepository,
-        EFGenericRepository<Content> contentRepository,
-        EFGenericRepository<Comment> commentRepository)
+    public class PostDataHandler
     {
         EFGenericRepository<Post> _postRepository;
         EFGenericRepository<Content> _contentRepository;
@@ -30,8 +26,8 @@ public class PostDataHandler
             _authenticateService = authenticateService;
         }
 
-        return tmpPost!;
-    }
+        public Post GetById(int id)
+        {
 
             var tmpPost = _postRepository.GetWithInclude
                 (
@@ -68,93 +64,161 @@ public class PostDataHandler
              
             try
             {
-                CreationDate = DateTime.UtcNow,
-                IsVisible = true,
-                Text = postData.Description
-            });
+                int contentId = _contentRepository.CreateAndGetId(new Content
+                {
+                    CreationDate = DateTime.UtcNow,
+                    IsVisible = true,
+                    Text = postData.Description
+                });
 
-            int entitiesNumb = _postRepository.Create(new Post
+                int entitiesNumb = _postRepository.Create(new Post
+                {
+                    Category = postData.Category,
+                    ContentId = contentId,
+                    Rating = 0,
+                    UserId = postData.UserId,
+                    CreationDate = DateTime.UtcNow,
+                });
+
+                if (entitiesNumb > 0)
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                }
+
+            }
+            catch
             {
-                Category = postData.Category,
-                ContentId = contentId,
-                Rating = 0,
-                UserId = postData.UserId,
-                CreationDate = DateTime.UtcNow,
-            });
-            return entitiesNumb > 0;
-        }
-        catch
-        {
-            return false;
-        }
-    }
+                result = false;
+            }
 
-    public bool Edit(EditPostDTO postData)
-    {
-        var post = _postRepository.FindById(postData.Id);
-        if (post is not null)
+
+            return result;
+        }
+
+        public bool Edit(EditPostDTO postData)
         {
+
+            var post = _postRepository.FindById(postData.Id);
+
+            if (post == null)
+            {
+                return false;
+            }
+
             var content = _contentRepository.FindById(post.ContentId);
-            if (content is not null)
+
+            if (content == null)
             {
-                content.CreationDate = DateTime.UtcNow;
-                content.IsVisible = true;
-                content.Text = postData.Description;
-                return _contentRepository.Update(content) > 0;
+                return false;
             }
-        }
-        return false;            
-    }
 
-    public bool Delete(EditPostDTO postData)
-    {
-        var post = _postRepository.FindById(postData.Id);
-        if (post is not null)
-        {
-            post.IsVisible = false;
-            return _postRepository.Update(post) > 0;
-        }
-        return false;
-    }
+            content.CreationDate = DateTime.UtcNow;
+            content.IsVisible = true;
+            content.Text = postData.Description;
 
-    public bool Rating(string postData, int Id)
-    {
-        if (postData == "plus" || postData == "minus")
-        {
-            var post = _postRepository.FindById(Id);
-            if (post is not null)
+            int res = _contentRepository.Update(content);
+
+            if (res > 0)
             {
-                post.Rating = postData == "plus" ? post.Rating + 1 : post.Rating - 1;
-                return _postRepository.Update(post) > 0;
+                return true;
             }
-        }
-        return false;
-    }
 
-    public bool AddComment(CommentDTO comment)
-    {
-        try
-        {
-            int contentId = _contentRepository.CreateAndGetId(new Content
-            {
-                CreationDate = DateTime.UtcNow,
-                IsVisible = true,
-                Text = comment.Content.Text
-            });
-
-            int res = _commentRepository.Create(new Comment
-            {
-                PostId = comment.PostId,
-                CreationDate = DateTime.UtcNow,
-                ParentId = comment.ParentId,
-                ContentId = contentId
-            });
-
-            return res > 0;
-        }
-        catch
-        {
             return false;
+        }
+
+        public bool Delete(EditPostDTO postData)
+        {
+            var post = _postRepository.FindById(postData.Id);
+
+            if (post == null)
+            {
+                return false;
+            }
+            post.IsVisible = false;
+
+            int res = _postRepository.Update(post);
+
+            if (res > 0)
+            {
+                return true;
+            }
+
+
+            return false;
+
+        }
+
+        public bool Rating(string postData, int Id)
+        {
+            if (postData == "plus" || postData == "minus")
+            {
+                var post = _postRepository.FindById(Id);
+
+                if (post != null)
+                {
+                    if (postData == "plus")
+                    {
+                        post.Rating += 1;
+                    }
+                    else
+                    {
+                        post.Rating -= 1;
+                    }
+
+                    int res = _postRepository.Update(post);
+
+                    if (res > 0)
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+
+            }
+
+            return false;
+
+        }
+
+        public bool AddComment(CommentDTO comment)
+        {
+
+            try
+            {
+                int contentId = _contentRepository.CreateAndGetId(new Content
+                {
+                    CreationDate = DateTime.UtcNow,
+                    IsVisible = true,
+                    Text = comment.Text
+                });
+
+                int res = _commentRepository.Create(new Comment
+                {
+                    PostId = comment.PostId,
+                    CreationDate = DateTime.UtcNow,
+                    ParentId = comment.ParentId,
+                    ContentId = contentId
+                });
+
+                if (res > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+
         }
 
         public IEnumerable<Post> GetPostsByCategory(string creationDate = "Desc", string category = "", int skip = 0)
@@ -195,13 +259,4 @@ public class PostDataHandler
 
 
     }
-    private IEnumerable<PostDTO> Remap(IEnumerable<Post> posts)
-    {
-        List<PostDTO> dtos=new List<PostDTO>(posts.Count());
-        foreach (var post in posts)
-        {
-            dtos.Add(post.Remap());
-        }
-        return dtos;
-    }        
 }

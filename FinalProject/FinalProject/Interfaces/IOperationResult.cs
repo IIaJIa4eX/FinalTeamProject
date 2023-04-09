@@ -1,8 +1,11 @@
-namespace FinalProject.Interfaces;
+﻿using NLog.Filters;
 
-public interface IOperationResult<T> where T : class
+namespace FinalProject.Interfaces
 {
-    int ErrorCode { get; set; }
-    string? ErrorMessage { get; }
-    T? ObjectData { get; }
+    public interface IOperationResult<T> where T : class
+    {
+        int ErrorCode { get; set; }
+        string? ErrorMessage { get; }
+        T? ObjectData { get; }
+    }
 }

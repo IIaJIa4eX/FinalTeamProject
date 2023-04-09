@@ -32,5 +32,5 @@ public class Comment : IEntity
 
     public virtual Post? Post { get; set; }
 
-    public virtual Content? Content { get; set; }
+    public virtual Content? Content { get; set; } 
 }

@@ -1,6 +1,7 @@
-﻿namespace FinalProject.Models.Requests;
-
-public class RegistrationResponse
+﻿namespace FinalProject.Models.Requests
 {
-    public RegistrationStatus Status { get; set; }
+    public class RegistrationResponse
+    {
+        public RegistrationStatus Status { get; set; }
+    }
 }
