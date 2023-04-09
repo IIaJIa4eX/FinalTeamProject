@@ -1,18 +1,22 @@
-﻿using DatabaseConnector;
+using DatabaseConnector;
+using DatabaseConnector.DTO.Post;
+using DatabaseConnector.Extensions;
 using FinalProject.DataBaseContext;
-using FinalProject.Interfaces;
-using FinalProject.Models.DTO;
-using FinalProject.Models.DTO.PostDTO;
-using Microsoft.CodeAnalysis;
-using Microsoft.Extensions.Hosting;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
-using System.Net.Http.Headers;
-using System.Net;
 using FinalProject.Models;
+using System.Net;
+using System.Net.Http.Headers;
 
-namespace FinalProject.Services
+namespace FinalProject.Services;
+
+public class PostDataHandler
 {
-    public class PostDataHandler
+    EFGenericRepository<Post> _postRepository;
+    EFGenericRepository<Content> _contentRepository;
+    EFGenericRepository<Comment> _commentRepository;
+
+    public PostDataHandler(EFGenericRepository<Post> postRepository,
+        EFGenericRepository<Content> contentRepository,
+        EFGenericRepository<Comment> commentRepository)
     {
         EFGenericRepository<Post> _postRepository;
         EFGenericRepository<Content> _contentRepository;
@@ -26,8 +30,8 @@ namespace FinalProject.Services
             _authenticateService = authenticateService;
         }
 
-        public Post GetById(int id)
-        {
+        return tmpPost!;
+    }
 
             var tmpPost = _postRepository.GetWithInclude
                 (
@@ -64,161 +68,93 @@ namespace FinalProject.Services
              
             try
             {
-                int contentId = _contentRepository.CreateAndGetId(new Content
-                {
-                    CreationDate = DateTime.UtcNow,
-                    IsVisible = true,
-                    Text = postData.Description
-                });
+                CreationDate = DateTime.UtcNow,
+                IsVisible = true,
+                Text = postData.Description
+            });
 
-                int entitiesNumb = _postRepository.Create(new Post
-                {
-                    Category = postData.Category,
-                    ContentId = contentId,
-                    Rating = 0,
-                    UserId = postData.UserId,
-                    CreationDate = DateTime.UtcNow,
-                });
-
-                if (entitiesNumb > 0)
-                {
-                    result = true;
-                }
-                else
-                {
-                    result = false;
-                }
-
-            }
-            catch
+            int entitiesNumb = _postRepository.Create(new Post
             {
-                result = false;
-            }
-
-
-            return result;
+                Category = postData.Category,
+                ContentId = contentId,
+                Rating = 0,
+                UserId = postData.UserId,
+                CreationDate = DateTime.UtcNow,
+            });
+            return entitiesNumb > 0;
         }
-
-        public bool Edit(EditPostDTO postData)
+        catch
         {
+            return false;
+        }
+    }
 
-            var post = _postRepository.FindById(postData.Id);
-
-            if (post == null)
-            {
-                return false;
-            }
-
+    public bool Edit(EditPostDTO postData)
+    {
+        var post = _postRepository.FindById(postData.Id);
+        if (post is not null)
+        {
             var content = _contentRepository.FindById(post.ContentId);
-
-            if (content == null)
+            if (content is not null)
             {
-                return false;
+                content.CreationDate = DateTime.UtcNow;
+                content.IsVisible = true;
+                content.Text = postData.Description;
+                return _contentRepository.Update(content) > 0;
             }
-
-            content.CreationDate = DateTime.UtcNow;
-            content.IsVisible = true;
-            content.Text = postData.Description;
-
-            int res = _contentRepository.Update(content);
-
-            if (res > 0)
-            {
-                return true;
-            }
-
-            return false;
         }
+        return false;            
+    }
 
-        public bool Delete(EditPostDTO postData)
+    public bool Delete(EditPostDTO postData)
+    {
+        var post = _postRepository.FindById(postData.Id);
+        if (post is not null)
         {
-            var post = _postRepository.FindById(postData.Id);
-
-            if (post == null)
-            {
-                return false;
-            }
             post.IsVisible = false;
-
-            int res = _postRepository.Update(post);
-
-            if (res > 0)
-            {
-                return true;
-            }
-
-
-            return false;
-
+            return _postRepository.Update(post) > 0;
         }
+        return false;
+    }
 
-        public bool Rating(string postData, int Id)
+    public bool Rating(string postData, int Id)
+    {
+        if (postData == "plus" || postData == "minus")
         {
-            if (postData == "plus" || postData == "minus")
+            var post = _postRepository.FindById(Id);
+            if (post is not null)
             {
-                var post = _postRepository.FindById(Id);
-
-                if (post != null)
-                {
-                    if (postData == "plus")
-                    {
-                        post.Rating += 1;
-                    }
-                    else
-                    {
-                        post.Rating -= 1;
-                    }
-
-                    int res = _postRepository.Update(post);
-
-                    if (res > 0)
-                    {
-                        return true;
-                    }
-
-                    return false;
-                }
-
+                post.Rating = postData == "plus" ? post.Rating + 1 : post.Rating - 1;
+                return _postRepository.Update(post) > 0;
             }
-
-            return false;
-
         }
+        return false;
+    }
 
-        public bool AddComment(CommentDTO comment)
+    public bool AddComment(CommentDTO comment)
+    {
+        try
         {
-
-            try
+            int contentId = _contentRepository.CreateAndGetId(new Content
             {
-                int contentId = _contentRepository.CreateAndGetId(new Content
-                {
-                    CreationDate = DateTime.UtcNow,
-                    IsVisible = true,
-                    Text = comment.Text
-                });
+                CreationDate = DateTime.UtcNow,
+                IsVisible = true,
+                Text = comment.Content.Text
+            });
 
-                int res = _commentRepository.Create(new Comment
-                {
-                    PostId = comment.PostId,
-                    CreationDate = DateTime.UtcNow,
-                    ParentId = comment.ParentId,
-                    ContentId = contentId
-                });
-
-                if (res > 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            catch
+            int res = _commentRepository.Create(new Comment
             {
-                return false;
-            }
+                PostId = comment.PostId,
+                CreationDate = DateTime.UtcNow,
+                ParentId = comment.ParentId,
+                ContentId = contentId
+            });
 
+            return res > 0;
+        }
+        catch
+        {
+            return false;
         }
 
         public IEnumerable<Post> GetPostsByCategory(string creationDate = "Desc", string category = "", int skip = 0)
@@ -259,4 +195,13 @@ namespace FinalProject.Services
 
 
     }
+    private IEnumerable<PostDTO> Remap(IEnumerable<Post> posts)
+    {
+        List<PostDTO> dtos=new List<PostDTO>(posts.Count());
+        foreach (var post in posts)
+        {
+            dtos.Add(post.Remap());
+        }
+        return dtos;
+    }        
 }

@@ -1,4 +1,4 @@
-﻿using DatabaseConnector.Interfaces;
+using DatabaseConnector.Interfaces;
 using System.Linq.Expressions;
 
 namespace FinalProject.Interfaces;
@@ -8,6 +8,11 @@ public interface IGenericRepository<TEntity> where TEntity : IEntity
     /// <summary>Создать элемент в БД</summary>
     /// <param name="item">объект для добавления в БД</param>
     /// <returns>Id элемента в БД</returns>
+    int CreateAndGetId(TEntity item);
+
+    /// <summary>Создать элемент в БД</summary>
+    /// <param name="item">объект для добавления в БД</param>
+    /// <returns>результат сохранения</returns>
     int Create(TEntity item);
 
     /// <summary>Поиск элемента в БД по Id</summary>

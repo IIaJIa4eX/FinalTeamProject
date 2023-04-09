@@ -1,19 +1,23 @@
 using DatabaseConnector;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
-using FinalProject.Models;
+using DatabaseConnector.Extensions;
 using FinalProject.Models.Requests;
 using FinalProject.Utils;
 using Microsoft.IdentityModel.Tokens;
 using NuGet.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
 
-namespace FinalProject.Services
+namespace FinalProject.Services;
+
+public class AuthenticateService : IAuthenticateService
 {
-    public class AuthenticateService : IAuthenticateService
+    public const string SecretKey = "kYp3s6v9y/B?E(H+";
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly Dictionary<string, SessionInfo> _sessions = new Dictionary<string, SessionInfo>();
+    public AuthenticateService(IServiceScopeFactory serviceScopeFactory)
     {
         public const string SecretKey = "kYp3s6v9y/B?E(H+";
         private readonly IServiceScopeFactory _serviceScopeFactory;
@@ -21,9 +25,9 @@ namespace FinalProject.Services
 
         public AuthenticateService(IServiceScopeFactory serviceScopeFactory)
         {
-            _serviceScopeFactory = serviceScopeFactory;
+            _sessions.TryGetValue(sessionToken, out sessionInfo!);
         }
-        public SessionInfo GetSessionInfo(string sessionToken)
+        if (sessionInfo == null)
         {
             SessionInfo sessionInfo;
             var handler = new JwtSecurityTokenHandler();
@@ -54,9 +58,15 @@ namespace FinalProject.Services
 
                 }
             }
-            return sessionInfo;
         }
-        public AuthenticationResponse Login(AuthenticationRequest authenticationRequest)
+        return sessionInfo!;
+    }
+    public AuthenticationResponse Login(AuthenticationRequest authenticationRequest)
+    {
+        using IServiceScope scope = _serviceScopeFactory.CreateScope();
+        Context context = scope.ServiceProvider.GetService<Context>()!;
+        User account = !string.IsNullOrWhiteSpace(authenticationRequest.Email) ? FindAccountByLogin(context, authenticationRequest.Email) : null!;
+        if (account == null)
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
             Context context = scope.ServiceProvider.GetService<Context>();
@@ -101,30 +111,17 @@ namespace FinalProject.Services
 
             return new AuthenticationResponse
             {
-                Status = AuthenticationStatus.Success,
-                SessionInfo = sessionInfo
+                Status = AuthenticationStatus.UserNotFound
             };
         }
-        private SessionInfo GetSessionInfo(User account, AccountSession accountSession)
+        if (!PasswordUtils.VerifyPassword(authenticationRequest.Password!, account.PasswordSalt, account.PasswordHash))
         {
-            return new SessionInfo
+            return new AuthenticationResponse
             {
-                SessionId = accountSession.SessionId,
-                SessionToken = accountSession.SessionToken,
-                Account = new UserDto
-                {
-                    Id = account.Id,
-                    NickName = account.NickName,
-                    FirstName = account.FirstName,
-                    LastName = account.LastName,
-                    Patronymic = account.Patronymic,
-                    Birthday = account.Birthday,
-                    Email = account.Email,
-                    IsBanned = account.IsBanned
-                }
+                Status = AuthenticationStatus.InvalidPassword
             };
         }
-        private string CreateSessionToken(User user)
+        AccountSession session = new AccountSession
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             byte[] key = Encoding.ASCII.GetBytes(SecretKey);
@@ -145,8 +142,45 @@ namespace FinalProject.Services
         }
         private User FindAccountByLogin(Context context, string login)
         {
-            return context.Users.FirstOrDefault(account => account.Email == login);
+            _sessions[sessionInfo.SessionToken] = sessionInfo;
         }
-
+        return new AuthenticationResponse
+        {
+            Status = AuthenticationStatus.Success,
+            SessionInfo = sessionInfo
+        };
+    }
+    private SessionInfo GetSessionInfo(User account, AccountSession accountSession)
+    {
+        
+        return new SessionInfo
+        {
+            SessionId = accountSession.SessionId,
+            SessionToken = accountSession.SessionToken,
+            Account = account.Remap()
+        };
+    }
+    private string CreateSessionToken(User user)
+    {
+        JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+        byte[] key = Encoding.ASCII.GetBytes(SecretKey);
+        SecurityTokenDescriptor tokenDescriptor = new
+        SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(
+                new Claim[] {
+                    new Claim(ClaimTypes.Name, user.NickName!),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Email, user.Email!),
+                }),
+            Expires = DateTime.Now.AddMinutes(15),                
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+        SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
+    }
+    private User FindAccountByLogin(Context context, string login)
+    {
+        return context.Users.FirstOrDefault(account => account.Email == login)!;
     }
 }
