@@ -9,11 +9,11 @@ public static class CommentEx
         return new CommentDTO()
         {
             Id = comment.Id,
-            Content = comment.Content.Remap(),
+            Content = comment.Content!.Remap(),
             IsVisible = comment.IsVisible,
             ParentId = comment.ParentId,
             PostId = comment.PostId,
-            User = comment.User.Remap(),
+            User = comment.User!.Remap(),
         };
     }
 }

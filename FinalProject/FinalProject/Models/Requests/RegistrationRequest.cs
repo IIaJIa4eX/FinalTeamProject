@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FinalProject.Models.Requests
 {
@@ -37,7 +36,7 @@ namespace FinalProject.Models.Requests
         {
             if (Nickname == "aaaaaa")
             {
-                yield return new ValidationResult("Плохой ник", new[] { nameof(Nickname) });
+                    yield return new ValidationResult("Плохой ник", new[] { nameof(Nickname) });
             }
             yield return ValidationResult.Success!;
         }

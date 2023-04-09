@@ -1,17 +1,13 @@
 using DatabaseConnector;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
-using DatabaseConnector.DTO;
-using DatabaseConnector.DTO.Post;
 using DatabaseConnector.Extensions;
 using FinalProject.Models.Requests;
 using FinalProject.Utils;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Principal;
 using System.Text;
-using FinalProject.Models;
 
 namespace FinalProject.Services
 {
@@ -37,7 +33,7 @@ namespace FinalProject.Services
                 Context context = scope.ServiceProvider.GetService<Context>()!;
                 AccountSession session = context.AccountSessions.FirstOrDefault(item => item.SessionToken == sessionToken)!;
                 if (session == null)
-                    return null;
+                    return null!;
                 User account = context.Users.FirstOrDefault(item => item.Id == session.AccountId)!;
                 sessionInfo = GetSessionInfo(account, session);
                 if (sessionInfo != null)

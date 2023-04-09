@@ -1,4 +1,4 @@
-﻿using FinalProject.Models;
+﻿using DatabaseConnector;
 using FinalProject.Models.Requests;
 
 namespace FinalProject.Interfaces

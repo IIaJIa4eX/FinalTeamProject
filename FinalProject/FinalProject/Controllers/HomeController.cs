@@ -1,8 +1,5 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
-using FinalProject.DataBaseContext;
 
 namespace FinalProject.Controllers
 {
@@ -31,7 +28,6 @@ namespace FinalProject.Controllers
         [Route("/[action]")]
         public IActionResult Categories()
         {
-            bool ss = User.Identity.IsAuthenticated;
             return View();
         }
 

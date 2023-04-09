@@ -1,5 +1,4 @@
-﻿using DatabaseConnector;
-using DatabaseConnector.DTO;
+﻿using DatabaseConnector.DTO;
 
 namespace DatabaseConnector.Extensions;
 

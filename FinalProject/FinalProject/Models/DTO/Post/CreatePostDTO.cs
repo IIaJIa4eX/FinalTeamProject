@@ -1,8 +1,4 @@
-﻿using DatabaseConnector;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace FinalProject.Models.DTO.PostDTO
+﻿namespace FinalProject.Models.DTO.PostDTO
 {
     public class CreatePostDTO
     {

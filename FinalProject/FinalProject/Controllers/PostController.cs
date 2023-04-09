@@ -1,10 +1,7 @@
 using DatabaseConnector;
-using FinalProject.DataBaseContext;
-using FinalProject.Models.Requests;
 using FinalProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using FinalProject.Services;
 using DatabaseConnector.DTO.Post;
 
 namespace FinalProject.Controllers

@@ -3,11 +3,9 @@ using DatabaseConnector.DTO;
 using DatabaseConnector.Extensions;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
-using FinalProject.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
-using System.Net;
 using System.Net.Http.Headers;
 
 namespace FinalProject.Controllers

@@ -29,7 +29,7 @@ public class Issue : IEntity
     [Column]
     public short IssueType { get; set; }
 
-    public virtual User User { get; set; } = null;
+    public virtual User User { get; set; } = null!;
 
-    public virtual Content Content { get; set; } = null;
+    public virtual Content Content { get; set; } = null!;
 }

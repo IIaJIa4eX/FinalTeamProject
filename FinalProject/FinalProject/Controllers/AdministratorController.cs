@@ -1,7 +1,6 @@
 ﻿using DatabaseConnector;
 using FinalProject.DataBaseContext;
 using FinalProject.Models.DTO;
-using FinalProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

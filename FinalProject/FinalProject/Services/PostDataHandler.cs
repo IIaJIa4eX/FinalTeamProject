@@ -1,11 +1,7 @@
 using DatabaseConnector;
-using DatabaseConnector.DTO;
 using DatabaseConnector.DTO.Post;
 using DatabaseConnector.Extensions;
 using FinalProject.DataBaseContext;
-//using FinalProject.Models.DTO;
-//using FinalProject.Models.DTO.Post;
-//using FinalProject.Models.DTO.PostDTO;
 
 namespace FinalProject.Services
 {
