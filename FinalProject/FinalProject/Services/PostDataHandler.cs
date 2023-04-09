@@ -229,9 +229,13 @@ namespace FinalProject.Services
                 {
 
                     return _postRepository
-                           .Get(post => post.Category == category)
+                           .GetWithInclude(
+                            post => post.Category == category,
+                            comm =>comm.Comments,
+                            cont => cont.Content,
+                            usr => usr.User)
                            .OrderByDescending(time => time.CreationDate).Skip(skip).Take(10);
-             
+
                 }
                    
             }
@@ -242,17 +246,27 @@ namespace FinalProject.Services
                 if (string.IsNullOrEmpty(category))
                 {
                     return _postRepository
-                           .Get()
+                           .GetWithInclude(
+                            comm => comm.Comments,
+                            cont => cont.Content,
+                            usr => usr.User)
                            .OrderBy(time => time.CreationDate).Skip(skip).Take(10);
                 }
 
-                    return _postRepository
-                            .Get(post => post.Category == category)
-                            .OrderBy(time => time.CreationDate).Skip(skip).Take(10);
+                return _postRepository
+                       .GetWithInclude(
+                        post => post.Category == category,
+                        comm => comm.Comments,
+                        cont => cont.Content,
+                        usr => usr.User)
+                       .OrderBy(time => time.CreationDate).Skip(skip).Take(10);
             }
 
             return _postRepository
-                           .Get()
+                           .GetWithInclude(
+                            comm => comm.Comments,
+                            cont => cont.Content,
+                            usr => usr.User)
                            .OrderByDescending(time => time.CreationDate).Skip(skip).Take(10);
 
         }
