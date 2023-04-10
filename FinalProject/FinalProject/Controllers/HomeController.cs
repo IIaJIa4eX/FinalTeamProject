@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using FinalProject.Services;
 
 namespace FinalProject.Controllers;
 
@@ -7,22 +8,23 @@ namespace FinalProject.Controllers;
 //[AllowAnonymous]
 public class HomeController : Controller  //если удалите, то никакого Index page не будет
 {
-
+    private PostDataHandler _postDataHandler { get; set; }
 
     #region Constructor
 
-    public HomeController()
+    public HomeController(PostDataHandler postDataHandler)
     {
+        _postDataHandler = postDataHandler;
     }
 
     #endregion
-    //[HttpGet]
-    //[Route("/[action]")]
-    public IActionResult Index()
-    {
-        return View();
-    }
 
+    public IActionResult Index(string creationDate, string category, int skip)
+    {
+        var posts = _postDataHandler.GetPostsByCategory(creationDate, category, skip);
+
+        return View(posts);
+    }
     [Authorize]
     [HttpGet]
     [Route("/[action]")]

@@ -3,6 +3,7 @@ using FinalProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DatabaseConnector.DTO.Post;
+using Microsoft.Net.Http.Headers;
 
 namespace FinalProject.Controllers;
 
@@ -75,6 +76,20 @@ public class PostController : Controller
         return View(post);
     }
 
+    [HttpPost]
+    [Route("/[action]")]
+    public IActionResult AddPost(CreatePostDTO postData)
+    {
+
+        bool success = _postDataHandler.Create
+        (
+            postData,
+            Request.Headers[HeaderNames.Authorization]
+        );
+
+        return Redirect("~/Home/Index");
+    }
+
     [HttpGet]
     [Route("/create/new")]
     [AllowAnonymous]
@@ -92,14 +107,12 @@ public class PostController : Controller
     {
         return View(content);
     }
-    [HttpPost]
-    [Route("/[action]")]
-    [AllowAnonymous]
-    public IActionResult AddPost(CreatePostDTO postData)
-    {
-        bool success = _postDataHandler.Create(postData);
 
-        return Ok(success);
+    [HttpGet]
+    [Route("/[action]")]
+    public IActionResult Edit()
+    {
+        return View();
     }
 
     [HttpPost]

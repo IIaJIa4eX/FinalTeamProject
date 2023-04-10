@@ -89,7 +89,6 @@ public class AuthenticateService : IAuthenticateService
     }
     private SessionInfo GetSessionInfo(User account, AccountSession accountSession)
     {
-        
         return new SessionInfo
         {
             SessionId = accountSession.SessionId,

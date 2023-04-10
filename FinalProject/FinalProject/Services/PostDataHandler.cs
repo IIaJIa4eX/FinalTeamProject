@@ -2,6 +2,8 @@ using DatabaseConnector;
 using DatabaseConnector.DTO.Post;
 using DatabaseConnector.Extensions;
 using FinalProject.DataBaseContext;
+using FinalProject.Interfaces;
+using System.Net.Http.Headers;
 
 namespace FinalProject.Services;
 
@@ -10,14 +12,18 @@ public class PostDataHandler
     EFGenericRepository<Post> _postRepository;
     EFGenericRepository<Content> _contentRepository;
     EFGenericRepository<Comment> _commentRepository;
+    IAuthenticateService _authenticateService;
+
 
     public PostDataHandler(EFGenericRepository<Post> postRepository,
         EFGenericRepository<Content> contentRepository,
-        EFGenericRepository<Comment> commentRepository)
+        EFGenericRepository<Comment> commentRepository,
+        IAuthenticateService authenticateService)
     {
         _postRepository = postRepository;
         _contentRepository = contentRepository;
         _commentRepository = commentRepository;
+        _authenticateService = authenticateService;
     }
 
     public Post GetById(int id)
@@ -32,8 +38,21 @@ public class PostDataHandler
         return tmpPost!;
     }
 
-    public bool Create(CreatePostDTO postData)
+    public bool Create(CreatePostDTO postData, string token)
     {
+        if (AuthenticationHeaderValue.TryParse(token, out var headerValue))
+        {
+            SessionInfo sessionInfo = _authenticateService.GetSessionInfo(headerValue.Parameter!);
+            if (sessionInfo is not null)
+                postData.UserId = sessionInfo.Account.Id;
+            else
+                return false;
+        }
+        else
+        {
+            return false;
+        }
+
         try
         {
             int contentId = _contentRepository.CreateAndGetId(new Content
@@ -141,5 +160,51 @@ public class PostDataHandler
             dtos.Add(post.Remap());
         }
         return dtos;
-    }        
+    }
+    public IEnumerable<Post> GetPostsByCategory(string creationDate = "Desc", string category = "", int skip = 0)
+    {
+        switch (creationDate)
+        {
+            case "Desc":
+                if (!string.IsNullOrEmpty(category))
+                {
+                    return _postRepository
+                           .GetWithInclude(
+                            post => post.Category == category,
+                            comm => comm.Comments,
+                            cont => cont.Content,
+                            usr => usr.User)
+                           .OrderByDescending(time => time.CreationDate).Skip(skip).Take(10);
+                }
+                break;
+            case "Asc":
+                if (string.IsNullOrEmpty(category))
+                {
+                    return _postRepository
+                           .GetWithInclude(
+                            comm => comm.Comments,
+                            cont => cont.Content,
+                            usr => usr.User)
+                           .OrderBy(time => time.CreationDate).Skip(skip).Take(10);
+                }
+
+                return _postRepository
+                       .GetWithInclude(
+                        post => post.Category == category,
+                        comm => comm.Comments,
+                        cont => cont.Content,
+                        usr => usr.User)
+                       .OrderBy(time => time.CreationDate).Skip(skip).Take(10);
+            default:
+                break;
+        }
+
+        return _postRepository
+                       .GetWithInclude(
+                        comm => comm.Comments,
+                        cont => cont.Content,
+                        usr => usr.User)
+                       .OrderByDescending(time => time.CreationDate).Skip(skip).Take(10);
+
+    }
 }

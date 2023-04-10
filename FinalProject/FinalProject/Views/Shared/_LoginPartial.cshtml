@@ -9,6 +9,9 @@
 <ul class="navbar-nav">
     @if (@User.Identity!.IsAuthenticated)
     {
+        <li class="nav-item">
+            <a type="button" class="btn btn-outline-success btn-sm text-decoration-none" asp-controller="Post" asp-action="Edit" method="get" title="NewPost">Create Post</a>
+        </li>
         <li 
         class="nav-item">
         @*

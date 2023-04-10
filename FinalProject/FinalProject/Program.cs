@@ -120,7 +120,7 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-        app.UseSession();
+        //app.UseSession();
         app.UseStaticFiles();
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
