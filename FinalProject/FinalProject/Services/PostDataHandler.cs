@@ -163,6 +163,32 @@ public class PostDataHandler
     }
     public IEnumerable<Post> GetPostsByCategory(string creationDate = "Desc", string category = "", int skip = 0)
     {
+        List<Post> posts = new List<Post>();
+        if (!string.IsNullOrEmpty(category))
+        {
+            posts = _postRepository
+                           .GetWithInclude(
+                            post => post.Category == category,
+                            comm => comm.Comments,
+                            cont => cont.Content!,
+                            usr => usr.User!).ToList();
+        }
+        else
+        {
+            posts = _postRepository
+                           .GetWithInclude(
+                            comm => comm.Comments,
+                            cont => cont.Content!,
+                            usr => usr.User!).ToList();
+        }
+        switch (creationDate)
+        {
+            case "Desc":posts.OrderByDescending(time => time.CreationDate);
+                break;
+            case "Asc":
+                posts.OrderBy(time => time.CreationDate);
+                break;
+        }
         switch (creationDate)
         {
             case "Desc":
@@ -172,8 +198,8 @@ public class PostDataHandler
                            .GetWithInclude(
                             post => post.Category == category,
                             comm => comm.Comments,
-                            cont => cont.Content,
-                            usr => usr.User)
+                            cont => cont.Content!,
+                            usr => usr.User!)
                            .OrderByDescending(time => time.CreationDate).Skip(skip).Take(10);
                 }
                 break;
@@ -183,8 +209,8 @@ public class PostDataHandler
                     return _postRepository
                            .GetWithInclude(
                             comm => comm.Comments,
-                            cont => cont.Content,
-                            usr => usr.User)
+                            cont => cont.Content!,
+                            usr => usr.User!)
                            .OrderBy(time => time.CreationDate).Skip(skip).Take(10);
                 }
 
@@ -192,8 +218,8 @@ public class PostDataHandler
                        .GetWithInclude(
                         post => post.Category == category,
                         comm => comm.Comments,
-                        cont => cont.Content,
-                        usr => usr.User)
+                        cont => cont.Content!,
+                        usr => usr.User!)
                        .OrderBy(time => time.CreationDate).Skip(skip).Take(10);
             default:
                 break;
@@ -202,8 +228,8 @@ public class PostDataHandler
         return _postRepository
                        .GetWithInclude(
                         comm => comm.Comments,
-                        cont => cont.Content,
-                        usr => usr.User)
+                        cont => cont.Content!,
+                        usr => usr.User!)
                        .OrderByDescending(time => time.CreationDate).Skip(skip).Take(10);
 
     }

@@ -84,7 +84,7 @@ public class PostController : Controller
         bool success = _postDataHandler.Create
         (
             postData,
-            Request.Headers[HeaderNames.Authorization]
+            Request.Headers[HeaderNames.Authorization]!
         );
 
         return Redirect("~/Home/Index");
