@@ -1,12 +1,15 @@
 using DatabaseConnector;
+using DatabaseConnector.DTO;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
 using FinalProject.Models;
 using FinalProject.Models.Requests;
 using FinalProject.Utils;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 
 namespace FinalProject.Services
@@ -16,6 +19,7 @@ namespace FinalProject.Services
         public const string SecretKey = "kYp3s6v9y/B?E(H+";
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly Dictionary<string, SessionInfo> _sessions = new Dictionary<string, SessionInfo>();
+
         public AuthenticateService(IServiceScopeFactory serviceScopeFactory)
         {
             _serviceScopeFactory = serviceScopeFactory;
@@ -23,10 +27,15 @@ namespace FinalProject.Services
         public SessionInfo GetSessionInfo(string sessionToken)
         {
             SessionInfo sessionInfo;
+            var handler = new JwtSecurityTokenHandler();
+            var email = handler.ReadJwtToken(sessionToken).Claims.First(claim => claim.Type == "email").Value;
+
+            
             lock (_sessions)
             {
                 _sessions.TryGetValue(sessionToken, out sessionInfo);
             }
+
             if (sessionInfo == null)
             {
                 using IServiceScope scope = _serviceScopeFactory.CreateScope();
@@ -35,6 +44,7 @@ namespace FinalProject.Services
                 if (session == null)
                     return null;
                 User account = context.Users.FirstOrDefault(item => item.Id == session.AccountId);
+
                 sessionInfo = GetSessionInfo(account, session);
                 if (sessionInfo != null)
                 {
@@ -42,6 +52,7 @@ namespace FinalProject.Services
                     {
                         _sessions[sessionToken] = sessionInfo;
                     }
+
                 }
             }
             return sessionInfo;
@@ -65,6 +76,8 @@ namespace FinalProject.Services
                     Status = AuthenticationStatus.InvalidPassword
                 };
             }
+
+
             AccountSession session = new AccountSession
             {
                 AccountId = account.Id,
@@ -74,13 +87,19 @@ namespace FinalProject.Services
                 IsClosed = false,
                 TimeClosed = DateTime.Now.AddMinutes(15)
             };
+
+
             context.AccountSessions.Add(session);
             context.SaveChanges();
+
+
             SessionInfo sessionInfo = GetSessionInfo(account, session);
             lock (_sessions)
             {
                 _sessions[sessionInfo.SessionToken] = sessionInfo;
             }
+
+
             return new AuthenticationResponse
             {
                 Status = AuthenticationStatus.Success,
@@ -110,14 +129,17 @@ namespace FinalProject.Services
         {
             JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             byte[] key = Encoding.ASCII.GetBytes(SecretKey);
-            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+            SecurityTokenDescriptor tokenDescriptor = new
+            SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(
-                    new Claim[] {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.NickName),
                     new Claim(ClaimTypes.Email, user.Email),
-                    }),
-                Expires = DateTime.Now.AddMinutes(15),
+                    new Claim(ClaimTypes.Role, user.UserRole)
+
+                }),
+                Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);

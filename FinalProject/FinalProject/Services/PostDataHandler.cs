@@ -1,7 +1,15 @@
-﻿using DatabaseConnector;
+using DatabaseConnector;
 using FinalProject.DataBaseContext;
-using FinalProject.Models.DTO;
-using FinalProject.Models.DTO.PostDTO;
+using FinalProject.Interfaces;
+using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.Hosting;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
+using System.Net.Http.Headers;
+using System.Net;
+using DatabaseConnector.Extensions;
+using FinalProject.Models;
+using DatabaseConnector.DTO;
+using DatabaseConnector.DTO.Post;
 
 namespace FinalProject.Services
 {
@@ -10,11 +18,13 @@ namespace FinalProject.Services
         EFGenericRepository<Post> _postRepository;
         EFGenericRepository<Content> _contentRepository;
         EFGenericRepository<Comment> _commentRepository;
+        IAuthenticateService _authenticateService;
 
-        public PostDataHandler(EFGenericRepository<Post> postRepository, EFGenericRepository<Content> contentRepository)
+        public PostDataHandler(EFGenericRepository<Post> postRepository, EFGenericRepository<Content> contentRepository, IAuthenticateService authenticateService)
         {
             _postRepository = postRepository;
             _contentRepository = contentRepository;
+            _authenticateService = authenticateService;
         }
 
         public Post GetById(int id)
@@ -23,18 +33,30 @@ namespace FinalProject.Services
             var tmpPost = _postRepository.GetWithInclude
                 (
                 post => post.Id == id,
-                comms => comms.Comments.Take(50),
-                cont => cont.Content,
-                usr => usr.User
+                comms => comms.Comments.Take(10),
+                cont => cont.Content!,
+                usr => usr.User!
                 )
                 .FirstOrDefault();
 
             return tmpPost;
         }
 
-        public bool Create(CreatePostDTO postData)
+        public bool Create(CreatePostDTO postData, string token)
         {
-            bool result;
+            if (AuthenticationHeaderValue.TryParse(token, out var headerValue))
+            {
+                SessionInfo sessionInfo = _authenticateService.GetSessionInfo(headerValue.Parameter!);
+                if (sessionInfo is not null)
+                    postData.UserId = sessionInfo.Account.Id;
+                else
+                    return false;
+            }
+            else
+            {
+                return false;
+            }
+
             try
             {
                 int contentId = _contentRepository.CreateAndGetId(new Content
@@ -52,75 +74,40 @@ namespace FinalProject.Services
                     UserId = postData.UserId,
                     CreationDate = DateTime.UtcNow,
                 });
-
-                if (entitiesNumb > 0)
-                {
-                    result = true;
-                }
-                else
-                {
-                    result = false;
-                }
-
+                return entitiesNumb > 0;
             }
             catch
             {
-                result = false;
+                return false;
             }
-
-
-            return result;
         }
 
         public bool Edit(EditPostDTO postData)
         {
 
             var post = _postRepository.FindById(postData.Id);
-
-            if (post == null)
+            if (post is not null)
             {
-                return false;
+                var content = _contentRepository.FindById(post.ContentId);
+                if (content is not null)
+                {
+                    content.CreationDate = DateTime.UtcNow;
+                    content.IsVisible = true;
+                    content.Text = postData.Description;
+                    return _contentRepository.Update(content) > 0;
+                }
             }
-
-            var content = _contentRepository.FindById(post.ContentId);
-
-            if (content == null)
-            {
-                return false;
-            }
-
-            content.CreationDate = DateTime.UtcNow;
-            content.IsVisible = true;
-            content.Text = postData.Description;
-
-            int res = _contentRepository.Update(content);
-
-            if (res > 0)
-            {
-                return true;
-            }
-
             return false;
         }
 
         public bool Delete(EditPostDTO postData)
         {
             var post = _postRepository.FindById(postData.Id);
-
-            if (post == null)
+            if (post is not null)
             {
-                return false;
+                post.IsVisible = false;
+                return _postRepository.Update(post) > 0;
             }
-            post.IsVisible = false;
-
-            int res = _postRepository.Update(post);
-
-            if (res > 0)
-            {
-                return true;
-            }
-
-
             return false;
 
         }
@@ -130,30 +117,12 @@ namespace FinalProject.Services
             if (postData == "plus" || postData == "minus")
             {
                 var post = _postRepository.FindById(Id);
-
-                if (post != null)
+                if (post is not null)
                 {
-                    if (postData == "plus")
-                    {
-                        post.Rating += 1;
-                    }
-                    else
-                    {
-                        post.Rating -= 1;
-                    }
-
-                    int res = _postRepository.Update(post);
-
-                    if (res > 0)
-                    {
-                        return true;
-                    }
-
-                    return false;
+                    post.Rating = postData == "plus" ? post.Rating + 1 : post.Rating - 1;
+                    return _postRepository.Update(post) > 0;
                 }
-
             }
-
             return false;
 
         }
@@ -167,7 +136,7 @@ namespace FinalProject.Services
                 {
                     CreationDate = DateTime.UtcNow,
                     IsVisible = true,
-                    Text = comment.Text
+                    Text = comment.Content.Text
                 });
 
                 int res = _commentRepository.Create(new Comment
@@ -178,14 +147,7 @@ namespace FinalProject.Services
                     ContentId = contentId
                 });
 
-                if (res > 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return res > 0;
             }
             catch
             {
@@ -194,6 +156,69 @@ namespace FinalProject.Services
 
         }
 
+        public IEnumerable<PostDTO> GetLast(int count)
+        {
+            return Remap(_postRepository.Get(p => p.Content!.IsVisible).TakeLast(count));
+        }
+        private IEnumerable<PostDTO> Remap(IEnumerable<Post> posts)
+        {
+            List<PostDTO> dtos = new List<PostDTO>(posts.Count());
+            foreach (var post in posts)
+            {
+                dtos.Add(post.Remap());
+            }
+            return dtos;
+        }
+
+        public IEnumerable<Post> GetPostsByCategory(string creationDate = "Desc", string category = "", int skip = 0)
+        {
+            if(creationDate == "Desc")
+            {
+                if (!string.IsNullOrEmpty(category))
+                {
+
+                    return _postRepository
+                           .GetWithInclude(
+                            post => post.Category == category,
+                            comm =>comm.Comments,
+                            cont => cont.Content,
+                            usr => usr.User)
+                           .OrderByDescending(time => time.CreationDate).Skip(skip).Take(10);
+
+                }
+                   
+            }
+
+
+            if (creationDate == "Asc")
+            {
+                if (string.IsNullOrEmpty(category))
+                {
+                    return _postRepository
+                           .GetWithInclude(
+                            comm => comm.Comments,
+                            cont => cont.Content,
+                            usr => usr.User)
+                           .OrderBy(time => time.CreationDate).Skip(skip).Take(10);
+                }
+
+                    return _postRepository
+                            .GetWithInclude(
+                            post => post.Category == category,
+                            comm => comm.Comments,
+                            cont => cont.Content,
+                            usr => usr.User)
+                            .OrderBy(time => time.CreationDate).Skip(skip).Take(10);
+            }
+
+            return _postRepository
+                           .GetWithInclude(
+                            comm => comm.Comments,
+                            cont => cont.Content,
+                            usr => usr.User)
+                           .OrderByDescending(time => time.CreationDate).Skip(skip).Take(10);
+
+        }
 
 
     }

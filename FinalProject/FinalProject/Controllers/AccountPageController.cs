@@ -1,4 +1,6 @@
 ﻿using DatabaseConnector;
+using DatabaseConnector.DTO;
+using DatabaseConnector.Extensions;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
 using FinalProject.Models;
@@ -9,7 +11,7 @@ using System.Net.Http.Headers;
 
 namespace FinalProject.Controllers
 {
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize]
     [Route("[controller]")]
     public class AccountPageController : Controller
     {
@@ -30,24 +32,19 @@ namespace FinalProject.Controllers
             if (AuthenticationHeaderValue.TryParse(authorization, out var headerValue))
             {
                 SessionInfo sessionInfo = _authenticateService.GetSessionInfo(headerValue.Parameter!);
+
                 var users = _userRepository.Get(x => x.Id == sessionInfo.Account.Id);
+
                 if (users.Any())
                 {
                     var user = users.First();
-                    return View(new UserDto
-                    {
-                        Id = user.Id, //sessionInfo.Account.Id,
-                        NickName = user.NickName, //sessionInfo.Account.NickName,
-                        FirstName = user.FirstName, //sessionInfo.Account.FirstName,
-                        LastName = user.LastName, //sessionInfo.Account.LastName,
-                        Patronymic = user.Patronymic, //sessionInfo.Account.Patronymic,
-                        Birthday = user.Birthday, //sessionInfo.Account.Birthday,
-                        Email = user.Email // sessionInfo.Account.Email
-                    });
+
+                    return View(user.Remap());
                 }
             }
             return View();
         }
+
         [Route("Edit")]
         [HttpGet]
         public ActionResult Edit()
@@ -59,16 +56,7 @@ namespace FinalProject.Controllers
                 var user = _userRepository.FindById(sessionInfo.Account.Id);
                 if (user is not null)
                 {
-                    return View(new UserDto
-                    {
-                        Id = user.Id, //sessionInfo.Account.Id,
-                        NickName = user.NickName, //sessionInfo.Account.NickName,
-                        FirstName = user.FirstName, //sessionInfo.Account.FirstName,
-                        LastName = user.LastName, //sessionInfo.Account.LastName,
-                        Patronymic = user.Patronymic, //sessionInfo.Account.Patronymic,
-                        Birthday = user.Birthday, //sessionInfo.Account.Birthday,
-                        Email = user.Email // sessionInfo.Account.Email
-                    });
+                    return View(user.Remap());
                 }
             }
             return View();

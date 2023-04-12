@@ -43,6 +43,7 @@ namespace FinalProject.Services
                 NickName = registrationRequest.Nickname,
                 Email = registrationRequest.Email,
                 IsBanned = false,
+                Birthday = DateTime.UtcNow,
                 PasswordSalt = result.passSalt,
                 PasswordHash = result.passHash
             };

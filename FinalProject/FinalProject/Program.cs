@@ -19,23 +19,20 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.Services.AddDistributedMemoryCache();
-        builder.Services.AddSession();
-        builder.Services.AddControllersWithViews();
-        builder.Services.AddHttpLogging(logging =>
-        {
-            logging.LoggingFields = HttpLoggingFields.All | HttpLoggingFields.RequestQuery;
-            logging.RequestBodyLogLimit = 4096;
-            logging.ResponseBodyLogLimit = 4096;
-            logging.RequestHeaders.Add("Authorization");
-            logging.RequestHeaders.Add("X-Real-IP");
-            logging.RequestHeaders.Add("X-Forwared-For");
-        });
-        builder.Host.ConfigureLogging(logging =>
-        {
-            logging.ClearProviders();
-            logging.AddConsole();
-        }).UseNLog(new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = true });
+        //builder.Services.AddHttpLogging(logging =>
+        //{
+        //    logging.LoggingFields = HttpLoggingFields.All | HttpLoggingFields.RequestQuery;
+        //    logging.RequestBodyLogLimit = 4096;
+        //    logging.ResponseBodyLogLimit = 4096;
+        //    logging.RequestHeaders.Add("Authorization");
+        //    logging.RequestHeaders.Add("X-Real-IP");
+        //    logging.RequestHeaders.Add("X-Forwared-For");
+        //});
+        //builder.Host.ConfigureLogging(logging =>
+        //{
+        //    logging.ClearProviders();
+        //    logging.AddConsole();
+        //}).UseNLog(new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = true });
 
         if (File.Exists("dbcstring.json"))
         {
@@ -51,30 +48,31 @@ public class Program
         }
 
 
-        
         builder.Services.AddSingleton<IAuthenticateService, AuthenticateService>();
         builder.Services.AddSingleton<IRegistrationService, RegistrationService>();
 
 
         builder.Services.AddAuthentication(x =>
         {
-            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultAuthenticateScheme =
+            JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme =
+            JwtBearerDefaults.AuthenticationScheme;
         }).AddJwtBearer(x =>
-        {
-            x.RequireHttpsMetadata = false;
-            x.SaveToken = true;
-            x.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AuthenticateService.SecretKey)),
-                ValidateIssuer = false,
-                ValidateLifetime = true,
-                ValidateAudience = false,
-                ClockSkew = TimeSpan.Zero,
-            };
-        });
-
+           {
+               x.RequireHttpsMetadata = false;
+               x.SaveToken = true;
+               x.TokenValidationParameters = new
+                TokenValidationParameters
+               {
+                   ValidateIssuerSigningKey = true,
+                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AuthenticateService.SecretKey)),
+                   ValidateIssuer = false,
+                   ValidateLifetime = true,
+                   ValidateAudience = false,
+                   ClockSkew = TimeSpan.Zero
+               };
+           });
 
 
         builder.Services.AddScoped<EFGenericRepository<User>>();
@@ -123,7 +121,9 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-        app.UseSession();
+        
+
+
         app.UseStaticFiles();
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
@@ -140,9 +140,14 @@ public class Program
             return next.Invoke();
         });
 
+
+
         app.UseRouting();
-        app.UseAuthorization();
         app.UseAuthentication();
+        app.UseAuthorization();
+       
+
+ 
 
         app.UseHttpLogging();
 

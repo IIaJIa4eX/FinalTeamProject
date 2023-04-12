@@ -1,4 +1,5 @@
 ﻿using DatabaseConnector;
+using DatabaseConnector.DTO;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace FinalProject.Models.Requests
