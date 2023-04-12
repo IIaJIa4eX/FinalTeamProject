@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Post>;
+﻿@model IEnumerable<DatabaseConnector.Post>
 @{
     ViewData["Title"] = "Home";
 }
@@ -18,6 +18,7 @@
         <div сlass="PostCard">
 
             @foreach(var item in Model){
+          <a type="button" class="text-decoration-none" asp-controller="Post" asp-action="Index" asp-route-id="@item.Id">
             <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
                 <div class="uk-card-media-left uk-cover-container">
                     <img src="~/imgs/examplephoto.jpeg" alt="" uk-cover>
@@ -59,6 +60,7 @@
                     </div>
                 </div>
             </div>
-            }
+            </a>
+        }
         </div>
 </div>

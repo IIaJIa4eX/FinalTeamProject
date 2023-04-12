@@ -1,19 +1,16 @@
 using DatabaseConnector;
-using FinalProject.DataBaseContext;
-using FinalProject.Models.DTO;
-using FinalProject.Models.DTO.PostDTO;
-using FinalProject.Models.Requests;
 using FinalProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using FinalProject.Services;
 using Microsoft.Net.Http.Headers;
 using FinalProject.Interfaces;
 using System.Net.Http.Headers;
+using DatabaseConnector.DTO.Post;
+using DatabaseConnector.DTO;
 
 namespace FinalProject.Controllers
 {
-    [Route("[controller]")]
+    [Route("Post")]
     [Authorize]
     public class PostController : Controller
     {
@@ -29,12 +26,13 @@ namespace FinalProject.Controllers
 
 
         [HttpGet]
-        [Route("/[action]")]
-        public IActionResult Index(int id)
+        [Route("{id}")]
+        [AllowAnonymous]
+        public IActionResult Index([FromRoute] int id)
         {
             var post = _postDataHandler.GetById(id);
 
-            return Ok($"{post.CreationDate}, {post.ContentId}, {post.User.NickName}");
+            return View(post);
         }
 
 
@@ -46,10 +44,10 @@ namespace FinalProject.Controllers
                 bool success = _postDataHandler.Create
                 (
                     postData,
-                    Request.Headers[HeaderNames.Authorization]
+                    Request.Headers[HeaderNames.Authorization]!
                 );
 
-            return Ok();
+            return Redirect("~/Home/Index");
         }
 
         [HttpPost]
@@ -67,6 +65,24 @@ namespace FinalProject.Controllers
         { 
 
             return View();
+        }
+
+        [HttpGet]
+        [Route("/create/new")]
+        [AllowAnonymous]
+        public IActionResult CreateNew()
+        {
+            var userid = HttpContext.Request.Headers.SingleOrDefault(x => x.Key == "UserId").Value.ToString();
+            ViewBag.UserId = userid;
+            return View();
+        }
+
+        [HttpPost]
+        [Route("/create/new")]
+        [AllowAnonymous]
+        public IActionResult CreateNew([FromForm] Content content)
+        {
+            return View(content);
         }
 
         [HttpPost]
@@ -89,11 +105,21 @@ namespace FinalProject.Controllers
 
         [HttpPost]
         [Route("/[action]")]
-        public IActionResult AddPostComment(CommentDTO comment)
+        public IActionResult AddPostComment([FromForm] CommentCreationDTO content)
         {
-            bool success = _postDataHandler.AddComment(comment);
+            bool success = _postDataHandler.AddComment(new CommentDTO()
+            {
+                IsVisible = true,
+                PostId = content.PostId,
+                Content = new ContentDTO()
+                {
+                    CreationDate = DateTime.Now,
+                    IsVisible = true,
+                    Text = content.Text
+                }
+            });
 
-            return Ok(success);
+            return View();
         }
 
     }

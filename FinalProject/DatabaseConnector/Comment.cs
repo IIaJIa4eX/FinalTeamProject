@@ -18,7 +18,7 @@ public class Comment : IEntity
 
     [ForeignKey(nameof(Content))]
     public int ContentId { get; set; }
-
+    
     [Column]
     public int ParentId { get; set; } = -1;
 

@@ -1,4 +1,6 @@
 ﻿using DatabaseConnector;
+using DatabaseConnector.DTO;
+using DatabaseConnector.Extensions;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
 using FinalProject.Models;
@@ -37,17 +39,7 @@ namespace FinalProject.Controllers
                 {
                     var user = users.First();
 
-                    return View(new UserDto
-                    {
-                        Id = user.Id, //sessionInfo.Account.Id,
-                        NickName = user.NickName, //sessionInfo.Account.NickName,
-                        FirstName = user.FirstName, //sessionInfo.Account.FirstName,
-                        LastName = user.LastName, //sessionInfo.Account.LastName,
-                        Patronymic = user.Patronymic, //sessionInfo.Account.Patronymic,
-                        Birthday = user.Birthday, //sessionInfo.Account.Birthday,
-                        Email = user.Email // sessionInfo.Account.Email
-
-                    });
+                    return View(user.Remap());
                 }
             }
             return View();
@@ -64,17 +56,7 @@ namespace FinalProject.Controllers
                 var user = _userRepository.FindById(sessionInfo.Account.Id);
                 if (user is not null)
                 {
-                    return View(new UserDto
-                    {
-                        Id = user.Id, //sessionInfo.Account.Id,
-                        NickName = user.NickName, //sessionInfo.Account.NickName,
-                        FirstName = user.FirstName, //sessionInfo.Account.FirstName,
-                        LastName = user.LastName, //sessionInfo.Account.LastName,
-                        Patronymic = user.Patronymic, //sessionInfo.Account.Patronymic,
-                        Birthday = user.Birthday, //sessionInfo.Account.Birthday,
-                        Email = user.Email // sessionInfo.Account.Email
-
-                    });
+                    return View(user.Remap());
                 }
             }
             return View();

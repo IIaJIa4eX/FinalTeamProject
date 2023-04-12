@@ -1,4 +1,5 @@
-﻿using FinalProject.Models;
+﻿using DatabaseConnector.DTO;
+using FinalProject.Models;
 using FinalProject.Models.Requests;
 
 namespace FinalProject.Interfaces

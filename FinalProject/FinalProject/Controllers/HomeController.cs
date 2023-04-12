@@ -20,15 +20,7 @@ namespace FinalProject.Controllers
 
         #endregion
 
-        //public IActionResult Index()
-        //{
-        //    var posts = _postDataHandler.GetPostsByCategory();
 
-        //    return View(posts);
-        //}
-
-        //[HttpGet]
-        //[Route("/[action]")]
         public IActionResult Index(string creationDate, string category, int skip)
         {
             var posts = _postDataHandler.GetPostsByCategory(creationDate, category, skip);
@@ -41,7 +33,6 @@ namespace FinalProject.Controllers
         [Route("/[action]")]
         public IActionResult Categories()
         {
-            bool ss = User.Identity.IsAuthenticated;
             return View();
         }
 

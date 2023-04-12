@@ -1,4 +1,5 @@
 using DatabaseConnector;
+using DatabaseConnector.DTO;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
 using FinalProject.Models;
@@ -134,8 +135,9 @@ namespace FinalProject.Services
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, user.NickName),
-                    new Claim(ClaimTypes.Email, user.Email)
-                    
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(ClaimTypes.Role, user.UserRole)
+
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(15),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

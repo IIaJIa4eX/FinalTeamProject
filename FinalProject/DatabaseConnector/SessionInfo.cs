@@ -1,4 +1,4 @@
-﻿namespace FinalProject.Models;
+﻿namespace DatabaseConnector.DTO;
 
 public class SessionInfo
 {
