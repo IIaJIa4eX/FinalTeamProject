@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using DatabaseConnector.DTO.Post;
 using Microsoft.Net.Http.Headers;
+using DatabaseConnector.DTO;
 
 namespace FinalProject.Controllers;
 
@@ -98,11 +99,21 @@ public class PostController : Controller
 
     [HttpPost]
     [Route("/[action]")]
-    public IActionResult AddPostComment(CommentDTO comment)
+    public IActionResult AddPostComment([FromForm] CommentCreationDTO content)
     {
-        bool success = _postDataHandler.AddComment(comment);
+        bool success = _postDataHandler.AddComment(new CommentDTO()
+        {
+            IsVisible = true,
+            PostId = content.PostId,
+            Content = new ContentDTO()
+            {
+                CreationDate = DateTime.Now,
+                IsVisible = true,
+                Text = content.Text
+            }
+        });
 
-        return Ok(success);
+        return View();
     }
 
 }

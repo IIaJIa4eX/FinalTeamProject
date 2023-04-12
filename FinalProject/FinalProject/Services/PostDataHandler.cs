@@ -1,4 +1,5 @@
 using DatabaseConnector;
+using DatabaseConnector.DTO;
 using DatabaseConnector.DTO.Post;
 using DatabaseConnector.Extensions;
 using FinalProject.DataBaseContext;
@@ -120,6 +121,11 @@ public class PostDataHandler
         return false;
     }
 
+    public bool AddContentToComment(CommentCreationDTO dto)
+    {
+        return true;
+    }
+
     public bool AddComment(CommentDTO comment)
     {
         try
@@ -163,32 +169,32 @@ public class PostDataHandler
     }
     public IEnumerable<Post> GetPostsByCategory(string creationDate = "Desc", string category = "", int skip = 0)
     {
-        List<Post> posts = new List<Post>();
-        if (!string.IsNullOrEmpty(category))
-        {
-            posts = _postRepository
-                           .GetWithInclude(
-                            post => post.Category == category,
-                            comm => comm.Comments,
-                            cont => cont.Content!,
-                            usr => usr.User!).ToList();
-        }
-        else
-        {
-            posts = _postRepository
-                           .GetWithInclude(
-                            comm => comm.Comments,
-                            cont => cont.Content!,
-                            usr => usr.User!).ToList();
-        }
-        switch (creationDate)
-        {
-            case "Desc":posts.OrderByDescending(time => time.CreationDate);
-                break;
-            case "Asc":
-                posts.OrderBy(time => time.CreationDate);
-                break;
-        }
+        //List<Post> posts = new List<Post>();
+        //if (!string.IsNullOrEmpty(category))
+        //{
+        //    posts = _postRepository
+        //                   .GetWithInclude(
+        //                    post => post.Category == category,
+        //                    comm => comm.Comments,
+        //                    cont => cont.Content!,
+        //                    usr => usr.User!).ToList();
+        //}
+        //else
+        //{
+        //    posts = _postRepository
+        //                   .GetWithInclude(
+        //                    comm => comm.Comments,
+        //                    cont => cont.Content!,
+        //                    usr => usr.User!).ToList();
+        //}
+        //switch (creationDate)
+        //{
+        //    case "Desc":posts.OrderByDescending(time => time.CreationDate);
+        //        break;
+        //    case "Asc":
+        //        posts.OrderBy(time => time.CreationDate);
+        //        break;
+        //}
         switch (creationDate)
         {
             case "Desc":
