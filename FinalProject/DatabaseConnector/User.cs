@@ -1,13 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+using DatabaseConnector.Interfaces;
+using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseConnector;
 
 [Table("User")]
-public class User
+public class User : IEntity
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 
     [Column]
     [StringLength(255)]
@@ -26,19 +28,21 @@ public class User
     public string? Patronymic { get; set; }
 
     [Column]
-    public DateTime Birthday { get; set; }
+    public DateTime? Birthday { get; set; } = null;
 
     [Column]
     [StringLength(255)]
     public string? Email { get; set; }
 
-    [Column]
-    [StringLength(255)]
-    public string? Password { get; set; }
+    [StringLength(100)]
+    public string PasswordSalt { get; set; }
+
+    [StringLength(100)]
+    public string PasswordHash { get; set; }
 
     [Column]
     [StringLength(255)]
-    public string? UserRole { get; set; }
+    public string? UserRole { get; set; } = "User";
 
     [Column]
     public bool IsBanned { get; set; } = false;
@@ -51,4 +55,7 @@ public class User
 
     [InverseProperty(nameof(Issue.User))]
     public virtual ICollection<Issue> Issues { get; set; } = new HashSet<Issue>();
+
+    [InverseProperty(nameof(AccountSession.User))]
+    public virtual ICollection<AccountSession> Sessions { get; set; } = new HashSet<AccountSession>();
 }

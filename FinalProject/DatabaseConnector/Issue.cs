@@ -5,16 +5,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace DatabaseConnector;
 
 [Table("Issue")]
-public class Issue : IMessage
+public class Issue : IEntity
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 
     [ForeignKey(nameof(User))]
-    public Guid UserId { get; set; }
+    public int UserId { get; set; }
 
     [ForeignKey(nameof(Content))]
-    public Guid ContentId { get; set; }
+    public int ContentId { get; set; }
 
     [Column]
     [StringLength(255)]

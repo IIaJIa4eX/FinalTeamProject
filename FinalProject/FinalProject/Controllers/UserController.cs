@@ -1,63 +1,121 @@
-﻿using DatabaseConnector;
+using DatabaseConnector;
+using DatabaseConnector.DTO;
+using FinalProject.Interfaces;
+using FinalProject.Models;
 using FinalProject.Models.Requests;
-using FinalProject.Services;
+using FinalProject.Models.Validations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Globalization;
+using Microsoft.Net.Http.Headers;
+using System.Net.Http.Headers;
 
 namespace FinalProject.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UserController : ControllerBase
+    [Route("[controller]")]
+    public class UserController : Controller
     {
-        private readonly IUserRepository _clientRepositoryService;
-        private readonly ILogger<UserController> _logger;
-        public UserController(ILogger<UserController> logger, IUserRepository clientRepositoryService)
+        private readonly IAuthenticateService _authenticateService;
+        private readonly IRegistrationService _registrationService;
+        public UserController(IAuthenticateService authenticateService, IRegistrationService registrationService)
         {
-            _clientRepositoryService = clientRepositoryService;
-            _logger = logger;
+            _registrationService = registrationService;
+            _authenticateService = authenticateService;
         }
-        [HttpPost("create")]
-        [ProducesResponseType(typeof(CreateUserResponse), StatusCodes.Status200OK)]
-        public IActionResult Create([FromBody] CreateUserRequest request)
+
+        [Route("/[action]")]
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Registration()
         {
-            try
+
+            return View();
+        }
+
+        [Route("/[action]")]
+        [HttpPost]
+        [AllowAnonymous]
+        public IActionResult Registration([FromForm] RegistrationRequest user)
+        {
+            if (ModelState.IsValid)
             {
-                var clientId = _clientRepositoryService.Create(new User
+                RegistrationResponse registrationResponse = _registrationService.Registration(user);
+                if (registrationResponse.Status == 0)
                 {
-                    NickName = request.NickName,
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    Patronymic = request.Patronymic,
-                    Email = request.Email,
-                    Password = request.Password,
-                    Birthday = request.Birthday
-                });
-                return Ok(new CreateUserResponse
-                {
-                    UserId = clientId
-                });
+                    return RedirectToAction("Login", new AuthenticationRequest
+                    {
+                        Email = user.Email,
+                        Password = user.Password
+                    });
+                }
+                return Ok(registrationResponse);
             }
-            catch (Exception e)
+            return View(user);
+        }
+
+        [Route("/[action]")]
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [Route("/[action]")]
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult Login([FromForm] AuthenticationRequest authenticationRequest)
+        {
+
+            if (ModelState.IsValid)
             {
-                _logger.LogError(e, "Create client error.");
-                return Ok(new CreateUserResponse
+                AuthenticationResponse authenticationResponse = _authenticateService.Login(authenticationRequest);
+                if (authenticationResponse.Status == AuthenticationStatus.Success)
                 {
-                    ErrorCode = 912,
-                    ErrorMessage = "Create client error."
-                });
+                    Response.Headers.Add("X-Session-Token", authenticationResponse.SessionInfo.SessionToken);
+                    var option = new CookieOptions
+                    {
+                        //option.Expires = DateTime.Now.AddHours(24);
+                        SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict,
+                        HttpOnly = true,
+                        //Secure = true,//works only for https
+                        IsEssential = true
+                    };
+                    Response.Cookies.Append("X-Session-Token", authenticationResponse.SessionInfo?.SessionToken!, option);
+                    return Redirect("~/Home/Index");
+                }
+                return View("Home/Index");
             }
+            return View(authenticationRequest);
+        }
+
+        [HttpGet("session")]
+        public IActionResult GetSessionInfo()
+        {
+            var authorization = Request.Headers[HeaderNames.Authorization];
+            if (AuthenticationHeaderValue.TryParse(authorization, out var headerValue))
+            {
+                var scheme = headerValue.Scheme;
+                var sessionToken = headerValue.Parameter;
+                if (!string.IsNullOrEmpty(sessionToken))
+                {
+                    SessionInfo sessionInfo = _authenticateService.GetSessionInfo(sessionToken);
+                    return sessionInfo == null ? Unauthorized() : Ok(sessionInfo);
+                }
+            }
+            return Unauthorized();
+        }
+
+
+        [Route("/[action]")]
+        [HttpGet]
+        public IActionResult LogOut()
+        {
+
+            Response.Cookies.Delete("X-Session-Token");
+
+            return Redirect("~/Home/Index");
         }
     }
-}
 
-/*"nickName": "Anatoly911",
-  "firstName": "Anatolii",
-  "lastName": "Revutskyi",
-  "patronymic": "Yaroslavovich",
-  "birthday": "1994-04-19T12:28:55.958Z",
-  "email": "revutskyanatoly@gmail.com",
-  "password": "Cgfcfntkm911"
-}*/
+}

@@ -1,38 +1,34 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DatabaseConnector.Interfaces;
 
 namespace DatabaseConnector
 {
     [Table("AccountSessions")]
-    public class AccountSession
+    public class AccountSession : IEntity
     {
+        public int Id { get => SessionId; set => SessionId = value; }
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid SessionId { get; set; }
+        public int SessionId { get; set; }
 
         [Required]
         [StringLength(384)]
         public string SessionToken { get; set; }
 
-        [ForeignKey(nameof(Account))]
-        public Guid AccountId { get; set; }
+        [ForeignKey(nameof(User))]
+        public int AccountId { get; set; }
 
-        [Column/*(TypeName = "datetime2")*/]
+        [Column(TypeName = "Timestamp")]
         public DateTime TimeCreated { get; set; }
 
-        [Column/*(TypeName = "datetime2")*/]
+        [Column(TypeName = "Timestamp")]
         public DateTime TimeLastRequest { get; set; }
 
         public bool IsClosed { get; set; }
 
-        [Column/*(TypeName = "datetime2")*/]
+        [Column(TypeName = "Timestamp")]
         public DateTime? TimeClosed { get; set; }
 
-        public virtual Account Account { get; set; }
+        public virtual User User { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 {
     public interface IOperationResult
     {
-        int ErrorCode { get; }
+        int ErrorCode { get; set; }
         string? ErrorMessage { get; }
     }
 }

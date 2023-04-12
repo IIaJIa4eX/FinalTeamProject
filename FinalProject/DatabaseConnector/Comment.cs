@@ -1,22 +1,26 @@
+using DatabaseConnector.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DatabaseConnector;
 
 [Table("Comment")]
-public class Comment
+public class Comment : IEntity
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public Guid Id { get; set; }
+    public int Id { get; set; }
 
     [ForeignKey(nameof(User))]
-    public Guid UserId { get; set; }
+    public int UserId { get; set; }
 
     [ForeignKey(nameof(Post))]
-    public Guid PostId { get; set; }
+    public int PostId { get; set; }
 
     [ForeignKey(nameof(Content))]
-    public Guid ContentId { get; set; }
+    public int ContentId { get; set; }
+    
+    [Column]
+    public int ParentId { get; set; } = -1;
 
     [Column]
     public bool IsVisible { get; set; }
@@ -24,10 +28,9 @@ public class Comment
     [Column]
     public DateTime CreationDate { get; set; }
 
-    public virtual User? User { get; set; } = null;
+    public virtual User? User { get; set; }
 
-    public virtual Post? Post { get; set; } = null;
+    public virtual Post? Post { get; set; }
 
-    public virtual Content? Content { get; set; } = null;
+    public virtual Content? Content { get; set; } 
 }
-
