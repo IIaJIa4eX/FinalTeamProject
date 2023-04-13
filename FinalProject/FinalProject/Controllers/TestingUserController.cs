@@ -33,7 +33,7 @@ public class TestingUserController : Controller
                 {
                     return View(users.First());
                 }
-            }                    
+            }
         }
         throw new Exception(message:"No such user in DB.");        
     }

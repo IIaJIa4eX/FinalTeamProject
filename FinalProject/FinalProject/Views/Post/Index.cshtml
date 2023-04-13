@@ -1,9 +1,11 @@
 ﻿@using DatabaseConnector.DTO;
+@using DatabaseConnector.DTO.Post;
 @model DatabaseConnector.Post
 
 @{
-    Content dtos = new();
+    ContentDTO dtos = new();
     ViewData["Title"] = "Index";
+    ViewData["PostId"] = Model.Id;
 }
 
 <h1>Index</h1>
@@ -24,7 +26,7 @@
                     <h3 class="uk-card-title uk-margin-remove-bottom">@Model.User!.FirstName</h3>
                     <p class="uk-text-meta uk-margin-remove-top">@Model.CreationDate.ToString()</p>
                 </div>
-                <p>@Model.Content!.Text</p>
+                <p>@Html.Raw(Model.Content!.Text)</p>
             </div>
         </div>        
         <div class="uk-card-footer">
@@ -47,19 +49,36 @@
                 </div>
             </div>
         </div>
+</div>
 <div>
     @foreach (var item in Model.Comments)
     {
         if (item is not null && item.IsVisible)
         {
-            <div>
-                @item.Content!.Text!.ToString();
+            <div class="comment-container">
+                <table>                    
+                    <tbody>                
+                        <tr>
+                            <td>
+                                <div class="comment-body" style="">
+                                    <h2 style="background-color:darkcyan; border-radius: 199px; width: 43px; height: 43px; text-align:center;">
+                                        👨‍💻
+                                    </h2>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="comment-text-area">
+                                    @item.Content!.Text!.ToString();
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         }
     }
+</div>
     <partial name="AddPostComment" model=@dtos/>
-</div>
-</div>
 
 @*<div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |

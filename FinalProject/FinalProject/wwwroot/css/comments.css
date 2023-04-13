@@ -1,0 +1,21 @@
+﻿.comment-body {
+    background-color: lightgray;
+    grid-column: auto;
+    border-radius: 7px;
+    margin-bottom: 0;
+}    
+.comment-text-area {
+    border-style: outset;
+    border-color: blueviolet;
+    border-radius: 7px;
+    background-color: beige;
+    margin: initial 0,0,0,0;
+    width: initial 100%;
+    height:100%;
+}
+.comment-container {
+    border-style: groove;
+    border-radius: 7px;
+    border-color:cornflowerblue;
+    box-shadow: inset 0 -3em 3em #cba1a199, 0 0 0 2px rgb(74, 174, 119), 0.3em 0.3em 5em rgb(3, 75, 3);
+}

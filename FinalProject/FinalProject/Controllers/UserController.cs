@@ -68,7 +68,15 @@ public class UserController : Controller
             if (authenticationResponse.Status == AuthenticationStatus.Success)
             {
                 Response.Headers.Add("X-Session-Token", authenticationResponse.SessionInfo.SessionToken);
-                Response.Cookies.Append("X-Session-Token", authenticationResponse.SessionInfo?.SessionToken!);
+                var option = new CookieOptions
+                {
+                    //option.Expires = DateTime.Now.AddHours(24);
+                    SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict,
+                    HttpOnly = true,
+                    //Secure = true,//works only for https
+                    IsEssential = true
+                };
+                Response.Cookies.Append("X-Session-Token", authenticationResponse.SessionInfo?.SessionToken!, option);
                 return Redirect("~/Home/Index");
             }
             return View("Home/Index");

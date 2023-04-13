@@ -4,7 +4,14 @@ using DatabaseConnector.DTO.Post;
 using DatabaseConnector.Extensions;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
+using Microsoft.Net.Http.Headers;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Headers;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
+using Microsoft.Extensions.Hosting;
 
 namespace FinalProject.Services;
 
@@ -26,15 +33,18 @@ public class PostDataHandler
         _commentRepository = commentRepository;
         _authenticateService = authenticateService;
     }
-
+    //.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
     public Post GetById(int id)
     {
         var tmpPost = _postRepository
             .GetWithInclude(post => post.Id == id,
-                            comms => comms.Comments.Take(50),
+                            comms => comms.Comments,
                             cont => cont.Content!,
                             usr => usr.User!)
             .FirstOrDefault();
+        tmpPost.Comments = _commentRepository.GetWithInclude(
+                                                com => com.PostId == tmpPost.Id,
+                                                content => content.Content!).ToArray();
 
         return tmpPost!;
     }
@@ -93,7 +103,7 @@ public class PostDataHandler
                 return _contentRepository.Update(content) > 0;
             }
         }
-        return false;            
+        return false;
     }
 
     public bool Delete(EditPostDTO postData)
@@ -125,27 +135,48 @@ public class PostDataHandler
     {
         return true;
     }
-
+    public bool AddComment(ContentDTO content, SessionInfo sessionInfo)
+    {
+        try
+        {
+            var post = _postRepository.FindById(content.PostId);
+            int commentId = _commentRepository.CreateAndGetId(new Comment
+            {
+                PostId = content.PostId,
+                CreationDate = content.CreationDate,
+                IsVisible = true,
+                ContentId = _contentRepository.CreateAndGetId(new Content
+                {
+                    CreationDate = DateTime.UtcNow,
+                    IsVisible = true,
+                    Text = content.Text
+                }),
+                UserId = sessionInfo.Account.Id
+            });
+            post!.Comments.Add(_commentRepository.FindById(commentId)!);
+            return _postRepository.Update(post) > 0;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
     public bool AddComment(CommentDTO comment)
     {
         try
         {
-            int contentId = _contentRepository.CreateAndGetId(new Content
-            {
-                CreationDate = DateTime.UtcNow,
-                IsVisible = true,
-                Text = comment.Content.Text
-            });
-
-            int res = _commentRepository.Create(new Comment
+            return _commentRepository.Create(new Comment
             {
                 PostId = comment.PostId,
                 CreationDate = DateTime.UtcNow,
                 ParentId = comment.ParentId,
-                ContentId = contentId
-            });
-
-            return res > 0;
+                ContentId = _contentRepository.CreateAndGetId(new Content
+                {
+                    CreationDate = DateTime.UtcNow,
+                    IsVisible = true,
+                    Text = comment.Content.Text
+                })
+            }) > 0;
         }
         catch
         {
@@ -158,85 +189,45 @@ public class PostDataHandler
     {
         return Remap(_postRepository.Get(p => p.Content!.IsVisible).TakeLast(count));
     }
+    public IEnumerable<Post> GetPostsByCategory(string creationDate = "Desc", string category = "", int skip = 0,int take = 10)
+    {
+        IEnumerable<Post> posts =
+            !string.IsNullOrEmpty(category) ?
+            _postRepository.GetWithInclude(
+                            post => post.Category == category,
+                            comm => comm.Comments,
+                            cont => cont.Content!,
+                            usr => usr.User!) :
+            _postRepository.GetWithInclude(
+                        comm => comm.Comments,
+                        cont => cont.Content!,
+                        usr => usr.User!);
+        foreach (var item in posts)
+        {
+            item.Comments = _commentRepository.GetWithInclude(
+                                               com => com.PostId == item.Id,
+                                               content => content.Content!)
+                                              .OrderBy(time => time.CreationDate)
+                                              .ToArray();
+        }
+        switch (creationDate)
+        {
+            case "Asc":
+                posts.OrderBy(time => time.CreationDate);
+                break;
+            case "Desc":
+            default: posts.OrderByDescending(time => time.CreationDate);
+                break;
+        }
+        return posts.Skip(skip).Take(take);
+    }
     private IEnumerable<PostDTO> Remap(IEnumerable<Post> posts)
     {
-        List<PostDTO> dtos=new List<PostDTO>(posts.Count());
+        List<PostDTO> dtos = new List<PostDTO>(posts.Count());
         foreach (var post in posts)
         {
             dtos.Add(post.Remap());
         }
         return dtos;
-    }
-    public IEnumerable<Post> GetPostsByCategory(string creationDate = "Desc", string category = "", int skip = 0)
-    {
-        //List<Post> posts = new List<Post>();
-        //if (!string.IsNullOrEmpty(category))
-        //{
-        //    posts = _postRepository
-        //                   .GetWithInclude(
-        //                    post => post.Category == category,
-        //                    comm => comm.Comments,
-        //                    cont => cont.Content!,
-        //                    usr => usr.User!).ToList();
-        //}
-        //else
-        //{
-        //    posts = _postRepository
-        //                   .GetWithInclude(
-        //                    comm => comm.Comments,
-        //                    cont => cont.Content!,
-        //                    usr => usr.User!).ToList();
-        //}
-        //switch (creationDate)
-        //{
-        //    case "Desc":posts.OrderByDescending(time => time.CreationDate);
-        //        break;
-        //    case "Asc":
-        //        posts.OrderBy(time => time.CreationDate);
-        //        break;
-        //}
-        switch (creationDate)
-        {
-            case "Desc":
-                if (!string.IsNullOrEmpty(category))
-                {
-                    return _postRepository
-                           .GetWithInclude(
-                            post => post.Category == category,
-                            comm => comm.Comments,
-                            cont => cont.Content!,
-                            usr => usr.User!)
-                           .OrderByDescending(time => time.CreationDate).Skip(skip).Take(10);
-                }
-                break;
-            case "Asc":
-                if (string.IsNullOrEmpty(category))
-                {
-                    return _postRepository
-                           .GetWithInclude(
-                            comm => comm.Comments,
-                            cont => cont.Content!,
-                            usr => usr.User!)
-                           .OrderBy(time => time.CreationDate).Skip(skip).Take(10);
-                }
-
-                return _postRepository
-                       .GetWithInclude(
-                        post => post.Category == category,
-                        comm => comm.Comments,
-                        cont => cont.Content!,
-                        usr => usr.User!)
-                       .OrderBy(time => time.CreationDate).Skip(skip).Take(10);
-            default:
-                break;
-        }
-
-        return _postRepository
-                       .GetWithInclude(
-                        comm => comm.Comments,
-                        cont => cont.Content!,
-                        usr => usr.User!)
-                       .OrderByDescending(time => time.CreationDate).Skip(skip).Take(10);
-
     }
 }

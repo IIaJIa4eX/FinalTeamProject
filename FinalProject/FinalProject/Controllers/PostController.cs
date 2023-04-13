@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using DatabaseConnector.DTO.Post;
 using Microsoft.Net.Http.Headers;
 using DatabaseConnector.DTO;
+using FinalProject.Interfaces;
+using System.Net.Http.Headers;
 
 namespace FinalProject.Controllers;
 
@@ -14,10 +16,12 @@ public class PostController : Controller
 {
 
     PostDataHandler _postDataHandler;
+    private readonly IAuthenticateService _authenticateService;
 
-    public PostController(PostDataHandler postDataHandler)
+    public PostController(PostDataHandler postDataHandler,IAuthenticateService authenticate)
     {
         _postDataHandler = postDataHandler;
+        this._authenticateService = authenticate;
     }
 
 
@@ -99,20 +103,20 @@ public class PostController : Controller
 
     [HttpPost]
     [Route("/[action]")]
-    public IActionResult AddPostComment([FromForm] CommentCreationDTO content)
+    public IActionResult AddPostComment([FromForm] ContentDTO content)
     {
-        bool success = _postDataHandler.AddComment(new CommentDTO()
+        SessionInfo sessionInfo = null!;
+        var authorization = Request.Headers[HeaderNames.Authorization];
+        if (AuthenticationHeaderValue.TryParse(authorization, out var headerValue))
         {
-            IsVisible = true,
-            PostId = content.PostId,
-            Content = new ContentDTO()
+            var sessionToken = headerValue.Parameter;
+            if (!string.IsNullOrEmpty(sessionToken))
             {
-                CreationDate = DateTime.Now,
-                IsVisible = true,
-                Text = content.Text
+                sessionInfo = _authenticateService.GetSessionInfo(sessionToken);
             }
-        });
-
+        }
+        if (_postDataHandler.AddComment(content,sessionInfo))
+            return Redirect($"Post/{content.PostId}");
         return View();
     }
 
