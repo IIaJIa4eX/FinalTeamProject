@@ -11,8 +11,6 @@ public class HomeController : Controller  //если удалите, то ник
 {
     private PostDataHandler _postDataHandler { get; set; }
 
-    #region Constructor
-
     public HomeController(PostDataHandler postDataHandler)
     {
         _postDataHandler = postDataHandler;

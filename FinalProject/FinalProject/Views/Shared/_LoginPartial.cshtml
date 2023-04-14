@@ -10,7 +10,7 @@
     @if (@User.Identity.IsAuthenticated)
 {
      <li class="nav-item">
-            <a type="button" class="btn btn-outline-success btn-sm text-decoration-none" asp-controller="Post" asp-action="Edit" method="get" title="NewPost">�������</a>
+            <a type="button" class="btn btn-outline-success btn-sm text-decoration-none" asp-controller="Post" asp-action="Edit" method="get" title="NewPost">Создать</a>
      </li>
     <li class="nav-item">
             <a class="nav-link text-dark" asp-controller="AccountPage" asp-action="Details" method="get" title="Manage">@User.Identity?.Name</a>
