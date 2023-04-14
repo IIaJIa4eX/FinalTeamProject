@@ -61,8 +61,10 @@
                 </div>
             </div>
             </a>
+            
         }
         <div id="loading-indicator"></div>
+
         </div>
 </div>
 
@@ -85,7 +87,9 @@
                         url: '/Post/GetPosts',
                         data: { creationDate: creationDate, category: category, skip: skip, take: take },
                         success: function (html) {
+                            indicator.remove();
                             container.append(html);
+                            indicator = $('#loading-indicator');
                             skip += take;
                             loading = false;
                             indicator.hide();
