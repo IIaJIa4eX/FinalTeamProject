@@ -20,11 +20,12 @@ namespace FinalProject.Services
         EFGenericRepository<Comment> _commentRepository;
         IAuthenticateService _authenticateService;
 
-        public PostDataHandler(EFGenericRepository<Post> postRepository, EFGenericRepository<Content> contentRepository, IAuthenticateService authenticateService)
+        public PostDataHandler(EFGenericRepository<Post> postRepository, EFGenericRepository<Content> contentRepository, IAuthenticateService authenticateService, EFGenericRepository<Comment> commentRepository)
         {
             _postRepository = postRepository;
             _contentRepository = contentRepository;
             _authenticateService = authenticateService;
+            _commentRepository = commentRepository;
         }
 
         public Post GetById(int id)
@@ -170,7 +171,7 @@ namespace FinalProject.Services
             return dtos;
         }
 
-        public IEnumerable<Post> GetPostsByCategory(string creationDate = "Desc", string category = "", int skip = 0)
+        public IEnumerable<Post> GetPostsByCategory(string creationDate = "Desc", string category = "", int skip = 0, int take = 10)
         {
             if(creationDate == "Desc")
             {
@@ -183,7 +184,7 @@ namespace FinalProject.Services
                             comm =>comm.Comments,
                             cont => cont.Content,
                             usr => usr.User)
-                           .OrderByDescending(time => time.CreationDate).Skip(skip).Take(10);
+                           .OrderByDescending(time => time.CreationDate).Skip(skip).Take(take);
 
                 }
                    
@@ -199,7 +200,7 @@ namespace FinalProject.Services
                             comm => comm.Comments,
                             cont => cont.Content,
                             usr => usr.User)
-                           .OrderBy(time => time.CreationDate).Skip(skip).Take(10);
+                           .OrderBy(time => time.CreationDate).Skip(skip).Take(take);
                 }
 
                     return _postRepository
@@ -208,7 +209,7 @@ namespace FinalProject.Services
                             comm => comm.Comments,
                             cont => cont.Content,
                             usr => usr.User)
-                            .OrderBy(time => time.CreationDate).Skip(skip).Take(10);
+                            .OrderBy(time => time.CreationDate).Skip(skip).Take(take);
             }
 
             return _postRepository
@@ -216,7 +217,7 @@ namespace FinalProject.Services
                             comm => comm.Comments,
                             cont => cont.Content,
                             usr => usr.User)
-                           .OrderByDescending(time => time.CreationDate).Skip(skip).Take(10);
+                           .OrderByDescending(time => time.CreationDate).Skip(skip).Take(take);
 
         }
 

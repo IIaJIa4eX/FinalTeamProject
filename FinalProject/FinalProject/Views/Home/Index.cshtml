@@ -15,7 +15,7 @@
     </div>
     </div>
     <div class="PostInMain">
-        <div сlass="PostCard">
+    <div сlass="PostCard" id="posts-container">
 
             @foreach(var item in Model){
           <a type="button" class="text-decoration-none" asp-controller="Post" asp-action="Index" asp-route-id="@item.Id">
@@ -62,5 +62,37 @@
             </div>
             </a>
         }
+        <div id="loading-indicator"></div>
         </div>
 </div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            let loading = false;
+            let skip = @Model.Count();
+            let take = 10;
+            let creationDate = "";
+            let category = "";
+            let container = $('#posts-container');
+            let indicator = $('#loading-indicator');
+            $(window).scroll(function () {
+                if (!loading && $(window).scrollTop() >= $(document).height() - $(window).height() - 100) {
+                    loading = true;
+                    indicator.show();
+                    $.ajax({
+                        type: "POST",
+                        url: '/Post/GetPosts',
+                        data: { creationDate: creationDate, category: category, skip: skip, take: take },
+                        success: function (html) {
+                            container.append(html);
+                            skip += take;
+                            loading = false;
+                            indicator.hide();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}
