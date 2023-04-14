@@ -24,7 +24,6 @@ public class PostController : Controller
         this._authenticateService = authenticate;
     }
 
-
     [HttpGet]
     [Route("{id}")]
     [AllowAnonymous]
