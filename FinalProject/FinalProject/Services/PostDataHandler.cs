@@ -45,9 +45,9 @@ public class PostDataHandler
         tmpPost.Comments = _commentRepository.GetWithInclude(
                                                 com => com.PostId == tmpPost.Id,
                                                 content => content.Content!,
-                                                u => u.User!)
+                                                u=>u.User!)
                                              .ToArray();
-
+        
         return tmpPost!;
     }
 
@@ -191,7 +191,7 @@ public class PostDataHandler
     {
         return Remap(_postRepository.Get(p => p.Content!.IsVisible).TakeLast(count));
     }
-    public IEnumerable<Post> GetPostsByCategory(string creationDate = "Desc", string category = "", int skip = 0, int take = 10)
+    public IEnumerable<Post> GetPostsByCategory(string creationDate = "Desc", string category = "", int skip = 0,int take = 10)
     {
         IEnumerable<Post> posts =
             !string.IsNullOrEmpty(category) ?
@@ -218,8 +218,7 @@ public class PostDataHandler
                 posts.OrderBy(time => time.CreationDate);
                 break;
             case "Desc":
-            default:
-                posts.OrderByDescending(time => time.CreationDate);
+            default: posts.OrderByDescending(time => time.CreationDate);
                 break;
         }
         return posts.Skip(skip).Take(take);

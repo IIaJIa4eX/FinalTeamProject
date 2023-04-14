@@ -1,80 +1,124 @@
-﻿@using DatabaseConnector.DTO;
+@using DatabaseConnector.DTO;
+@using DatabaseConnector.DTO.Post;
 @model DatabaseConnector.Post
 
 @{
-    Content dtos = new();
+    ContentDTO dtos = new();
     ViewData["Title"] = "Index";
+    ViewData["PostId"] = Model.Id;
 }
 
 <h1>Index</h1>
-    <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
-        <div class="uk-card-media-left uk-cover-container">
-            <img src="~/imgs/examplephoto.jpeg" alt="" uk-cover>
-            <canvas width="600" height="400"></canvas>
-        </div>
-        <div>
-            <div class="uk-card-body">
-                <div class="uk-width-auto">
-                    @*<img class="uk-border-circle" width="40" height="40" src="~/imgs/exampleprofilephoto.jpeg" alt="Avatar" >*@
-                    <h2 style="background-color:darkcyan; border-radius: 199px; width: 43px; height: 43px; text-align:center;">
-                        👨‍💻
-                    </h2>
-                </div>
-                <div class="uk-width-expand">
-                    <h3 class="uk-card-title uk-margin-remove-bottom">@Model.User!.FirstName</h3>
-                    <p class="uk-text-meta uk-margin-remove-top">@Model.CreationDate.ToString()</p>
-                </div>
-            <p>@Html.Raw(@Model.Content!.Text)</p>
+<div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
+    <div class="uk-card-media-left uk-cover-container">
+        <img src="~/imgs/examplephoto.jpeg" alt="" uk-cover>
+        <canvas width="600" height="400"></canvas>
+    </div>
+    <div>
+        <div class="uk-card-body">
+            <div class="uk-width-auto">
+                @*<img class="uk-border-circle" width="40" height="40" src="~/imgs/exampleprofilephoto.jpeg" alt="Avatar" >*@
+                <h2 style="background-color:darkcyan; border-radius: 199px; width: 43px; height: 43px; text-align:center;">
+                    👨‍💻
+                </h2>
             </div>
-        </div>        
-        <div class="uk-card-footer">
-            <div class="CardFooter">
-                <div class="Likes">
-                    <div>
-                        <img src="~/icons/heart.png" width="20" height="20" />
-                    </div>
-                    <div>
-                        <p style="text-align:center">@Model.Rating.ToString() likes </p>
-                    </div>
-                </div>
-                <div class="Comments">
-                    <div>
-                        <img src="~/icons/comment.png" width="20" height="20" />
-                    </div>
-                    <div>
-                        <p style="text-align:center">@Model.Comments.Count().ToString() comments </p>
-                    </div>
-                </div>
+            <div class="uk-width-expand">
+                <h3 class="uk-card-title uk-margin-remove-bottom">@Model.User!.FirstName</h3>
+                <p class="uk-text-meta uk-margin-remove-top">@Model.CreationDate.ToString()</p>
             </div>
+            <p>@Html.Raw(Model.Content!.Text)</p>
         </div>
+    </div>        
+    <div class="uk-card-footer">
+        <div class="CardFooter">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="Likes">
+                                <div>
+                                    <img src="~/icons/heart.png" width="20" height="20" />
+                                </div>
+                                <div>
+                                    <p style="text-align:center">@Model.Rating.ToString() likes </p>
+                                </div>
+                            </div>
+                            <div class="Comments">
+                                <div>
+                                    <img src="~/icons/comment.png" width="20" height="20" />
+                                </div>
+                                <div>
+                                    <p style="text-align:center">@Model.Comments.Where(i=>i.IsVisible).Count().ToString() comments </p>
+                                </div>
+                            </div>
+                        </td>
+                    @if (@User.Identity!.IsAuthenticated)
+                    {
+                        <td class="button-container">
+                            <div>
+                                <a class="button btn btn-success btn-sm text-decoration-none"
+                                    method="Get"
+                                    asp-action="PostRating"
+                                    asp-route-rating="plus"
+                                    asp-route-id="@Model.Id">
+                                    Like
+                                </a>
+                            </div>
+                            <div>
+                                <a class="button btn btn-danger btn-sm text-decoration-none"
+                                    method="Get"
+                                    asp-action="PostRating"
+                                    asp-route-rating="minus"
+                                    asp-route-id="@Model.Id">
+                                    Dislike
+                                </a>
+                            </div>
+                        </td>
+                    }                        
+                    </tr>
+                </tbody>
+            </table>                
+        </div>
+    </div>
+</div>
 <div>
     @foreach (var item in Model.Comments)
     {
         if (item is not null && item.IsVisible)
         {
-            <div>
-                @item.Content!.Text!.ToString();
+            <div class="comment-container">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="comment-user">
+                                <div class="comment-body">
+                                    <h2 style="background-color:darkcyan; border-radius: 199px; width: 43px; height: 43px; text-align:center;">
+                                        👨‍💻
+                                    </h2>
+                                </div>
+                                <div>
+                                    <h2>
+                                        @item.User!.NickName
+                                    </h2>
+                                </div>
+                                <div>
+                                    @item.CreationDate
+                                </div>
+                            </td>
+                            <td class="comment-text-container">
+                                <div class="comment-text-area">
+                                    @item.Content!.Text!.ToString();
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         }
     }
     <partial name="AddPostComment" model=@dtos/>
 </div>
-</div>
-
-@*<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
-<form asp-controller="Post" asp-action="AddPostComment">
-    @*public int Id { get; set; }
-    public int PostId { get; set; }
-    public int ParentId { get; set; }
-    public ContentDTO Content { get; set; }
-    public UserDto User { get; set; }
-    public bool IsVisible { get; set; }*@
-    @*<input type="hidden" asp-for="PostId" />*@
-    @*<div class="form-group">
-        <textarea id="editor" name="Text"></textarea>
-    </div>
-    <button type="submit" class="w-100 btn btn-lg btn-primary">Create</button>
-</form>*@
+@if (@User.Identity!.IsAuthenticated)
+{
+    <partial name="AddPostComment" model=@dtos/>
+}

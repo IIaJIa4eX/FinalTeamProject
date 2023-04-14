@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DatabaseConnector.Post>
+@model IEnumerable<DatabaseConnector.Post>
 @{
     ViewData["Title"] = "Home";
 }
@@ -38,16 +38,18 @@
                         </div>
                         <p>@Html.Raw(item.Content.Text)</p>                       
                     </div>
-                </div>
-                <div class="uk-card-footer">
-                    <div class="CardFooter">
-                        <div class="Likes">
-                            <div>
-                                <img src="~/icons/heart.png" width="20" height="20" />
+                    <div>
+                        <div class="uk-card-body">
+                            <div class="uk-width-auto">
+                                @*<img class="uk-border-circle" width="40" height="40" src="~/imgs/exampleprofilephoto.jpeg" alt="Avatar" >*@
+                                <h2 style="background-color:darkcyan; border-radius: 199px; width: 43px; height: 43px; text-align:center;">
+                                    👨‍💻
+                                </h2>
                             </div>
                             <div>
                                 <p style="text-align:center">@item.Rating.ToString() likes </p>
                             </div>
+                            <p>@Html.Raw(item.Content!.Text)</p>
                         </div>
                         <div class="Comments">
                             <div>
