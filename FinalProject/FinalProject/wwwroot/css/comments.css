@@ -4,11 +4,14 @@
     border-radius: 7px;
     margin-bottom: 0;
 }
-.comment-user{
+.comment-user {
+    width: 12%;
     border-right: outset 4px;
     border-color: aliceblue;
 }
 .comment-text-container {
+    align-items:center;
+    width: 100%;
     vertical-align: top;
 }
 .comment-text-area {
@@ -24,4 +27,11 @@
     border-radius: 7px;
     border-color:cornflowerblue;
     box-shadow: 0 -1em 1em #cba1a199, 0 0 0 2px rgb(74, 174, 119), 0.3em 0.3em 2em rgb(3, 75, 3);
+}
+.button-container{
+    width:5%;
+    vertical-align:bottom;
+}
+.button {
+    width: 100%;
 }

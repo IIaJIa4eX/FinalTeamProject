@@ -93,14 +93,15 @@ public class PostController : Controller
     }
 
     [HttpGet]
-    [Route("/[action]")]
-    public IActionResult PostRating(string rating, int id)
+    [Route("/[action]/{id}/{rating}")]
+    public IActionResult PostRating([FromRoute]string rating,[FromRoute] int id)
     {
-        bool success = _postDataHandler.Rating(rating, id);
-
-        return Ok(success);
+        if (_postDataHandler.Rating(rating, id))
+        {
+            return Redirect($"/Post/{id}");
+        }
+        return View();
     }
-
     [HttpPost]
     [Route("/[action]")]
     public IActionResult AddPostComment([FromForm] ContentDTO content)

@@ -31,22 +31,51 @@
         </div>        
         <div class="uk-card-footer">
             <div class="CardFooter">
-                <div class="Likes">
-                    <div>
-                        <img src="~/icons/heart.png" width="20" height="20" />
-                    </div>
-                    <div>
-                        <p style="text-align:center">@Model.Rating.ToString() likes </p>
-                    </div>
-                </div>
-                <div class="Comments">
-                    <div>
-                        <img src="~/icons/comment.png" width="20" height="20" />
-                    </div>
-                    <div>
-                        <p style="text-align:center">@Model.Comments.Count().ToString() comments </p>
-                    </div>
-                </div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="Likes">
+                                    <div>
+                                        <img src="~/icons/heart.png" width="20" height="20" />
+                                    </div>
+                                    <div>
+                                        <p style="text-align:center">@Model.Rating.ToString() likes </p>
+                                    </div>
+                                </div>
+                                <div class="Comments">
+                                    <div>
+                                        <img src="~/icons/comment.png" width="20" height="20" />
+                                    </div>
+                                    <div>
+                                        <p style="text-align:center">@Model.Comments.Count().ToString() comments </p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="button-container">
+                                <div>
+                                    <a class="button btn btn-success btn-sm text-decoration-none"
+                                       method="Get"
+                                   asp-action="PostRating"
+                                       asp-route-rating="plus"
+                                       asp-route-id="@Model.Id">
+                                        Like
+                                    </a>
+                                </div>
+                                <div>
+                                    <a class="button btn btn-danger btn-sm text-decoration-none"
+                                       method="Get"
+                                   asp-action="PostRating"
+                                       asp-route-rating="minus"
+                                        asp-route-id="@Model.Id">
+                                        Dislike
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
             </div>
         </div>
 </div>
@@ -78,7 +107,7 @@
                                 <div class="comment-text-area">
                                     @item.Content!.Text!.ToString();
                                 </div>
-                            </td>
+                            </td>s
                         </tr>
                     </tbody>
                 </table>
