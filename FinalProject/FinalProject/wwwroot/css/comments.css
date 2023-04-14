@@ -3,19 +3,25 @@
     grid-column: auto;
     border-radius: 7px;
     margin-bottom: 0;
-}    
+}
+.comment-user{
+    border-right: outset 4px;
+    border-color: aliceblue;
+}
+.comment-text-container {
+    vertical-align: top;
+}
 .comment-text-area {
-    border-style: outset;
-    border-color: blueviolet;
-    border-radius: 7px;
-    background-color: beige;
+    display:table-cell;
+    margin-top:2px;
+    text-align: left;
     margin: initial 0,0,0,0;
-    width: initial 100%;
-    height:100%;
+    width: inherit 100%;
+    height: 100%;
 }
 .comment-container {
     border-style: groove;
     border-radius: 7px;
     border-color:cornflowerblue;
-    box-shadow: inset 0 -3em 3em #cba1a199, 0 0 0 2px rgb(74, 174, 119), 0.3em 0.3em 5em rgb(3, 75, 3);
+    box-shadow: 0 -1em 1em #cba1a199, 0 0 0 2px rgb(74, 174, 119), 0.3em 0.3em 2em rgb(3, 75, 3);
 }

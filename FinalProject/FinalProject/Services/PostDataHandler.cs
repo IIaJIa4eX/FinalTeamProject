@@ -44,8 +44,10 @@ public class PostDataHandler
             .FirstOrDefault();
         tmpPost.Comments = _commentRepository.GetWithInclude(
                                                 com => com.PostId == tmpPost.Id,
-                                                content => content.Content!).ToArray();
-
+                                                content => content.Content!,
+                                                u=>u.User!)
+                                             .ToArray();
+        
         return tmpPost!;
     }
 

@@ -59,14 +59,22 @@
                 <table>                    
                     <tbody>                
                         <tr>
-                            <td>
+                            <td class="comment-user">
                                 <div class="comment-body" style="">
                                     <h2 style="background-color:darkcyan; border-radius: 199px; width: 43px; height: 43px; text-align:center;">
                                         👨‍💻
                                     </h2>
                                 </div>
+                                <div>
+                                    <h2>
+                                        @item.User!.NickName
+                                    </h2>
+                                </div>
+                                <div>
+                                    @item.CreationDate
+                                </div>
                             </td>
-                            <td>
+                            <td class="comment-text-container">
                                 <div class="comment-text-area">
                                     @item.Content!.Text!.ToString();
                                 </div>
