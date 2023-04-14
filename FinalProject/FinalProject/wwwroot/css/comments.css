@@ -35,3 +35,8 @@
 .button {
     width: 100%;
 }
+.field-search-container{
+    justify-self: initial center;
+    width:100%!important;
+    display:flex!important;
+}

@@ -38,18 +38,11 @@
                         }
                     </li>
                 </ul>
-
                 <!-- Search -->
-                @using (Html.BeginForm("Search", "Home", FormMethod.Post))
-                {
-                    <div class="d-flex" role="search">
-                        <input name="str" class="form-control me-2" type="text" placeholder="Search" aria-label="Search"/>
-                        <input class="btn btn-outline-success" type="submit" value="Search"/>                    
-                    </div>
-                }
-                @*<form >
-                        </form>*@
-
+                <form action="/Home/Search" method="Post" class="field-search-container">
+                    <input name="str" class="form-control me-2" type="text" placeholder="Поиск" aria-label="Поиск" />
+                    <input class="btn btn-outline-success" type="submit" value="Поиск" />
+                </form>
                 <!-- login/register -->
                 <partial name="_LoginPartial" />
             </div>
