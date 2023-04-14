@@ -85,11 +85,11 @@
         if (item is not null && item.IsVisible)
         {
             <div class="comment-container">
-                <table>                    
-                    <tbody>                
+                <table>
+                    <tbody>
                         <tr>
                             <td class="comment-user">
-                                <div class="comment-body" style="">
+                                <div class="comment-body">
                                     <h2 style="background-color:darkcyan; border-radius: 199px; width: 43px; height: 43px; text-align:center;">
                                         👨‍💻
                                     </h2>
@@ -107,7 +107,7 @@
                                 <div class="comment-text-area">
                                     @item.Content!.Text!.ToString();
                                 </div>
-                            </td>s
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -115,7 +115,10 @@
         }
     }
 </div>
+@if (@User.Identity!.IsAuthenticated)
+{
     <partial name="AddPostComment" model=@dtos/>
+}
 
 @*<div>
     <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |

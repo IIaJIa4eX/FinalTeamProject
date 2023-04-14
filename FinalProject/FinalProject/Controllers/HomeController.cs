@@ -33,6 +33,11 @@ public class HomeController : Controller  //если удалите, то ник
         return View();
     }
 
+    public IActionResult Search([FromForm] string str)
+    {
+        var result = _postDataHandler.FindContent(str);
+        return View(result);
+    }
     //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     //public IActionResult Error()  //это страница с ошибками, ее можно убрать
     //{

@@ -233,5 +233,21 @@ public class PostDataHandler
         return dtos;
     }
 
-    
+    public IEnumerable<Post>? FindContent(string str)
+    {
+        var res = _postRepository.GetWithInclude(
+            p => p.Content!.Text!.Contains(str),
+            comm => comm.Comments,
+            cont => cont.Content!,
+            usr => usr.User!);
+        foreach (var item in res)
+        {
+            item.Comments = _commentRepository.GetWithInclude(
+                                               com => com.PostId == item.Id,
+                                               content => content.Content!)
+                                              .OrderBy(time => time.CreationDate)
+                                              .ToArray();
+        }
+        return res.Count() > 0 ? res : null;
+    }
 }
