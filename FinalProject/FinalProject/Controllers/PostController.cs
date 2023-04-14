@@ -122,5 +122,14 @@ namespace FinalProject.Controllers
             return View();
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("GetPosts")]
+        public IActionResult GetPosts(string creationDate, string category, int skip, int take)
+        {
+            var posts = _postDataHandler.GetPostsByCategory(creationDate, category, skip, take);
+            return PartialView("_PostsPartial", posts);
+        }
+
     }
 }

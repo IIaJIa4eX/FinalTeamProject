@@ -21,9 +21,9 @@ namespace FinalProject.Controllers
         #endregion
 
 
-        public IActionResult Index(string creationDate, string category, int skip)
+        public IActionResult Index(string creationDate, string category)
         {
-            var posts = _postDataHandler.GetPostsByCategory(creationDate, category, skip);
+            var posts = _postDataHandler.GetPostsByCategory(creationDate, category);
 
             return View(posts);
         }
