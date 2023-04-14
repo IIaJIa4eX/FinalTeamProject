@@ -52,13 +52,15 @@
                                     </div>
                                 </div>
                             </td>
+                        @if (@User.Identity!.IsAuthenticated)
+                        {
                             <td class="button-container">
                                 <div>
                                     <a class="button btn btn-success btn-sm text-decoration-none"
                                        method="Get"
                                    asp-action="PostRating"
-                                       asp-route-rating="plus"
-                                       asp-route-id="@Model.Id">
+                                   asp-route-rating="plus"
+                                   asp-route-id="@Model.Id">
                                         Like
                                     </a>
                                 </div>
@@ -66,12 +68,13 @@
                                     <a class="button btn btn-danger btn-sm text-decoration-none"
                                        method="Get"
                                    asp-action="PostRating"
-                                       asp-route-rating="minus"
-                                        asp-route-id="@Model.Id">
+                                   asp-route-rating="minus"
+                                   asp-route-id="@Model.Id">
                                         Dislike
                                     </a>
                                 </div>
                             </td>
+                        }                        
                         </tr>
                     </tbody>
                 </table>
