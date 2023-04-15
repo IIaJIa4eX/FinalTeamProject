@@ -28,7 +28,6 @@ namespace FinalProject.Controllers
         [AllowAnonymous]
         public IActionResult Registration()
         {
-
             return View();
         }
 
