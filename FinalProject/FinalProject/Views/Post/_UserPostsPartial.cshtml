@@ -1,25 +1,10 @@
-@model IEnumerable<DatabaseConnector.Post>
+﻿@model IEnumerable<DatabaseConnector.Post>
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Мои посты";
 }
-
-
-<div class="MainBody">
-    <div class="CategoriesInIndex">
-        <div>
-            <div class="uk-card uk-card-default uk-card-body uk-width-1-2@m">
-                <h3 class="uk-card-title">IT</h3>
-            </div>
-
-        </div>
-    </div>
-</div>
-<div class="PostInMain">
-    <div сlass="PostCard" id="posts-container">
-
-        @foreach (var item in Model)
+@foreach (var item in Model)
         {
-            <a type="button" class="text-decoration-none" asp-controller="Post" asp-action="Index"  asp-route-id="@item.Id">
+            <a type="button" class="text-decoration-none" asp-controller="Post" asp-action="Index" asp-route-id="@item.Id">
                 <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
                     <div class="uk-card-media-left uk-cover-container">
                         <img src="~/imgs/examplephoto.jpeg" alt="" uk-cover>
@@ -64,40 +49,4 @@
             </a>
 
         }
-        <div id="loading-indicator"></div>
-
-    </div>
-</div>
-
-@section scripts {
-    <script>
-        $(document).ready(function () {
-            let loading = false;
-            let skip = @Model.Count();
-            let take = 10;
-            let creationDate = "";
-            let category = "";
-            let container = $('#posts-container');
-            let indicator = $('#loading-indicator');
-            $(window).scroll(function () {
-                if (!loading && $(window).scrollTop() >= $(document).height() - $(window).height() - 100) {
-                    loading = true;
-                    indicator.show();
-                    $.ajax({
-                        type: "POST",
-                        url: '/Post/GetPosts',
-                        data: { creationDate: creationDate, category: category, skip: skip, take: take },
-                        success: function (html) {                            
-                            indicator.remove();
-                            container.append(html);
-                            indicator = $('#loading-indicator');
-                            skip += take;
-                            loading = false;
-                            indicator.hide();
-                        }
-                    });
-                }
-            });
-        });
-    </script>
-}
+<div id="loading-indicator"></div>

@@ -128,4 +128,23 @@ public class PostController : Controller
         var posts = _postDataHandler.GetPostsByCategory(creationDate, category, skip, take);
         return PartialView("_PostsPartial", posts);
     }
+
+    [HttpGet]
+    [Route("GetUserPosts")]
+    [Authorize]
+    public IActionResult UserPosts()
+    {
+        var posts = _postDataHandler.GetUserPostsByCategory(Request.Headers[HeaderNames.Authorization]);
+        ViewData["scriptsLoaded"] = false;
+        return View(posts);
+    }
+
+    [HttpPost]
+    [Route("GetUserPosts")]
+    [Authorize]
+    public IActionResult GetUserPosts(string creationDate, string category, int skip, int take)
+    {
+        var posts = _postDataHandler.GetUserPostsByCategory(Request.Headers[HeaderNames.Authorization], creationDate, category, skip, take);
+        return PartialView("_UserPostsPartial", posts);
+    }
 }

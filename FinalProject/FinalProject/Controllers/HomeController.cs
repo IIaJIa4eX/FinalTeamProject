@@ -24,11 +24,13 @@ public class HomeController : Controller  //если удалите, то ник
 
         return View(posts);
     }
-    [Authorize]
+
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     [Route("/[action]")]
     public IActionResult Categories()
     {
+        
         return View();
     }
 
