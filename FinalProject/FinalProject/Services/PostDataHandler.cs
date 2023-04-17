@@ -92,7 +92,6 @@ public class PostDataHandler
         }
     }
 
-        public bool Create(CreatePostDTO postData, string token)
     public bool Edit(EditPostDTO postData)
     {
         var post = _postRepository.FindById(postData.Id);

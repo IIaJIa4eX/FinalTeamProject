@@ -69,14 +69,6 @@ public class PostController : Controller
         return View();
     }
 
-            return Ok(success);
-        }
-
-        [HttpGet]
-        [Route("/[action]")]
-        public IActionResult Edit()
-        { 
-
     [HttpPost]
     [Route("/[action]")]
     public IActionResult Delete(EditPostDTO postData)
