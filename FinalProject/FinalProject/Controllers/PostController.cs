@@ -14,18 +14,13 @@ namespace FinalProject.Controllers;
 [Authorize]
 public class PostController : Controller
 {
-    [Route("Post")]
-    [Authorize]
-    public class PostController : Controller
-    {
-
     PostDataHandler _postDataHandler;
     private readonly IAuthenticateService _authenticateService;
 
-    public PostController(PostDataHandler postDataHandler,IAuthenticateService authenticate)
+    public PostController(PostDataHandler postDataHandler, IAuthenticateService authenticate)
     {
         _postDataHandler = postDataHandler;
-        this._authenticateService = authenticate;
+        _authenticateService = authenticate;
     }
 
     [HttpGet]
@@ -34,7 +29,6 @@ public class PostController : Controller
     public IActionResult Index([FromRoute] int id)
     {
         var post = _postDataHandler.GetById(id);
-
         return View(post);
     }
 
@@ -42,13 +36,11 @@ public class PostController : Controller
     [Route("/[action]")]
     public IActionResult AddPost(CreatePostDTO postData)
     {
-
         bool success = _postDataHandler.Create
         (
             postData,
             Request.Headers[HeaderNames.Authorization]!
         );
-
         return Redirect("~/Home/Index");
     }
 
@@ -91,28 +83,12 @@ public class PostController : Controller
     public IActionResult Delete(EditPostDTO postData)
     {
         bool success = _postDataHandler.Delete(postData);
-
-        [HttpGet]
-        [Route("/create/new")]
-        [AllowAnonymous]
-        public IActionResult CreateNew()
-        {
-            var userid = HttpContext.Request.Headers.SingleOrDefault(x => x.Key == "UserId").Value.ToString();
-            ViewBag.UserId = userid;
-            return View();
-        }
-
-        [HttpPost]
-        [Route("/create/new")]
-        [AllowAnonymous]
-        public IActionResult CreateNew([FromForm] Content content)
-        {
-            return View(content);
-        }
-
+        return Ok(success);
+    }
+    
     [HttpGet]
     [Route("/[action]/{id}/{rating}")]
-    public IActionResult PostRating([FromRoute]string rating,[FromRoute] int id)
+    public IActionResult PostRating([FromRoute] string rating, [FromRoute] int id)
     {
         if (_postDataHandler.Rating(rating, id))
         {
@@ -120,6 +96,7 @@ public class PostController : Controller
         }
         return View();
     }
+    
     [HttpPost]
     [Route("/[action]")]
     public IActionResult AddPostComment([FromForm] ContentDTO content)
@@ -134,7 +111,7 @@ public class PostController : Controller
                 sessionInfo = _authenticateService.GetSessionInfo(sessionToken);
             }
         }
-        if (_postDataHandler.AddComment(content,sessionInfo))
+        if (_postDataHandler.AddComment(content, sessionInfo))
             return Redirect($"Post/{content.PostId}");
         return View();
     }
