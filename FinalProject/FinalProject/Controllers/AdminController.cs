@@ -1,15 +1,7 @@
 ﻿using DatabaseConnector;
-using DatabaseConnector.DTO;
-using DatabaseConnector.Extensions;
 using FinalProject.DataBaseContext;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
-using NuGet.Protocol.Core.Types;
-using System.Collections.Generic;
-using System.Net.Http.Headers;
-using System.Security.Principal;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace FinalProject.Controllers
 {
@@ -35,8 +27,7 @@ namespace FinalProject.Controllers
         [HttpGet]
         public ActionResult Edit([FromRoute] int id)
         {
-            var user = _userRepository.Get(g=>g.Id == id).FirstOrDefault();
-
+            var user = _userRepository.Get(g => g.Id == id).FirstOrDefault();
             return View(user);
         }
 

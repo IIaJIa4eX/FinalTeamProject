@@ -69,14 +69,13 @@ public class PostController : Controller
         return View();
     }
 
-    [HttpPost]
-    [Route("/[action]")]
-    public IActionResult Edit(EditPostDTO postData)
-    {
-        bool success = _postDataHandler.Edit(postData);
+            return Ok(success);
+        }
 
-        return Ok(success);
-    }
+        [HttpGet]
+        [Route("/[action]")]
+        public IActionResult Edit()
+        { 
 
     [HttpPost]
     [Route("/[action]")]

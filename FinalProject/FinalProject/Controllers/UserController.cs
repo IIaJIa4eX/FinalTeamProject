@@ -83,7 +83,7 @@ namespace FinalProject.Controllers
                     Response.Cookies.Append("X-Session-Token", authenticationResponse.SessionInfo?.SessionToken!, option);
                     return Redirect("~/Home/Index");
                 }
-                return View("Home/Index");
+                return View("Index");
             }
             return View(authenticationRequest);
         }
