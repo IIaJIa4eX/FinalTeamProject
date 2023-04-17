@@ -28,7 +28,6 @@ namespace FinalProject.Controllers
         [AllowAnonymous]
         public IActionResult Registration()
         {
-
             return View();
         }
 
@@ -95,7 +94,6 @@ namespace FinalProject.Controllers
             var authorization = Request.Headers[HeaderNames.Authorization];
             if (AuthenticationHeaderValue.TryParse(authorization, out var headerValue))
             {
-                var scheme = headerValue.Scheme;
                 var sessionToken = headerValue.Parameter;
                 if (!string.IsNullOrEmpty(sessionToken))
                 {

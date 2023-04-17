@@ -14,6 +14,10 @@ namespace FinalProject.Controllers;
 [Authorize]
 public class PostController : Controller
 {
+    [Route("Post")]
+    [Authorize]
+    public class PostController : Controller
+    {
 
     PostDataHandler _postDataHandler;
     private readonly IAuthenticateService _authenticateService;
@@ -88,8 +92,23 @@ public class PostController : Controller
     {
         bool success = _postDataHandler.Delete(postData);
 
-        return Ok(success);
-    }
+        [HttpGet]
+        [Route("/create/new")]
+        [AllowAnonymous]
+        public IActionResult CreateNew()
+        {
+            var userid = HttpContext.Request.Headers.SingleOrDefault(x => x.Key == "UserId").Value.ToString();
+            ViewBag.UserId = userid;
+            return View();
+        }
+
+        [HttpPost]
+        [Route("/create/new")]
+        [AllowAnonymous]
+        public IActionResult CreateNew([FromForm] Content content)
+        {
+            return View(content);
+        }
 
     [HttpGet]
     [Route("/[action]/{id}/{rating}")]
