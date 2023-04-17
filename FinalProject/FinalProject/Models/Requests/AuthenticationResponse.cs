@@ -1,9 +1,12 @@
-﻿namespace FinalProject.Models.Requests;
-#pragma warning disable CS8618
+﻿using DatabaseConnector;
+using DatabaseConnector.DTO;
+using Microsoft.AspNetCore.Components.Authorization;
 
-public class AuthenticationResponse
+namespace FinalProject.Models.Requests
 {
-    public AuthenticationStatus Status { get; set; }
-    public DatabaseConnector.SessionInfo SessionInfo { get; set; }
+    public class AuthenticationResponse
+    {
+        public AuthenticationStatus Status { get; set; }
+        public SessionInfo SessionInfo { get; set; }
+    }
 }
-#pragma warning restore CS8618

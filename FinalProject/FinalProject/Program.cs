@@ -51,6 +51,7 @@ public class Program
         builder.Services.AddSingleton<IAuthenticateService, AuthenticateService>();
         builder.Services.AddSingleton<IRegistrationService, RegistrationService>();
 
+
         builder.Services.AddAuthentication(x =>
         {
             x.DefaultAuthenticateScheme =
@@ -120,7 +121,9 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-        //app.UseSession();
+        
+
+
         app.UseStaticFiles();
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
@@ -137,12 +140,14 @@ public class Program
             return next.Invoke();
         });
 
+
+
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
+       
 
-
-
+ 
 
         app.UseHttpLogging();
 

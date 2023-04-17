@@ -1,7 +1,9 @@
 ﻿using FinalProject.Models.Requests;
-namespace FinalProject.Interfaces;
 
-public interface IRegistrationService
+namespace FinalProject.Interfaces
 {
-    RegistrationResponse Registration(RegistrationRequest authenticationRequest);
+    public interface IRegistrationService
+    {
+        RegistrationResponse Registration(RegistrationRequest authenticationRequest);
+    }
 }

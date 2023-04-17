@@ -1,0 +1,28 @@
+﻿<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a type="button" class="navbar-brand" asp-controller="AccountPage" asp-action="Details" method="get">Моя информация</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a type="button" class="nav-link" asp-controller="Post" asp-action="GetUserPosts" method="GET">Мои посты</a>
+                </li>
+                <li class="nav-item">
+                    <a type="button" class="nav-link" asp-controller="User" asp-action="ProfileHandler" asp-route-id="UserDrafts">Черновики</a>
+                </li>
+                @if (User.IsInRole("Admin"))
+                {
+                    <li class="nav-item">
+                        <a type="button" class="nav-link" asp-controller="Administration" asp-action="AdminActions" asp-route-name="Administration">Администрирование</a>
+                    </li>
+                    <li class="nav-item">
+                        <a type="button" class="nav-link" asp-controller="Administration" asp-action="GetIssues" asp-route-name="Issues">Жалобы</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>
+

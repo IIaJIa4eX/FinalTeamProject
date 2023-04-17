@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http.Headers;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 using Microsoft.Extensions.Hosting;
+using System.Collections.Generic;
 
 namespace FinalProject.Services;
 
@@ -249,5 +250,55 @@ public class PostDataHandler
                                               .ToArray();
         }
         return res.Count() > 0 ? res : null;
+    }
+
+    public IEnumerable<Post> GetUserPostsByCategory(string token, string creationDate = "Desc", string category = "", int skip = 0, int take = 10)
+    {
+        IEnumerable<Post> posts;
+
+        if (AuthenticationHeaderValue.TryParse(token, out var headerValue))
+        {
+            SessionInfo sessionInfo = _authenticateService.GetSessionInfo(headerValue.Parameter!);
+
+            posts =
+            !string.IsNullOrEmpty(category) ?
+            _postRepository.GetWithInclude(
+                            post => post.Category == category && post.UserId == sessionInfo.Account.Id,
+                            comm => comm.Comments,
+                            cont => cont.Content!,
+                            usr => usr.User!) :
+            _postRepository.GetWithInclude(
+                        post => post.UserId == sessionInfo.Account.Id,
+                        comm => comm.Comments,
+                        cont => cont.Content!,
+                        usr => usr.User!);
+            foreach (var item in posts)
+            {
+                item.Comments = _commentRepository.GetWithInclude(
+                                                   com => com.PostId == item.Id,
+                                                   content => content.Content!)
+                                                  .OrderBy(time => time.CreationDate)
+                                                  .ToArray();
+            }
+            switch (creationDate)
+            {
+                case "Asc":
+                    posts.OrderBy(time => time.CreationDate);
+                    break;
+                case "Desc":
+                default:
+                    posts.OrderByDescending(time => time.CreationDate);
+                    break;
+            }
+
+            posts = posts.Skip(skip).Take(take);
+        }
+        else
+        {
+            posts = null;
+        }
+
+        return posts;
+
     }
 }

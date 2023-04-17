@@ -1,4 +1,4 @@
-﻿using DatabaseConnector.Interfaces;
+using DatabaseConnector.Interfaces;
 using System.Linq.Expressions;
 
 namespace FinalProject.Interfaces;
@@ -53,7 +53,7 @@ public interface IGenericRepository<TEntity> where TEntity : IEntity
     /// <param name="skip">Пропустить</param>
     /// <param name="take">Получить</param>
     /// <returns>Список объектов</returns>
-    IEnumerable<TEntity> GetWithSkipAndTake(Expression<Func<TEntity, bool>> predicate,int skip,int take);
+    IEnumerable<TEntity> GetWithSkipAndTake(Expression<Func<TEntity, bool>> predicate, int skip, int take);
 
     /// <summary>Получить элементы из таблицы и связанные элементы</summary>
     /// <param name="skip">Пропустить</param>

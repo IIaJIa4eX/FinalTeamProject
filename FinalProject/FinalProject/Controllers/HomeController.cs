@@ -1,16 +1,15 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using FinalProject.Services;
 
-namespace FinalProject.Controllers;
+        #region Constructor
 
 //[Route("[controller]")]
 //[AllowAnonymous]
 public class HomeController : Controller  //если удалите, то никакого Index page не будет
 {
     private PostDataHandler _postDataHandler { get; set; }
-
-    #region Constructor
 
     public HomeController(PostDataHandler postDataHandler)
     {
@@ -25,11 +24,13 @@ public class HomeController : Controller  //если удалите, то ник
 
         return View(posts);
     }
-    [Authorize]
+
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     [Route("/[action]")]
     public IActionResult Categories()
     {
+        
         return View();
     }
 

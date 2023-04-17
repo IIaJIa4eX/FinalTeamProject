@@ -1,9 +1,11 @@
-﻿namespace FinalProject.Services;
-
-public class UserDataHandler
+﻿namespace FinalProject.Services
 {
-    public UserDataHandler()
+    public class UserDataHandler
     {
+        public UserDataHandler()
+        {
+
+        }
 
     }
 }
