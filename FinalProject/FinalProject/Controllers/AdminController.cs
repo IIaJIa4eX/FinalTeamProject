@@ -53,6 +53,7 @@ namespace FinalProject.Controllers
                 updated.LastName = user.LastName;
                 updated.Birthday = user.Birthday;
                 updated.Patronymic = user.Patronymic;
+                updated.IsBanned = user.IsBanned;
                 _userRepository.Update(updated);
                 return Redirect("/Admin");
             }
