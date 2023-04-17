@@ -1,71 +1,76 @@
-﻿@model List<DatabaseConnector.User>
+﻿@model IEnumerable<DatabaseConnector.User>
 
 @{
-    ViewData["Title"] = "All Users";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Admin";
 }
+<h1>Admin</h1>
 
-<h1>Пользователи</h1>
-
-@foreach (var model in Model)
-{
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(m => model.Id)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(m => model.Id)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(m => model.NickName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(m => model.NickName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(m => model.FirstName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(m => model.FirstName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(m => model.LastName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(m => model.LastName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(m => model.Patronymic)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(m => model.Patronymic)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(m => model.Birthday)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(m => model.Birthday)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(m => model.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(m => model.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(m => model.IsBanned)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(m => model.IsBanned)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(m => model.UserRole)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(m => model.UserRole)
-        </dd>
-    </dl>
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NickName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Patronymic)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Birthday)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UserRole)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsBanned)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NickName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Patronymic)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Birthday)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserRole)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsBanned)
+            </td>
+            <td>
+                <a asp-controller="Admin" asp-action="Edit" method="Get" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
 }
-<div>
-    <a asp-action="Edit" asp-controller="Admin">Edit</a> |
-</div>
+    </tbody>
+</table>

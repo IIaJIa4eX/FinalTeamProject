@@ -31,18 +31,18 @@ namespace FinalProject.Controllers
             return View(user);
         }
 
-        [Route("Edit")]
+        [Route("Edit/{id}")]
         [HttpGet]
-        public ActionResult Edit()
+        public ActionResult Edit([FromRoute] int id)
         {
-            var user = _userRepository.Get();
+            var user = _userRepository.Get(g=>g.Id == id).FirstOrDefault();
 
             return View(user);
         }
 
-        [Route("Edit")]
+        [Route("Edit/{id}")]
         [HttpPost]
-        public ActionResult Edit(User user)
+        public ActionResult Edit([FromForm] User user)
         {
             var updated = _userRepository.FindById(user.Id);
             if (updated is not null)
@@ -54,7 +54,7 @@ namespace FinalProject.Controllers
                 updated.Birthday = user.Birthday;
                 updated.Patronymic = user.Patronymic;
                 _userRepository.Update(updated);
-                return RedirectToAction("Details");
+                return Redirect("/Admin");
             }
             return BadRequest();
         }
