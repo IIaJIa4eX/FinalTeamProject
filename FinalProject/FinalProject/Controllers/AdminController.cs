@@ -1,15 +1,7 @@
 ﻿using DatabaseConnector;
-using DatabaseConnector.DTO;
-using DatabaseConnector.Extensions;
 using FinalProject.DataBaseContext;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
-using NuGet.Protocol.Core.Types;
-using System.Collections.Generic;
-using System.Net.Http.Headers;
-using System.Security.Principal;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace FinalProject.Controllers
 {
@@ -31,18 +23,17 @@ namespace FinalProject.Controllers
             return View(user);
         }
 
-        [Route("Edit")]
+        [Route("Edit/{id}")]
         [HttpGet]
-        public ActionResult Edit()
+        public ActionResult Edit([FromRoute] int id)
         {
-            var user = _userRepository.Get();
-
+            var user = _userRepository.Get(g => g.Id == id).FirstOrDefault();
             return View(user);
         }
 
-        [Route("Edit")]
+        [Route("Edit/{id}")]
         [HttpPost]
-        public ActionResult Edit(User user)
+        public ActionResult Edit([FromForm] User user)
         {
             var updated = _userRepository.FindById(user.Id);
             if (updated is not null)
@@ -53,8 +44,9 @@ namespace FinalProject.Controllers
                 updated.LastName = user.LastName;
                 updated.Birthday = user.Birthday;
                 updated.Patronymic = user.Patronymic;
+                updated.IsBanned = user.IsBanned;
                 _userRepository.Update(updated);
-                return RedirectToAction("Details");
+                return Redirect("/Admin");
             }
             return BadRequest();
         }
