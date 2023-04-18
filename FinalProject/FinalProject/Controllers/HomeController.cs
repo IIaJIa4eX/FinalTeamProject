@@ -4,6 +4,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using FinalProject.DataBaseContext;
 using FinalProject.Services;
+using MarketPracticingPlatform.Attributes;
 
 namespace FinalProject.Controllers
 {
@@ -24,7 +25,7 @@ namespace FinalProject.Controllers
         }
 
 
-        [Authorize(Roles = "Admin")]
+        [UnAuthorizedRedirect]
         [HttpGet]
         [Route("/[action]")]
         public IActionResult Categories()

@@ -4,6 +4,7 @@ using FinalProject.Interfaces;
 using FinalProject.Models;
 using FinalProject.Models.Requests;
 using FinalProject.Models.Validations;
+using MarketPracticingPlatform.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
@@ -11,7 +12,7 @@ using System.Net.Http.Headers;
 
 namespace FinalProject.Controllers
 {
-    [Authorize]
+
     [Route("[controller]")]
     public class UserController : Controller
     {
@@ -90,6 +91,7 @@ namespace FinalProject.Controllers
         }
 
         [HttpGet("session")]
+        [UnAuthorizedRedirect]
         public IActionResult GetSessionInfo()
         {
             var authorization = Request.Headers[HeaderNames.Authorization];
@@ -109,6 +111,7 @@ namespace FinalProject.Controllers
 
         [Route("/[action]")]
         [HttpGet]
+        [UnAuthorizedRedirect]
         public IActionResult LogOut()
         {
 
