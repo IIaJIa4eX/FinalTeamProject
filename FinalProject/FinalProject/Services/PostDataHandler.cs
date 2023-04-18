@@ -186,13 +186,9 @@ public class PostDataHandler
             return false;
         }
 
-    }
 
-    public IEnumerable<PostDTO> GetLast(int count)
-    {
-        return Remap(_postRepository.Get(p => p.Content!.IsVisible).TakeLast(count));
     }
-    public IEnumerable<Post> GetPostsByCategory(string creationDate = "Desc", string category = "", int skip = 0,int take = 10)
+    public IEnumerable<Post> GetPostsByCategory(string creationDate = "Asc", string category = "", int skip = 0,int take = 10)
     {
         IEnumerable<Post> posts =
             !string.IsNullOrEmpty(category) ?

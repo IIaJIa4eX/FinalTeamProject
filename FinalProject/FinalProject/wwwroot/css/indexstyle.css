@@ -8,9 +8,9 @@
     margin: 2%;
 }
 .PostCard {
-    padding: auto;
+    padding: initial 4px,7px,2px,4px;
     margin: auto;
-    position: relative;
-    width: 65%;
-    height: 70%;
+    position: center;
+    width: initial 65%;
+    height: initial 70%;
 }

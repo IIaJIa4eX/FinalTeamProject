@@ -6,7 +6,6 @@ using System.Linq.Expressions;
 namespace FinalProject.DataBaseContext;
 
 
-
 public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class, IEntity
 {
     DbContext _context;
