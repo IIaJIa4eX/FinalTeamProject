@@ -216,10 +216,11 @@ public class PostDataHandler
         switch (creationDate)
         {
             case "Asc":
-                posts.OrderBy(time => time.CreationDate);
+                posts = posts.OrderBy(time => time.CreationDate);
                 break;
             case "Desc":
-            default: posts.OrderByDescending(time => time.CreationDate);
+            default:
+                posts = posts.OrderByDescending(time => time.CreationDate);
                 break;
         }
         return posts.Skip(skip).Take(take);
@@ -283,11 +284,11 @@ public class PostDataHandler
             switch (creationDate)
             {
                 case "Asc":
-                    posts.OrderBy(time => time.CreationDate);
+                    posts = posts.OrderBy(time => time.CreationDate);
                     break;
                 case "Desc":
                 default:
-                    posts.OrderByDescending(time => time.CreationDate);
+                    posts = posts.OrderByDescending(time => time.CreationDate);
                     break;
             }
 

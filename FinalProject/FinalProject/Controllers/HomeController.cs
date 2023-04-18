@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using FinalProject.Services;
 
-        #region Constructor
+namespace FinalProject.Controllers;
 
 //[Route("[controller]")]
 //[AllowAnonymous]
@@ -15,8 +15,6 @@ public class HomeController : Controller  //если удалите, то ник
     {
         _postDataHandler = postDataHandler;
     }
-
-    #endregion
 
     public IActionResult Index(string creationDate, string category, int skip)
     {
