@@ -7,39 +7,29 @@ using FinalProject.Services;
 
 namespace FinalProject.Controllers
 {
-    public class HomeController : Controller  //если удалите, то никакого Index page не будет
-    {
-        PostDataHandler _postDataHandler;
+        public class HomeController : Controller  //если удалите, то никакого Index page не будет
+        {
+            PostDataHandler _postDataHandler;
 
-    public HomeController(PostDataHandler postDataHandler)
-    {
-        _postDataHandler = postDataHandler;
-    }
+        public HomeController(PostDataHandler postDataHandler)
+        {
+            _postDataHandler = postDataHandler;
+        }
 
-    public IActionResult Index(string creationDate, string category, int skip)
-    {
-        var posts = _postDataHandler.GetPostsByCategory(creationDate, category, skip);
-
-        return View(posts);
-    }
-
-    [Authorize(Roles = "Admin")]
-    [HttpGet]
-    [Route("/[action]")]
-    public IActionResult Categories()
-    {
-        
-        return View();
-    }
+        public IActionResult Index(string creationDate, string category, int skip)
+        {
+            var posts = _postDataHandler.GetPostsByCategory(creationDate, category, skip);
 
             return View(posts);
         }
 
-        [Authorize]
+
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         [Route("/[action]")]
         public IActionResult Categories()
         {
+        
             return View();
         }
 
