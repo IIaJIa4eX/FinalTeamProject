@@ -24,6 +24,17 @@ namespace FinalProject.Controllers
         public IActionResult Index(string creationDate, string category)
         {
             var posts = _postDataHandler.GetPostsByCategory(creationDate, category);
+        return View(posts);
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpGet]
+    [Route("/[action]")]
+    public IActionResult Categories()
+    {
+        
+        return View();
+    }
 
             return View(posts);
         }

@@ -3,6 +3,7 @@
     ViewData["Title"] = "Home";
 }
 
+
 <div class="MainBody">
     <div class="CategoriesInIndex">
         <div>
@@ -15,7 +16,6 @@
 </div>
 <div class="PostInMain">
     <div сlass="PostCard" id="posts-container">
-
         @foreach (var item in Model)
         {
             <a type="button" class="text-decoration-none" asp-controller="Post" asp-action="Index"  asp-route-id="@item.Id">
@@ -61,10 +61,8 @@
                     </div>
                 </div>
             </a>
-
         }
         <div id="loading-indicator"></div>
-
     </div>
 </div>
 
