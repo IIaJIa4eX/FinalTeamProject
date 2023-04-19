@@ -1,6 +1,5 @@
 ﻿using DatabaseConnector;
 using Microsoft.EntityFrameworkCore;
-using FinalProject.Models;
 
 namespace FinalProject.DataBaseContext;
 

@@ -1,6 +1,4 @@
-﻿using NLog.Filters;
-
-namespace FinalProject.Interfaces
+﻿namespace FinalProject.Interfaces
 {
     public interface IOperationResult<T> where T : class
     {

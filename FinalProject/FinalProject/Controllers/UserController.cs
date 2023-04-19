@@ -1,9 +1,7 @@
-using DatabaseConnector;
 using DatabaseConnector.DTO;
 using FinalProject.Interfaces;
 using FinalProject.Models;
 using FinalProject.Models.Requests;
-using FinalProject.Models.Validations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
