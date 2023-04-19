@@ -12,7 +12,7 @@ public class HomeController : Controller
     {
         _postDataHandler = postDataHandler;
     }
-
+    [AllowAnonymous]
     public IActionResult Index(string creationDate, string category)
     {
         var posts = _postDataHandler.GetPostsByCategory(creationDate, category);

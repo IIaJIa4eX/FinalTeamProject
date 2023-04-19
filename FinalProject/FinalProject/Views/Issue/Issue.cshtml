@@ -1,0 +1,62 @@
+﻿@model DatabaseConnector.Issue
+
+@{
+    ViewData["Title"] = "Issue";
+}
+<partial name="_AccountNavBarPartial" />
+<h1>Issue</h1>
+
+<div>
+    <h4>Issue</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreationDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreationDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IsVisible)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IsVisible)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IssueType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IssueType)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.User)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.User.NickName)
+        </dd>
+        <dt class="col-sm-2">
+            User Id
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.User.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Content)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Content.Text)
+        </dd>
+    </dl>
+</div>
+@if (User.IsInRole("Admin"))
+{
+    <div>
+        <a asp-controller="Administration" asp-action="Hide" asp-route-issueId="@Model?.Id">Hide</a> |
+        <a asp-controller="Administration" asp-action="GetIssues">Back to List</a>
+    </div>
+}else
+{
+    <div>
+        <a asp-controller="AccountPage" asp-action="Details">Account Page</a>
+    </div>
+}

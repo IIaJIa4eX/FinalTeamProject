@@ -1,5 +1,6 @@
 ﻿using DatabaseConnector;
 using Microsoft.EntityFrameworkCore;
+using DatabaseConnector.DTO.Post;
 
 namespace FinalProject.DataBaseContext;
 
@@ -17,4 +18,6 @@ public class Context : DbContext
     {
 
     }
+
+    public DbSet<DatabaseConnector.DTO.Post.ContentDTO>? ContentDTO { get; set; }
 }
