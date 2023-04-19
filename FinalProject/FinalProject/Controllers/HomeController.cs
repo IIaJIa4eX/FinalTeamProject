@@ -17,8 +17,15 @@ namespace FinalProject.Controllers
 
         public IActionResult Index(string creationDate, string category, int skip)
         {
+            category = Request.Query["category"];
+
             var posts = _postDataHandler.GetPostsByCategory(creationDate, category, skip);
 
+            if (!string.IsNullOrEmpty(category))
+            {
+                ViewBag.Category = category;
+            }
+            
             return View(posts);
         }
 

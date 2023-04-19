@@ -5,13 +5,13 @@
 
 
 <div class="MainBody">
-    <div class="CategoriesInIndex">
-        <div>
-            <div class="uk-card uk-card-default uk-card-body uk-width-1-2@m">
-                <h3 class="uk-card-title">IT</h3>
-            </div>
-
-        </div>
+    <div class="CategoriesInIndex d-flex justify-content-center">
+        <ul class="list-group list-group-horizontal">
+            <li class="list-group-item"><a type="button" asp-controller="Home" asp-action="Index" asp-route-category="IT">IT</a></li>
+            <li class="list-group-item"><a type="button" asp-controller="Home" asp-action="Index" asp-route-category="Marketing">Marketing</a></li>
+            <li class="list-group-item"><a type="button" asp-controller="Home" asp-action="Index" asp-route-category="Design">Design</a></li>
+            <li class="list-group-item"><a type="button" asp-controller="Home" asp-action="Index" asp-route-category="Mobile Development">Mobile Development</a></li>
+        </ul>
     </div>
 </div>
 <div class="PostInMain">
@@ -74,7 +74,7 @@
             let skip = @Model.Count();
             let take = 10;
             let creationDate = "";
-            let category = "";
+            let category = '@Html.Raw(ViewBag.Category)';
             let container = $('#posts-container');
             let indicator = $('#loading-indicator');
             $(window).scroll(function () {

@@ -51,6 +51,13 @@
                                     <p style="text-align:center">@Model.Comments.Where(i=>i.IsVisible).Count().ToString() comments </p>
                                 </div>
                             </div>
+                            <div>
+                                <form asp-controller="Issue" asp-action="AutoIssue" method="post">
+                                    <input type="hidden" name="contentText" value="@Model.Id">
+                                    <input type="hidden" name="issueType" value="1">
+                                    <button type="submit" class="uk-button uk-button-text">Пожаловаться</button>
+                                </form>
+                            </div>
                         </td>
                     @if (@User.Identity!.IsAuthenticated)
                     {
@@ -73,6 +80,8 @@
                                     Dislike
                                 </a>
                             </div>
+                            
+                          
                         </td>
                     }                        
                     </tr>

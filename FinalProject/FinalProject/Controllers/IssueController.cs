@@ -3,6 +3,7 @@ using DatabaseConnector.DTO;
 using DatabaseConnector.DTO.Post;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
+using MarketPracticingPlatform.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
@@ -91,6 +92,48 @@ namespace FinalProject.Controllers
                 };
                 var issueId=_issuesRepository.CreateAndGetId(issue);
                 return Redirect("Issue/"+issueId);
+            }
+            return BadRequest();
+        }
+
+        [HttpPost]
+        [UnAuthorizedRedirect]
+        [Route("/[action]")]
+        public IActionResult AutoIssue(string contentText, string issueType)
+        {
+            var authorization = Request.Headers[HeaderNames.Authorization];
+            User user = null!;
+            if (AuthenticationHeaderValue.TryParse(authorization, out var headerValue))
+            {
+                SessionInfo sessionInfo = _authenticateService.GetSessionInfo(headerValue.Parameter!);
+
+                var users = _usersRepository.Get(x => x.Id == sessionInfo.Account.Id);
+
+                if (users.Any())
+                {
+                    user = users.First();
+                }
+            }
+            Content content = new Content()
+            {
+                CreationDate = DateTime.Now,
+                Text = "automated",
+                IsVisible = true
+            };
+            if (user is not null)
+            {
+                var issue = new Issue()
+                {
+                    UserId = user.Id,
+                    Content = content,
+                    IssueType = Convert.ToInt16(issueType),
+                    CreationDate = DateTime.Now,
+                    IsVisible = true,
+                    ContentId = _contentRepository.CreateAndGetId(content),
+                    ContentText = contentText,// id for search
+                };
+                var issueId = _issuesRepository.CreateAndGetId(issue);
+                return Redirect("Issue/" + issueId);
             }
             return BadRequest();
         }
