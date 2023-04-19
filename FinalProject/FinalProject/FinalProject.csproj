@@ -41,7 +41,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\Administration\" />
     <Folder Include="wwwroot\lib\" />
   </ItemGroup>
   <ItemGroup>

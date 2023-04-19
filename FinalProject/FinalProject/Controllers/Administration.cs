@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FinalProject.Controllers
 {
-    [Authorize]
-    [Route("/[controller]")]
+    [Authorize(Roles = "Admin")]
+    [Route("[controller]")]
     public class AdministrationController : Controller
     {
         IAuthenticateService _authService;
@@ -40,7 +40,34 @@ namespace FinalProject.Controllers
                 i => i.IsVisible,
                 c=>c.Content,
                 u=>u.User);
-            return View();
+            return View(issues);
         }
+
+        [HttpGet]
+        [Route("Hide/{issueId}")]
+        public IActionResult Hide([FromRoute] int issueId)
+        {
+            var issue = _issuesRepository.FindById(issueId);
+            if (issue is not null)
+            {
+                issue.IsVisible = false;
+                _issuesRepository.Update(issue);
+            }
+            return RedirectToAction("GetIssues");
+        }
+
+        //[HttpPost]
+        //[Route("Hide/{issueId}")]
+        //public IActionResult Hide([FromRoute] int issueId)
+        //{
+        //    var issue = _issuesRepository.FindById(issueId);
+        //    if (issue is not null)
+        //    {
+        //        issue.IsVisible = false;
+        //        _issuesRepository.Update(issue);
+        //    }
+        //    return Ok(issueId);
+        //}
+
     }
 }

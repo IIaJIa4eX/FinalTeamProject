@@ -4,15 +4,7 @@ using DatabaseConnector.DTO.Post;
 using DatabaseConnector.Extensions;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
-using Microsoft.Net.Http.Headers;
 using System.Net.Http.Headers;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Headers;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
-using Microsoft.Extensions.Hosting;
-using System.Collections.Generic;
 
 namespace FinalProject.Services;
 

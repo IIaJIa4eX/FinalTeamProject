@@ -1,4 +1,4 @@
-﻿using DatabaseConnector;
+using DatabaseConnector;
 using DatabaseConnector.DTO;
 using DatabaseConnector.Extensions;
 using FinalProject.DataBaseContext;

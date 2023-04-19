@@ -1,15 +1,12 @@
 using DatabaseConnector;
-using FinalProject.Controllers;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
 using FinalProject.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using NLog.Web;
 using System.Text;
 using System.Text.Json;
 
