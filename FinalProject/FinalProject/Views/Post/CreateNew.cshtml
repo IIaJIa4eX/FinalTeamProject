@@ -1,4 +1,4 @@
-﻿@model DatabaseConnector.Content
+﻿@model DatabaseConnector.DTO.Post.CreatePostDTO
 
 @{
     ViewData["Title"] = "CreateNew";
@@ -6,16 +6,21 @@
 
 <h1>CreateNew</h1>
 
-<h4>Content</h4>
-
 <div class="row">
     <div class="col-md-4">
         <form asp-action="CreateNew">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>            
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Text" class="control-label"></label>
-                <input asp-for="Text" class="form-control" />
-                <span asp-validation-for="Text" class="text-danger"></span>
+                <select class="form-select" aria-label="Default select example" name="Category">
+                    <option selected value="IT">IT</option>
+                    <option value="Marketing">Marketing</option>
+                    <option value="Design">Design</option>
+                    <option value="Mobile Development">Mobile Development</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -23,25 +28,3 @@
         </form>
     </div>
 </div>
-@if (Model is not null)
-{
-    <div>
-        <p>
-            @Model.CreationDate.ToString()
-        </p>
-        <p>
-            @Model.Text!.ToString()ss
-        </p>
-    </div>
-}
-@if (ViewBag.UserId is not null)
-{
-    <div>@ViewBag.UserId.ToString()</div>
-}
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

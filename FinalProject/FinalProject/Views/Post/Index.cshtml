@@ -7,7 +7,6 @@
     ViewData["Title"] = "Index";
     ViewData["PostId"] = Model.Id;
 }
-
 <h1>Index</h1>
 <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
     <div class="uk-card-media-left uk-cover-container">
@@ -26,7 +25,10 @@
                 <h3 class="uk-card-title uk-margin-remove-bottom">@Model.User!.FirstName</h3>
                 <p class="uk-text-meta uk-margin-remove-top">@Model.CreationDate.ToString()</p>
             </div>
-            <p>@Html.Raw(Model.Content!.Text)</p>
+            <div>
+                @Html.Raw(Model.Content!.Text)
+            </div>
+
         </div>
     </div>        
     <div class="uk-card-footer">
@@ -50,6 +52,13 @@
                                 <div>
                                     <p style="text-align:center">@Model.Comments.Where(i=>i.IsVisible).Count().ToString() comments </p>
                                 </div>
+                            </div>
+                            <div>
+                                <form asp-controller="Issue" asp-action="AutoIssue" method="post">
+                                    <input type="hidden" name="contentText" value="@Model.Id">
+                                    <input type="hidden" name="issueType" value="1">
+                                    <button type="submit" class="uk-button uk-button-text">Пожаловаться</button>
+                                </form>
                             </div>
                         </td>
                     @if (@User.Identity!.IsAuthenticated)

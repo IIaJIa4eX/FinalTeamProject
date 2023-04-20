@@ -34,11 +34,12 @@ public class PostDataHandler
                             cont => cont.Content!,
                             usr => usr.User!)
             .FirstOrDefault();
-        tmpPost.Comments = _commentRepository.GetWithInclude(
-                                                com => com.PostId == tmpPost.Id,
-                                                content => content.Content!,
-                                                u=>u.User!)
-                                             .ToArray();
+        if (tmpPost is not null)
+            tmpPost.Comments = _commentRepository.GetWithInclude(
+                                                    com => com.PostId == tmpPost.Id,
+                                                    content => content.Content!,
+                                                    u=>u.User!)
+                                                 .ToArray();
         
         return tmpPost!;
     }
@@ -150,7 +151,7 @@ public class PostDataHandler
             post!.Comments.Add(_commentRepository.FindById(commentId)!);
             return _postRepository.Update(post) > 0;
         }
-        catch (Exception e)
+        catch
         {
             return false;
         }
@@ -242,7 +243,7 @@ public class PostDataHandler
 
     public IEnumerable<Post> GetUserPostsByCategory(string token, string creationDate = "Desc", string category = "", int skip = 0, int take = 10)
     {
-        IEnumerable<Post> posts;
+        IEnumerable<Post> posts = null!;
 
         if (AuthenticationHeaderValue.TryParse(token, out var headerValue))
         {
@@ -281,12 +282,7 @@ public class PostDataHandler
 
             posts = posts.Skip(skip).Take(take);
         }
-        else
-        {
-            posts = null;
-        }
 
         return posts;
-
     }
 }

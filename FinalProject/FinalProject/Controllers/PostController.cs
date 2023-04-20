@@ -57,8 +57,13 @@ public class PostController : Controller
     [HttpPost]
     [Route("/create/new")]
     [AllowAnonymous]
-    public IActionResult CreateNew([FromForm] Content content)
+    public IActionResult CreateNew([FromForm] CreatePostDTO content)
     {
+        bool success = _postDataHandler.Create
+        (
+            content,
+            Request.Headers[HeaderNames.Authorization]!
+        );
         return View(content);
     }
 
