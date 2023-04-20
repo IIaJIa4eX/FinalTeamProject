@@ -82,6 +82,8 @@
                                     Dislike
                                 </a>
                             </div>
+                            
+                          
                         </td>
                     }                        
                     </tr>
@@ -126,7 +128,6 @@
         }
     }
 </div>
-@if (@User.Identity!.IsAuthenticated)
-{
-    <partial name="AddPostComment" model=@dtos/>
-}
+
+<partial name="AddPostComment" model=@dtos/>
+

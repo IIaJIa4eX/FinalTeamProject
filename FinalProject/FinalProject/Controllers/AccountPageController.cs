@@ -1,9 +1,10 @@
-﻿using DatabaseConnector;
+using DatabaseConnector;
 using DatabaseConnector.DTO;
 using DatabaseConnector.Extensions;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
 using FinalProject.Models;
+using MarketPracticingPlatform.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
@@ -11,6 +12,7 @@ using System.Net.Http.Headers;
 
 namespace FinalProject.Controllers
 {
+    [UnAuthorizedRedirect]
     [Authorize]
     [Route("[controller]")]
     public class AccountPageController : Controller

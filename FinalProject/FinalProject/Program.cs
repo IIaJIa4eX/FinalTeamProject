@@ -2,6 +2,7 @@ using DatabaseConnector;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
 using FinalProject.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -142,9 +143,10 @@ public class Program
         app.UseRouting();
         app.UseAuthentication();
         app.UseAuthorization();
-       
 
- 
+        app.UseMiddleware<AuthenticationMiddleware>();
+
+
 
         app.UseHttpLogging();
 

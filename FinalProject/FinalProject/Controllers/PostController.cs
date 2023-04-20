@@ -7,11 +7,11 @@ using Microsoft.Net.Http.Headers;
 using DatabaseConnector.DTO;
 using FinalProject.Interfaces;
 using System.Net.Http.Headers;
+using MarketPracticingPlatform.Attributes;
 
 namespace FinalProject.Controllers;
 
 [Route("Post")]
-[Authorize]
 public class PostController : Controller
 {
     PostDataHandler _postDataHandler;
@@ -95,6 +95,7 @@ public class PostController : Controller
     
     [HttpPost]
     [Route("/[action]")]
+    [UnAuthorizedRedirect]
     public IActionResult AddPostComment([FromForm] ContentDTO content)
     {
         SessionInfo sessionInfo = null!;
@@ -123,7 +124,7 @@ public class PostController : Controller
 
     [HttpGet]
     [Route("GetUserPosts")]
-    [Authorize]
+    [UnAuthorizedRedirect]
     public IActionResult UserPosts()
     {
         var posts = _postDataHandler.GetUserPostsByCategory(Request.Headers[HeaderNames.Authorization]);
@@ -133,7 +134,7 @@ public class PostController : Controller
 
     [HttpPost]
     [Route("GetUserPosts")]
-    [Authorize]
+    [UnAuthorizedRedirect]
     public IActionResult GetUserPosts(string creationDate, string category, int skip, int take)
     {
         var posts = _postDataHandler.GetUserPostsByCategory(Request.Headers[HeaderNames.Authorization], creationDate, category, skip, take);

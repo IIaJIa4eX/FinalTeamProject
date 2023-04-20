@@ -1,4 +1,4 @@
-﻿namespace FinalProject.Models
+namespace FinalProject.Models
 {
     public enum AuthenticationStatus
     {
