@@ -15,7 +15,6 @@ public class PostDataHandler
     EFGenericRepository<Comment> _commentRepository;
     IAuthenticateService _authenticateService;
 
-
     public PostDataHandler(EFGenericRepository<Post> postRepository,
         EFGenericRepository<Content> contentRepository,
         EFGenericRepository<Comment> commentRepository,
@@ -26,7 +25,7 @@ public class PostDataHandler
         _commentRepository = commentRepository;
         _authenticateService = authenticateService;
     }
-    //.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+
     public Post GetById(int id)
     {
         var tmpPost = _postRepository

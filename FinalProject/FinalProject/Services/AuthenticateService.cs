@@ -6,8 +6,10 @@ using FinalProject.Models;
 using FinalProject.Models.Requests;
 using FinalProject.Utils;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 
 namespace FinalProject.Services
@@ -27,7 +29,6 @@ namespace FinalProject.Services
             SessionInfo sessionInfo;
             var handler = new JwtSecurityTokenHandler();
             var email = handler.ReadJwtToken(sessionToken).Claims.First(claim => claim.Type == "email").Value;
-
             
             lock (_sessions)
             {
@@ -82,7 +83,6 @@ namespace FinalProject.Services
                 };
             }
 
-
             AccountSession session = new AccountSession
             {
                 AccountId = account.Id,
@@ -93,17 +93,14 @@ namespace FinalProject.Services
                 TimeClosed = DateTime.Now.AddMinutes(15)
             };
 
-
             context.AccountSessions.Add(session);
             context.SaveChanges();
-
 
             SessionInfo sessionInfo = GetSessionInfo(account, session);
             lock (_sessions)
             {
                 _sessions[sessionInfo.SessionToken] = sessionInfo;
             }
-
 
             return new AuthenticationResponse
             {
@@ -154,6 +151,5 @@ namespace FinalProject.Services
         {
             return context.Users.FirstOrDefault(account => account.Email == login);
         }
-
     }
 }

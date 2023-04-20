@@ -13,9 +13,9 @@ public class HomeController : Controller
         _postDataHandler = postDataHandler;
     }
     [AllowAnonymous]
-    public IActionResult Index(string creationDate, string category)
+    public IActionResult Index(string creationDate, string category, int skip)
     {
-        var posts = _postDataHandler.GetPostsByCategory(creationDate, category);
+        var posts = _postDataHandler.GetPostsByCategory(creationDate, category, skip);
         return View(posts);
     }
 
