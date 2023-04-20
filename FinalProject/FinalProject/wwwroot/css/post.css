@@ -1,0 +1,11 @@
+﻿.post-card-container {
+    width: 100%;
+    border: 2px;
+    border-color: gray;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: center;
+    margin: 25px 10% 25px 10%;
+}
