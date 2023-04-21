@@ -57,8 +57,13 @@ public class PostController : Controller
     [HttpPost]
     [Route("/create/new")]
     [AllowAnonymous]
-    public IActionResult CreateNew([FromForm] Content content)
+    public IActionResult CreateNew([FromForm] CreatePostDTO content)
     {
+        bool success = _postDataHandler.Create
+        (
+            content,
+            Request.Headers[HeaderNames.Authorization]!
+        );
         return View(content);
     }
 
@@ -135,4 +140,24 @@ public class PostController : Controller
         var posts = _postDataHandler.GetUserPostsByCategory(Request.Headers[HeaderNames.Authorization], creationDate, category, skip, take);
         return PartialView("_UserPostsPartial", posts);
     }
+
+    [HttpGet]
+    [Route("comment/{id}")]
+    [UnAuthorizedRedirect]
+    public IActionResult Comment(int id) 
+    {
+        return View(_postDataHandler.GetComment(id));
+    }
+
+    [Route("/Hide/{id}")]
+    [UnAuthorizedRedirect]
+    public IActionResult HideComment([FromRoute] int id)
+    {
+        var comment = _postDataHandler.GetComment(id)!;
+        comment.IsVisible = false;
+        return _postDataHandler.UpdateComment(comment) > 0 ?
+                Redirect("/GetIssues") :
+                BadRequest();
+    }
+
 }

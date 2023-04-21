@@ -1,4 +1,5 @@
 using DatabaseConnector.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 

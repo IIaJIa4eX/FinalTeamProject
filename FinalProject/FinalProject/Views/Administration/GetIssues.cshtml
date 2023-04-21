@@ -1,5 +1,29 @@
 ﻿@model IEnumerable<DatabaseConnector.Issue>
 <partial name="_AccountNavBarPartial" />
-@foreach(var item in Model){
-    <partial name="Issue" model=item />
-}
+<div class="issue-container">
+    <div>
+        <table class="issue-table">
+            <thead>
+                <tr class="issue-header-id">
+                    <th>
+                        <div>
+                            Issue Id
+                        </div>
+                    </th>
+                    <th>
+                        <div>
+                            User
+                        </div>
+                    </th>
+                    <th>Issue</th>
+                    <th>IssueContent</th>
+                    <th></th>
+                </tr>
+            </thead>
+                @foreach(var item in Model)
+                {
+                    <partial name="Issue" model=item />
+                }
+        </table>
+    </div>
+</div>

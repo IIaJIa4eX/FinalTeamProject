@@ -10,15 +10,12 @@
                     <a type="button" class="nav-link" asp-controller="Post" asp-action="GetUserPosts" method="GET">Мои посты</a>
                 </li>
                 <li class="nav-item">
-                    <a type="button" class="nav-link" asp-controller="User" asp-action="ProfileHandler" asp-route-id="UserDrafts">Черновики</a>
-                </li>
-                <li class="nav-item">
                     <a type="button" class="nav-link" asp-controller="Issue" asp-action="CreateIssue">Подать жалобу</a>
                 </li>
                 @if (User.IsInRole("Admin"))
                 {
                     <li class="nav-item">
-                        <a type="button" class="nav-link" asp-controller="Administration" asp-action="AdminActions" asp-route-name="Administration">Администрирование</a>
+                        <a type="button" class="nav-link" asp-controller="Admin" asp-action="Admin">Администрирование</a>
                     </li>
                     <li class="nav-item">
                         <a type="button" class="nav-link" asp-controller="Administration" asp-action="GetIssues" asp-route-name="Issues">Жалобы</a>

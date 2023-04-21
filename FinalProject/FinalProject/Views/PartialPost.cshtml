@@ -1,0 +1,47 @@
+﻿@model DatabaseConnector.Post
+
+<a type="button" class="text-decoration-none" asp-controller="Post" asp-action="Index" asp-route-id="@Model.Id">
+    <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
+        <div class="uk-card-media-left uk-cover-container">
+            <img src="~/imgs/examplephoto.jpeg" alt="" uk-cover>
+            <canvas width="600" height="400"></canvas>
+        </div>
+        <div>
+            <div class="uk-card-body">
+                <div class="uk-card-badge uk-label">@Model.Category</div>
+                <div class="uk-width-1-2">
+                    <img class="" width="40" height="40" src="~/imgs/exampleprofilephoto.jpeg" alt="Avatar">
+                </div>
+                <div class="uk-width-1-2">
+                    <h3 class="uk-card-title uk-margin-remove-bottom">@Model.User.NickName</h3>
+                    <p class="uk-text-meta uk-margin-remove-top"><time datetime="2023-23-23T23:23">@Model.CreationDate.ToString()</time></p>
+                </div>
+                <p>@Html.Raw(Model.Content.Text)</p>
+            </div>
+        </div>
+        <div class="uk-card-footer">
+            <div class="CardFooter">
+                <div class="Likes">
+                    <div>
+                        <img src="~/icons/heart.png" width="20" height="20" />
+                    </div>
+                    <div>
+                        <p style="text-align:center">@Model.Rating.ToString() likes </p>
+                    </div>
+                </div>
+                <div class="Comments">
+                    <div>
+                        <img src="~/icons/comment.png" width="20" height="20" />
+                    </div>
+                    <div>
+                        <p style="text-align:center">@Model.Comments.Count().ToString() comments </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</a>
+@*
+<h2 style="background-color:darkcyan; border-radius: 199px; width: 43px; height: 43px; text-align:center;">
+    👨‍💻
+</h2>*@

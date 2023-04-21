@@ -10,79 +10,57 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace FinalProject.Services
+namespace FinalProject.Services;
+
+public class AuthenticateService : IAuthenticateService
 {
-    public class AuthenticateService : IAuthenticateService
+    public const string SecretKey = "kYp3s6v9y/B?E(H+";
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly Dictionary<string, SessionInfo> _sessions = new Dictionary<string, SessionInfo>();
+
+    public AuthenticateService(IServiceScopeFactory serviceScopeFactory)
     {
-        public const string SecretKey = "kYp3s6v9y/B?E(H+";
-        private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly Dictionary<string, SessionInfo> _sessions = new Dictionary<string, SessionInfo>();
-
-        public AuthenticateService(IServiceScopeFactory serviceScopeFactory)
+        _serviceScopeFactory = serviceScopeFactory;
+    }
+    public SessionInfo GetSessionInfo(string sessionToken)
+    {
+        SessionInfo sessionInfo;
+        var handler = new JwtSecurityTokenHandler();
+        var email = handler.ReadJwtToken(sessionToken).Claims.First(claim => claim.Type == "email").Value;
+        
+        lock (_sessions)
         {
-            _serviceScopeFactory = serviceScopeFactory;
+            _sessions.TryGetValue(sessionToken, out sessionInfo!);
         }
-        public SessionInfo GetSessionInfo(string sessionToken)
-        {
-            SessionInfo sessionInfo;
-            var handler = new JwtSecurityTokenHandler();
-            var email = handler.ReadJwtToken(sessionToken).Claims.First(claim => claim.Type == "email").Value;
 
-            
-            lock (_sessions)
-            {
-                _sessions.TryGetValue(sessionToken, out sessionInfo);
-            }
-
-            if (sessionInfo == null)
-            {
-                using IServiceScope scope = _serviceScopeFactory.CreateScope();
-                Context context = scope.ServiceProvider.GetService<Context>();
-                AccountSession session = context.AccountSessions.FirstOrDefault(item => item.SessionToken == sessionToken);
-                if (session == null)
-                    return null;
-                User account = context.Users.FirstOrDefault(item => item.Id == session.AccountId);
-
-                sessionInfo = GetSessionInfo(account, session);
-                if (sessionInfo != null)
-                {
-                    lock (_sessions)
-                    {
-                        _sessions[sessionToken] = sessionInfo;
-                    }
-
-                }
-            }
-            return sessionInfo;
-        }
-        public AuthenticationResponse Login(AuthenticationRequest authenticationRequest)
+        if (sessionInfo == null)
         {
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
-            Context context = scope.ServiceProvider.GetService<Context>();
-            User account = !string.IsNullOrWhiteSpace(authenticationRequest.Email) ? FindAccountByLogin(context, authenticationRequest.Email) : null;
-            if (account.IsBanned)
-            {
-                return new AuthenticationResponse
-                {
-                    Status = AuthenticationStatus.AccountIsBanned
-                };
-            }
-            if (account == null)
-            {
-                return new AuthenticationResponse
-                {
-                    Status = AuthenticationStatus.UserNotFound
-                };
-            }
-            if (!PasswordUtils.VerifyPassword(authenticationRequest.Password, account.PasswordSalt, account.PasswordHash))
-            {
-                return new AuthenticationResponse
-                {
-                    Status = AuthenticationStatus.InvalidPassword
-                };
-            }
+            Context context = scope.ServiceProvider.GetService<Context>()!;
+            AccountSession session = context.AccountSessions.FirstOrDefault(item => item.SessionToken == sessionToken)!;
+            if (session == null)
+                return null!;
+            User account = context.Users.FirstOrDefault(item => item.Id == session.AccountId)!;
 
-
+            sessionInfo = GetSessionInfo(account, session);
+            if (sessionInfo != null)
+            {
+                lock (_sessions)
+                {
+                    _sessions[sessionToken] = sessionInfo;
+                }
+            }
+        }
+        return sessionInfo!;
+    }
+    public AuthenticationResponse Login(AuthenticationRequest authenticationRequest)
+    {
+        using IServiceScope scope = _serviceScopeFactory.CreateScope();
+        AuthenticationResponse response = new();
+        Context context = scope.ServiceProvider.GetService<Context>()!;
+        User account = !string.IsNullOrWhiteSpace(authenticationRequest.Email) ? FindAccountByLogin(context, authenticationRequest.Email) : null!;
+        if (account is not null)
+        {
             AccountSession session = new AccountSession
             {
                 AccountId = account.Id,
@@ -92,68 +70,67 @@ namespace FinalProject.Services
                 IsClosed = false,
                 TimeClosed = DateTime.Now.AddMinutes(15)
             };
-
-
-            context.AccountSessions.Add(session);
+            context!.AccountSessions.Add(session);
             context.SaveChanges();
-
 
             SessionInfo sessionInfo = GetSessionInfo(account, session);
             lock (_sessions)
             {
                 _sessions[sessionInfo.SessionToken] = sessionInfo;
             }
-
-
-            return new AuthenticationResponse
-            {
-                Status = AuthenticationStatus.Success,
-                SessionInfo = sessionInfo
-            };
+            response.Status =
+                account.IsBanned ? AuthenticationStatus.AccountIsBanned :
+                !PasswordUtils.VerifyPassword(authenticationRequest.Password!, account.PasswordSalt, account.PasswordHash) ? AuthenticationStatus.InvalidPassword :
+                AuthenticationStatus.Success;
+            response.SessionInfo = sessionInfo;
         }
-        private SessionInfo GetSessionInfo(User account, AccountSession accountSession)
+        else
         {
-            return new SessionInfo
-            {
-                SessionId = accountSession.SessionId,
-                SessionToken = accountSession.SessionToken,
-                Account = new UserDto
-                {
-                    Id = account.Id,
-                    NickName = account.NickName,
-                    FirstName = account.FirstName,
-                    LastName = account.LastName,
-                    Patronymic = account.Patronymic,
-                    Birthday = account.Birthday,
-                    Email = account.Email,
-                    IsBanned = account.IsBanned
-                }
-            };
+            response.Status = AuthenticationStatus.UserNotFound;
         }
-        private string CreateSessionToken(User user)
+        return response;
+    }
+    private SessionInfo GetSessionInfo(User account, AccountSession accountSession)
+    {
+        return new SessionInfo
         {
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            byte[] key = Encoding.ASCII.GetBytes(SecretKey);
-            SecurityTokenDescriptor tokenDescriptor = new
-            SecurityTokenDescriptor
+            SessionId = accountSession.SessionId,
+            SessionToken = accountSession.SessionToken,
+            Account = new UserDto
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.NickName),
-                    new Claim(ClaimTypes.Email, user.Email),
-                    new Claim(ClaimTypes.Role, user.UserRole)
-
-                }),
-                Expires = DateTime.UtcNow.AddMinutes(15),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
-        }
-        private User FindAccountByLogin(Context context, string login)
+                Id = account.Id,
+                NickName = account.NickName,
+                FirstName = account.FirstName,
+                LastName = account.LastName,
+                Patronymic = account.Patronymic,
+                Birthday = account.Birthday,
+                Email = account.Email,
+                IsBanned = account.IsBanned
+            }
+        };
+    }
+    private string CreateSessionToken(User user)
+    {
+        JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+        byte[] key = Encoding.ASCII.GetBytes(SecretKey);
+        SecurityTokenDescriptor tokenDescriptor = new
+        SecurityTokenDescriptor
         {
-            return context.Users.FirstOrDefault(account => account.Email == login);
-        }
+            Subject = new ClaimsIdentity(new Claim[]
+            {
+                new Claim(ClaimTypes.Name, user.NickName!),
+                new Claim(ClaimTypes.Email, user.Email!),
+                new Claim(ClaimTypes.Role, user.UserRole!)
 
+            }),
+            Expires = DateTime.UtcNow.AddMinutes(15),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+        SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
+    }
+    private User FindAccountByLogin(Context context, string login)
+    {
+        return context.Users.FirstOrDefault(account => account.Email == login)!;
     }
 }

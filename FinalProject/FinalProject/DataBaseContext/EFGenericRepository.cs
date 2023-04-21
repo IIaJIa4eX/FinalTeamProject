@@ -5,12 +5,10 @@ using System.Linq.Expressions;
 
 namespace FinalProject.DataBaseContext;
 
-
 public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class, IEntity
 {
     DbContext _context;
     DbSet<TEntity> _dbSet;
-
 
     public EFGenericRepository(Context context)
     {
@@ -108,6 +106,4 @@ public class EFGenericRepository<TEntity> : IGenericRepository<TEntity> where TE
         return includeProperties
             .Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
     }
-
-
 }

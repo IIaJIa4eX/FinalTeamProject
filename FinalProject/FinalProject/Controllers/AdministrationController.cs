@@ -16,6 +16,7 @@ namespace FinalProject.Controllers
         EFGenericRepository<Post> _postsRepository;
         EFGenericRepository<Comment> _commentsRepository;
         EFGenericRepository<Content> _contentRepository;
+
         public AdministrationController(
             IAuthenticateService authService,
             EFGenericRepository<Issue> issuesRepository,
@@ -55,19 +56,5 @@ namespace FinalProject.Controllers
             }
             return RedirectToAction("GetIssues");
         }
-
-        //[HttpPost]
-        //[Route("Hide/{issueId}")]
-        //public IActionResult Hide([FromRoute] int issueId)
-        //{
-        //    var issue = _issuesRepository.FindById(issueId);
-        //    if (issue is not null)
-        //    {
-        //        issue.IsVisible = false;
-        //        _issuesRepository.Update(issue);
-        //    }
-        //    return Ok(issueId);
-        //}
-
     }
 }

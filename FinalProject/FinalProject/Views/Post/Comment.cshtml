@@ -1,0 +1,35 @@
+﻿@model DatabaseConnector.Comment
+
+<h4>Comment</h4>
+<hr />
+<div class="row">
+    <table>
+        <tbody>
+            <tr>
+                <td class="comment-user">                    
+                    <div>
+                        <h2>
+                            <a asp-controller="Post" asp-action="Index" asp-route-id="@Model.PostId">Post @Model.PostId</a>
+                        </h2>
+                    </div>
+                    <div>
+                        @Model.CreationDate
+                    </div>
+                </td>
+                <td class="comment-text-container">
+                    <div class="comment-text-area">
+                        @Model.Content!.Text!.ToString();
+                    </div>
+                </td>
+                <td>
+                    <a asp-controller="Post" asp-action="HideComment" asp-route-id="@Model.Id">Hide</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <a asp-controller="Administration" asp-action="GetIssues">Back to List</a>
+</div>
+

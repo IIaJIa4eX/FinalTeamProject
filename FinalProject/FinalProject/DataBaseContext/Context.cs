@@ -6,7 +6,6 @@ namespace FinalProject.DataBaseContext;
 
 public class Context : DbContext
 {
-
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Post> Posts { get; set; }
     public DbSet<Comment> Comments { get; set; }
@@ -18,6 +17,4 @@ public class Context : DbContext
     {
 
     }
-
-    public DbSet<DatabaseConnector.DTO.Post.ContentDTO>? ContentDTO { get; set; }
 }
