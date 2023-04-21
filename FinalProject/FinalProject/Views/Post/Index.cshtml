@@ -104,6 +104,7 @@
                                     <h2 style="background-color:darkcyan; border-radius: 199px; width: 43px; height: 43px; text-align:center;">
                                         👨‍💻
                                     </h2>
+                                    
                                 </div>
                                 <div>
                                     <h2>
@@ -117,11 +118,18 @@
                             <td class="comment-text-container">
                                 <div class="comment-text-area">
                                     @item.Content!.Text!.ToString();
+                                    <div class="uk-position-bottom-right">
+                                    <form asp-controller="Issue" asp-action="AutoIssue" method="post">
+                                        <input type="hidden" name="contentText" value="@Model.Id">
+                                        <input type="hidden" name="issueType" value="2">
+                                        <button type="submit" class="uk-button uk-button-text">Пожаловаться</button>
+                                    </form>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
                     </tbody>
-                </table>
+                </table>                
             </div>
         }
     }
