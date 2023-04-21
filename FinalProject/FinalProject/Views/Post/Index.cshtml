@@ -60,6 +60,12 @@
                                     <button type="submit" class="uk-button uk-button-text">Пожаловаться</button>
                                 </form>
                             </div>
+                            @if (@User.IsInRole("Admin"))
+                            {
+                                <td>
+                                    <a asp-controller="Post" asp-action="HidePost" asp-route-id="@Model.Id">Hide</a>
+                                </td>
+                            }
                         </td>
                     @if (@User.Identity!.IsAuthenticated)
                     {

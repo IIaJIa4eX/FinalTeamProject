@@ -75,6 +75,7 @@ public class PostDataHandler
                 Rating = 0,
                 UserId = postData.UserId,
                 CreationDate = DateTime.UtcNow,
+                IsVisible = true
             });
             return entitiesNumb > 0;
         }
@@ -185,11 +186,12 @@ public class PostDataHandler
         IEnumerable<Post> posts =
             !string.IsNullOrEmpty(category) ?
             _postRepository.GetWithInclude(
-                            post => post.Category == category,
+                            post => post.Category == category && post.IsVisible,
                             comm => comm.Comments,
                             cont => cont.Content!,
                             usr => usr.User!) :
             _postRepository.GetWithInclude(
+                        post => post.IsVisible,
                         comm => comm.Comments,
                         cont => cont.Content!,
                         usr => usr.User!);
@@ -252,7 +254,7 @@ public class PostDataHandler
             posts =
             !string.IsNullOrEmpty(category) ?
             _postRepository.GetWithInclude(
-                            post => post.Category == category && post.UserId == sessionInfo.Account.Id,
+                            post => post.Category == category && post.UserId == sessionInfo.Account.Id && post.IsVisible,
                             comm => comm.Comments,
                             cont => cont.Content!,
                             usr => usr.User!) :
@@ -294,6 +296,12 @@ public class PostDataHandler
             comment.Content = _contentRepository.Get(c => c.Id == comment.ContentId).FirstOrDefault();
         }
         return comment;
+    }
+    public int HidePost(int id)
+    {
+        var post = _postRepository.FindById(id);
+        post.IsVisible = false;
+        return _postRepository.Update(post);
     }
     public int UpdateComment(Comment comment)
     {
