@@ -1,14 +1,19 @@
 ﻿.issue-container {
-    border: initial solid 2px;
+    width:100%;
+    border: solid 2px;
     border-color: darkred;
 }
 .issue-header-id {
-    border:groove 2px;
+    width: 90%;
+    justify-self:center;
+    border: groove 2px;
     width: 30px;
 }
 .issue-content {
     border-bottom: initial solid 1px;
 }
-.issue-button-hide{
-
+.issue-table {
+    width: 100%;
+}
+.issue-button-hide {
 }

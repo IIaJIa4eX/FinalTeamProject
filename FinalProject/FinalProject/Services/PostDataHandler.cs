@@ -285,4 +285,18 @@ public class PostDataHandler
 
         return posts;
     }
+
+    public Comment? GetComment(int id)
+    {
+        var comment = _commentRepository.FindById(id);
+        if (comment is not null)
+        {
+            comment.Content = _contentRepository.Get(c => c.Id == comment.ContentId).FirstOrDefault();
+        }
+        return comment;
+    }
+    public int UpdateComment(Comment comment)
+    {
+        return _commentRepository.Update(comment);
+    }
 }
