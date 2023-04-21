@@ -2,134 +2,137 @@ using DatabaseConnector;
 using FinalProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using DatabaseConnector.DTO.Post;
 using Microsoft.Net.Http.Headers;
+using DatabaseConnector.DTO;
 using FinalProject.Interfaces;
 using System.Net.Http.Headers;
-using DatabaseConnector.DTO.Post;
-using DatabaseConnector.DTO;
+using MarketPracticingPlatform.Attributes;
 
-namespace FinalProject.Controllers
+namespace FinalProject.Controllers;
+
+[Route("Post")]
+public class PostController : Controller
 {
-    [Route("Post")]
-    [Authorize]
-    public class PostController : Controller
+    PostDataHandler _postDataHandler;
+    private readonly IAuthenticateService _authenticateService;
+
+    public PostController(PostDataHandler postDataHandler, IAuthenticateService authenticate)
     {
+        _postDataHandler = postDataHandler;
+        _authenticateService = authenticate;
+    }
 
-        PostDataHandler _postDataHandler;
-        IAuthenticateService _authenticateService;
+    [HttpGet]
+    [Route("{id}")]
+    [AllowAnonymous]
+    public IActionResult Index([FromRoute] int id)
+    {
+        var post = _postDataHandler.GetById(id);
+        return View(post);
+    }
 
-        public PostController(PostDataHandler postDataHandler, IAuthenticateService authenticateService)
+    [HttpPost]
+    [Route("/[action]")]
+    public IActionResult AddPost(CreatePostDTO postData)
+    {
+        bool success = _postDataHandler.Create
+        (
+            postData,
+            Request.Headers[HeaderNames.Authorization]!
+        );
+        return Redirect("~/Home/Index");
+    }
+
+    [HttpGet]
+    [Route("/create/new")]
+    [AllowAnonymous]
+    public IActionResult CreateNew()
+    {
+        var userid = HttpContext.Request.Headers.SingleOrDefault(x => x.Key == "UserId").Value.ToString();
+        ViewBag.UserId = userid;
+        return View();
+    }
+
+    [HttpPost]
+    [Route("/create/new")]
+    [AllowAnonymous]
+    public IActionResult CreateNew([FromForm] Content content)
+    {
+        return View(content);
+    }
+
+    [HttpGet]
+    [Route("/[action]")]
+    public IActionResult Edit()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [Route("/[action]")]
+    public IActionResult Delete(EditPostDTO postData)
+    {
+        bool success = _postDataHandler.Delete(postData);
+        return Ok(success);
+    }
+    
+    [HttpGet]
+    [Route("/[action]/{id}/{rating}")]
+    public IActionResult PostRating([FromRoute] string rating, [FromRoute] int id)
+    {
+        if (_postDataHandler.Rating(rating, id))
         {
-            _postDataHandler = postDataHandler;
-            _authenticateService = authenticateService;
+            return Redirect($"/Post/{id}");
         }
-
-
-        [HttpGet]
-        [Route("{id}")]
-        [AllowAnonymous]
-        public IActionResult Index([FromRoute] int id)
+        return View();
+    }
+    
+    [HttpPost]
+    [Route("/[action]")]
+    [UnAuthorizedRedirect]
+    public IActionResult AddPostComment([FromForm] ContentDTO content)
+    {
+        SessionInfo sessionInfo = null!;
+        var authorization = Request.Headers[HeaderNames.Authorization];
+        if (AuthenticationHeaderValue.TryParse(authorization, out var headerValue))
         {
-            var post = _postDataHandler.GetById(id);
-
-            return View(post);
-        }
-
-
-        [HttpPost]
-        [Route("/[action]")]
-        public IActionResult AddPost(CreatePostDTO postData)
-        {
-
-                bool success = _postDataHandler.Create
-                (
-                    postData,
-                    Request.Headers[HeaderNames.Authorization]!
-                );
-
-            return Redirect("~/Home/Index");
-        }
-
-        [HttpPost]
-        [Route("/[action]")]
-        public IActionResult Edit(EditPostDTO postData)
-        {
-            bool success = _postDataHandler.Edit(postData);
-
-            return Ok(success);
-        }
-
-        [HttpGet]
-        [Route("/[action]")]
-        public IActionResult Edit()
-        { 
-
-            return View();
-        }
-
-        [HttpGet]
-        [Route("/create/new")]
-        [AllowAnonymous]
-        public IActionResult CreateNew()
-        {
-            var userid = HttpContext.Request.Headers.SingleOrDefault(x => x.Key == "UserId").Value.ToString();
-            ViewBag.UserId = userid;
-            return View();
-        }
-
-        [HttpPost]
-        [Route("/create/new")]
-        [AllowAnonymous]
-        public IActionResult CreateNew([FromForm] Content content)
-        {
-            return View(content);
-        }
-
-        [HttpPost]
-        [Route("/[action]")]
-        public IActionResult Delete(EditPostDTO postData)
-        {
-            bool success = _postDataHandler.Delete(postData);
-
-            return Ok(success);
-        }
-
-        [HttpGet]
-        [Route("/[action]")]
-        public IActionResult PostRating(string rating, int id)
-        {
-            bool success = _postDataHandler.Rating(rating, id);
-
-            return Ok(success);
-        }
-
-        [HttpPost]
-        [Route("/[action]")]
-        public IActionResult AddPostComment([FromForm] CommentCreationDTO content)
-        {
-            bool success = _postDataHandler.AddComment(new CommentDTO()
+            var sessionToken = headerValue.Parameter;
+            if (!string.IsNullOrEmpty(sessionToken))
             {
-                IsVisible = true,
-                PostId = content.PostId,
-                Content = new ContentDTO()
-                {
-                    CreationDate = DateTime.Now,
-                    IsVisible = true,
-                    Text = content.Text
-                }
-            });
-
-            return View();
+                sessionInfo = _authenticateService.GetSessionInfo(sessionToken);
+            }
         }
+        if (_postDataHandler.AddComment(content, sessionInfo))
+            return Redirect($"Post/{content.PostId}");
+        return View();
+    }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [Route("GetPosts")]
-        public IActionResult GetPosts(string creationDate, string category, int skip, int take)
-        {
-            var posts = _postDataHandler.GetPostsByCategory(creationDate, category, skip, take);
-            return PartialView("_PostsPartial", posts);
-        }
+    [HttpPost]
+    [AllowAnonymous]
+    [Route("GetPosts")]
+    public IActionResult GetPosts(string creationDate, string category, int skip, int take)
+    {
+        var posts = _postDataHandler.GetPostsByCategory(creationDate, category, skip, take);
+        return PartialView("_PostsPartial", posts);
+    }
 
+    [HttpGet]
+    [Route("GetUserPosts")]
+    [UnAuthorizedRedirect]
+    public IActionResult UserPosts()
+    {
+        var posts = _postDataHandler.GetUserPostsByCategory(Request.Headers[HeaderNames.Authorization]);
+        ViewData["scriptsLoaded"] = false;
+        return View(posts);
+    }
+
+    [HttpPost]
+    [Route("GetUserPosts")]
+    [UnAuthorizedRedirect]
+    public IActionResult GetUserPosts(string creationDate, string category, int skip, int take)
+    {
+        var posts = _postDataHandler.GetUserPostsByCategory(Request.Headers[HeaderNames.Authorization], creationDate, category, skip, take);
+        return PartialView("_UserPostsPartial", posts);
     }
 }

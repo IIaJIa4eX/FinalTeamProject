@@ -1,39 +1,28 @@
-@model IEnumerable<DatabaseConnector.Post>
+﻿@model IEnumerable<DatabaseConnector.Post>
 @{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Мои посты";
 }
-
-
-<div class="MainBody">
-    <div class="CategoriesInIndex d-flex justify-content-center">
-        <ul class="list-group list-group-horizontal">
-            <li class="list-group-item"><a type="button" asp-controller="Home" asp-action="Index" asp-route-category="IT">IT</a></li>
-            <li class="list-group-item"><a type="button" asp-controller="Home" asp-action="Index" asp-route-category="Marketing">Marketing</a></li>
-            <li class="list-group-item"><a type="button" asp-controller="Home" asp-action="Index" asp-route-category="Design">Design</a></li>
-            <li class="list-group-item"><a type="button" asp-controller="Home" asp-action="Index" asp-route-category="Mobile Development">Mobile Development</a></li>
-        </ul>
-    </div>
-</div>
+<partial name="_AccountNavBarPartial"/>
 <div class="PostInMain">
     <div сlass="PostCard" id="posts-container">
+
         @foreach (var item in Model)
         {
-            <a type="button" class="text-decoration-none" asp-controller="Post" asp-action="Index"  asp-route-id="@item.Id">
-                <div class="uk-card uk-card-default uk-grid-collapse uk-card-hover uk-child-width-1-2@s uk-margin" uk-grid>
+            <a type="button" class="text-decoration-none" asp-controller="Post" asp-action="Index" asp-route-id="@item.Id">
+                <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
                     <div class="uk-card-media-left uk-cover-container">
                         <img src="~/imgs/examplephoto.jpeg" alt="" uk-cover>
                         <canvas width="600" height="400"></canvas>
                     </div>
                     <div>
                         <div class="uk-card-body">
-                            <div class="uk-card-badge uk-label">@item.Category</div>
-                            <div class="uk-width-1-2">
+                            <div class="uk-width-auto">
                                 @*<img class="uk-border-circle" width="40" height="40" src="~/imgs/exampleprofilephoto.jpeg" alt="Avatar" >*@
                                 <h2 style="background-color:darkcyan; border-radius: 199px; width: 43px; height: 43px; text-align:center;">
                                     👨‍💻
                                 </h2>
                             </div>
-                            <div class="uk-width-1-2">
+                            <div class="uk-width-expand">
                                 <h3 class="uk-card-title uk-margin-remove-bottom">@item.User.NickName</h3>
                                 <p class="uk-text-meta uk-margin-remove-top"><time datetime="2023-23-23T23:23">@item.CreationDate.ToString()</time></p>
                             </div>
@@ -62,8 +51,10 @@
                     </div>
                 </div>
             </a>
+
         }
         <div id="loading-indicator"></div>
+
     </div>
 </div>
 
@@ -74,7 +65,7 @@
             let skip = @Model.Count();
             let take = 10;
             let creationDate = "";
-            let category = '@Html.Raw(ViewBag.Category)';
+            let category = "";
             let container = $('#posts-container');
             let indicator = $('#loading-indicator');
             $(window).scroll(function () {
@@ -83,9 +74,9 @@
                     indicator.show();
                     $.ajax({
                         type: "POST",
-                        url: '/Post/GetPosts',
-                        data: { creationDate: creationDate, category: category, skip: skip, take: take },
-                        success: function (html) {                            
+                        url: '/Post/GetUserPosts',
+                        data: { creationDate: creationDate, category: category, skip: skip, take: take},
+                        success: function (html) {
                             indicator.remove();
                             container.append(html);
                             indicator = $('#loading-indicator');
@@ -98,4 +89,4 @@
             });
         });
     </script>
-}
+    }

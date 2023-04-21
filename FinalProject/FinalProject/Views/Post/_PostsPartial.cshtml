@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DatabaseConnector.Post>
+@model IEnumerable<DatabaseConnector.Post>
 @{
     ViewData["Title"] = "Home";
 }
@@ -13,6 +13,7 @@
             </div>
             <div>
                 <div class="uk-card-body">
+                    <div class="uk-card-badge uk-label">@item.Category</div>
                     <div class="uk-width-auto">
                         @*<img class="uk-border-circle" width="40" height="40" src="~/imgs/exampleprofilephoto.jpeg" alt="Avatar" >*@
                         <h2 style="background-color:darkcyan; border-radius: 199px; width: 43px; height: 43px; text-align:center;">
@@ -49,3 +50,5 @@
         </div>
     </a>
 }
+<div id="loading-indicator"></div>
+

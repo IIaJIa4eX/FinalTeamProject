@@ -1,26 +1,21 @@
-﻿@model DatabaseConnector.Content
-@{
-    ViewData["Title"] = "Content";
-}
+﻿@model DatabaseConnector.DTO.Post.ContentDTO
 
-<h4>Content</h4>
-<hr/>
+<hr />
 <div class="row">
-    <div class="col-md-4">
+    <div>
         <form asp-action="AddPostComment">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="CreationDate" class="control-label"></label>
-                <input asp-for="CreationDate" class="form-control" />
-                <span asp-validation-for="CreationDate" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsVisible" /> @Html.DisplayNameFor(model => model.IsVisible)
-                </label>
+                <input type="hidden" asp-for="PostId" value="@ViewData["PostId"]" />
             </div>
             <div class="form-group">
-                <label asp-for="Text" class="control-label"></label>
+                <input asp-for="CreationDate" type="hidden" value="@DateTime.Now" />
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="IsVisible" value="true" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Text" class="control-label">Äîáàâèòü êîììåíòàðèé</label>
                 <input asp-for="Text" class="form-control" />
                 <span asp-validation-for="Text" class="text-danger"></span>
             </div>

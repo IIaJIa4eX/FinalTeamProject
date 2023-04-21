@@ -49,7 +49,6 @@
     <None Include="Views\Home\Index.cshtml" />
     <None Include="Views\Privacy.cshtml" />
     <None Include="Views\Shared\Categories.cshtml" />
-    <None Include="Views\Shared\Index.cshtml" />
     <None Include="Views\Shared\Models\_Footer.cshtml" />
     <None Include="Views\Shared\Models\_Header.cshtml" />
     <None Include="Views\Shared\Models\_Links.cshtml" />
