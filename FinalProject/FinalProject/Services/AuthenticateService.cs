@@ -80,7 +80,7 @@ public class AuthenticateService : IAuthenticateService
             }
             response.Status =
                 account.IsBanned ? AuthenticationStatus.AccountIsBanned :
-                !PasswordUtils.VerifyPassword(authenticationRequest.Password!, account.PasswordSalt, account.PasswordHash) ? AuthenticationStatus.InvalidPassword :
+                !PasswordUtils.VerifyPassword(authenticationRequest.Password!, account.PasswordSalt!, account.PasswordHash!) ? AuthenticationStatus.InvalidPassword :
                 AuthenticationStatus.Success;
             response.SessionInfo = sessionInfo;
         }
@@ -105,7 +105,8 @@ public class AuthenticateService : IAuthenticateService
                 Patronymic = account.Patronymic,
                 Birthday = account.Birthday,
                 Email = account.Email,
-                IsBanned = account.IsBanned
+                IsBanned = account.IsBanned,
+                UserRole = account.UserRole
             }
         };
     }

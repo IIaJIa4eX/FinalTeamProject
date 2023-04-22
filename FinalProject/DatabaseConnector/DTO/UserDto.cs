@@ -10,4 +10,5 @@ public class UserDto
     public DateTime? Birthday { get; set; }
     public string? Email { get; set; }
     public bool IsBanned { get; set; }
+    public string? UserRole { get; set; }
 }
