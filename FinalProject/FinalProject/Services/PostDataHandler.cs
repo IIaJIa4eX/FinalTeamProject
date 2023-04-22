@@ -135,22 +135,25 @@ public class PostDataHandler
     {
         try
         {
-            var post = _postRepository.FindById(content.PostId);
-            int commentId = _commentRepository.CreateAndGetId(new Comment
-            {
-                PostId = content.PostId,
-                CreationDate = content.CreationDate,
-                IsVisible = true,
-                ContentId = _contentRepository.CreateAndGetId(new Content
+            if (!string.IsNullOrWhiteSpace(content.Text)){
+                var post = _postRepository.FindById(content.PostId);
+                int commentId = _commentRepository.CreateAndGetId(new Comment
                 {
-                    CreationDate = DateTime.UtcNow,
+                    PostId = content.PostId,
+                    CreationDate = content.CreationDate,
                     IsVisible = true,
-                    Text = content.Text
-                }),
-                UserId = sessionInfo.Account.Id
-            });
-            post!.Comments.Add(_commentRepository.FindById(commentId)!);
-            return _postRepository.Update(post) > 0;
+                    ContentId = _contentRepository.CreateAndGetId(new Content
+                    {
+                        CreationDate = DateTime.UtcNow,
+                        IsVisible = true,
+                        Text = content.Text
+                    }),
+                    UserId = sessionInfo.Account.Id
+                });
+                post!.Comments.Add(_commentRepository.FindById(commentId)!);
+                return _postRepository.Update(post) > 0;
+            }
+            return false;
         }
         catch
         {
@@ -161,18 +164,23 @@ public class PostDataHandler
     {
         try
         {
-            return _commentRepository.Create(new Comment
+            if (!string.IsNullOrEmpty(comment.Content.Text))
             {
-                PostId = comment.PostId,
-                CreationDate = DateTime.UtcNow,
-                ParentId = comment.ParentId,
-                ContentId = _contentRepository.CreateAndGetId(new Content
+                return _commentRepository.Create(new Comment
                 {
+                    PostId = comment.PostId,
                     CreationDate = DateTime.UtcNow,
-                    IsVisible = true,
-                    Text = comment.Content.Text
-                })
-            }) > 0;
+                    ParentId = comment.ParentId,
+                    ContentId = _contentRepository.CreateAndGetId(new Content
+                    {
+                        CreationDate = DateTime.UtcNow,
+                        IsVisible = true,
+                        Text = comment.Content.Text
+                    })
+                }) > 0;
+            }
+
+            return false;
         }
         catch
         {

@@ -5,7 +5,7 @@
 
 @foreach (var item in Model)
 {
-    <a type="button" class="text-decoration-none container-lg" asp-controller="Post" asp-action="Index" asp-route-id="@item.Id">
+    <a type="button" class="text-decoration-none container-sm" asp-controller="Post" asp-action="Index" asp-route-id="@item.Id">
         <div class="uk-card uk-card-hover uk-card-default uk-child-width-1-1@s uk-margin" uk-grid>            
             <div class="uk-card-header">
                 <div class="uk-grid-small uk-flex-middle" uk-grid>
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div>
-                <div class="uk-card-body ">
+                <div class="uk-card-body">
                     <div class="uk-card-badge uk-label">@item.Category</div>
                     <div class="uk-overflow-auto">@Html.Raw(item.Content.Text)</div>
                 </div>
