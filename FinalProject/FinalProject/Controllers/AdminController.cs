@@ -62,7 +62,6 @@ namespace FinalProject.Controllers
             return View(user);
         }
 
-
         [Route("Delete/{id}")]
         [HttpGet]
         public ActionResult Delete([FromRoute] int id)

@@ -8,6 +8,7 @@ using FinalProject.Utils;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Principal;
 using System.Text;
 
 namespace FinalProject.Services;
@@ -27,7 +28,7 @@ public class AuthenticateService : IAuthenticateService
         SessionInfo sessionInfo;
         var handler = new JwtSecurityTokenHandler();
         var email = handler.ReadJwtToken(sessionToken).Claims.First(claim => claim.Type == "email").Value;
-        
+
         lock (_sessions)
         {
             _sessions.TryGetValue(sessionToken, out sessionInfo!);
@@ -119,6 +120,7 @@ public class AuthenticateService : IAuthenticateService
         {
             Subject = new ClaimsIdentity(new Claim[]
             {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.NickName!),
                 new Claim(ClaimTypes.Email, user.Email!),
                 new Claim(ClaimTypes.Role, user.UserRole!)
