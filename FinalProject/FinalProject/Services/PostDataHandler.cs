@@ -15,7 +15,6 @@ public class PostDataHandler
     EFGenericRepository<Comment> _commentRepository;
     IAuthenticateService _authenticateService;
 
-
     public PostDataHandler(EFGenericRepository<Post> postRepository,
         EFGenericRepository<Content> contentRepository,
         EFGenericRepository<Comment> commentRepository,
@@ -26,7 +25,7 @@ public class PostDataHandler
         _commentRepository = commentRepository;
         _authenticateService = authenticateService;
     }
-    //.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+
     public Post GetById(int id)
     {
         var tmpPost = _postRepository
@@ -35,11 +34,12 @@ public class PostDataHandler
                             cont => cont.Content!,
                             usr => usr.User!)
             .FirstOrDefault();
-        tmpPost.Comments = _commentRepository.GetWithInclude(
-                                                com => com.PostId == tmpPost.Id,
-                                                content => content.Content!,
-                                                u=>u.User!)
-                                             .ToArray();
+        if (tmpPost is not null)
+            tmpPost.Comments = _commentRepository.GetWithInclude(
+                                                    com => com.PostId == tmpPost.Id,
+                                                    content => content.Content!,
+                                                    u=>u.User!)
+                                                 .ToArray();
         
         return tmpPost!;
     }
@@ -75,6 +75,7 @@ public class PostDataHandler
                 Rating = 0,
                 UserId = postData.UserId,
                 CreationDate = DateTime.UtcNow,
+                IsVisible = true
             });
             return entitiesNumb > 0;
         }
@@ -151,7 +152,7 @@ public class PostDataHandler
             post!.Comments.Add(_commentRepository.FindById(commentId)!);
             return _postRepository.Update(post) > 0;
         }
-        catch (Exception e)
+        catch
         {
             return false;
         }
@@ -185,11 +186,12 @@ public class PostDataHandler
         IEnumerable<Post> posts =
             !string.IsNullOrEmpty(category) ?
             _postRepository.GetWithInclude(
-                            post => post.Category == category,
+                            post => post.Category == category && post.IsVisible,
                             comm => comm.Comments,
                             cont => cont.Content!,
                             usr => usr.User!) :
             _postRepository.GetWithInclude(
+                        post => post.IsVisible,
                         comm => comm.Comments,
                         cont => cont.Content!,
                         usr => usr.User!);
@@ -243,7 +245,7 @@ public class PostDataHandler
 
     public IEnumerable<Post> GetUserPostsByCategory(string token, string creationDate = "Desc", string category = "", int skip = 0, int take = 10)
     {
-        IEnumerable<Post> posts;
+        IEnumerable<Post> posts = null!;
 
         if (AuthenticationHeaderValue.TryParse(token, out var headerValue))
         {
@@ -252,7 +254,7 @@ public class PostDataHandler
             posts =
             !string.IsNullOrEmpty(category) ?
             _postRepository.GetWithInclude(
-                            post => post.Category == category && post.UserId == sessionInfo.Account.Id,
+                            post => post.Category == category && post.UserId == sessionInfo.Account.Id && post.IsVisible,
                             comm => comm.Comments,
                             cont => cont.Content!,
                             usr => usr.User!) :
@@ -282,12 +284,27 @@ public class PostDataHandler
 
             posts = posts.Skip(skip).Take(take);
         }
-        else
-        {
-            posts = null;
-        }
 
         return posts;
+    }
 
+    public Comment? GetComment(int id)
+    {
+        var comment = _commentRepository.FindById(id);
+        if (comment is not null)
+        {
+            comment.Content = _contentRepository.Get(c => c.Id == comment.ContentId).FirstOrDefault();
+        }
+        return comment;
+    }
+    public int HidePost(int id)
+    {
+        var post = _postRepository.FindById(id);
+        post.IsVisible = false;
+        return _postRepository.Update(post);
+    }
+    public int UpdateComment(Comment comment)
+    {
+        return _commentRepository.Update(comment);
     }
 }

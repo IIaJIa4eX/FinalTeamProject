@@ -7,7 +7,6 @@
     ViewData["Title"] = "Index";
     ViewData["PostId"] = Model.Id;
 }
-
 <h1>Index</h1>
 <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
     <div class="uk-card-media-left uk-cover-container">
@@ -26,7 +25,10 @@
                 <h3 class="uk-card-title uk-margin-remove-bottom">@Model.User!.FirstName</h3>
                 <p class="uk-text-meta uk-margin-remove-top">@Model.CreationDate.ToString()</p>
             </div>
-            <p>@Html.Raw(Model.Content!.Text)</p>
+            <div>
+                @Html.Raw(Model.Content!.Text)
+            </div>
+
         </div>
     </div>        
     <div class="uk-card-footer">
@@ -58,6 +60,12 @@
                                     <button type="submit" class="uk-button uk-button-text">Пожаловаться</button>
                                 </form>
                             </div>
+                            @if (@User.IsInRole("Admin"))
+                            {
+                                <td>
+                                    <a asp-controller="Post" asp-action="HidePost" asp-route-id="@Model.Id">Hide</a>
+                                </td>
+                            }
                         </td>
                     @if (@User.Identity!.IsAuthenticated)
                     {
@@ -80,8 +88,6 @@
                                     Dislike
                                 </a>
                             </div>
-                            
-                          
                         </td>
                     }                        
                     </tr>
@@ -95,34 +101,7 @@
     {
         if (item is not null && item.IsVisible)
         {
-            <div class="comment-container">
-                <table>
-                    <tbody>
-                        <tr>
-                            <td class="comment-user">
-                                <div class="comment-body">
-                                    <h2 style="background-color:darkcyan; border-radius: 199px; width: 43px; height: 43px; text-align:center;">
-                                        👨‍💻
-                                    </h2>
-                                </div>
-                                <div>
-                                    <h2>
-                                        @item.User!.NickName
-                                    </h2>
-                                </div>
-                                <div>
-                                    @item.CreationDate
-                                </div>
-                            </td>
-                            <td class="comment-text-container">
-                                <div class="comment-text-area">
-                                    @item.Content!.Text!.ToString();
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <partial name="CommentPartial" model="item"/>
         }
     }
 </div>

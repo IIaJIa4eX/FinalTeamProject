@@ -1,36 +1,44 @@
 ﻿@model DatabaseConnector.Issue
 
-<div class="issue-container">
-    <div class="issue-content">
-        <table>
-            <thead>
-                <tr>
-                    <th>Issue Id</th>
-                    <th>User</th>
-                    <th>Issue</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        @Model.Id
-                    </td>
-                    <td>
-                        @Model.User.NickName
-                    </td>
-                    <td>
-                        @Model.Content.Text
-                    </td>
-                    <td>
-                        <a asp-controller="Administration" asp-action="Hide" method="Post" asp-route-issueId="@Model.Id" class="issue-button-hide">Hide</a>
-                    </td>
-                    <td>
-                        <a asp-controller="Issue" asp-action="Issue" asp-route-id="@Model.Id" class="issue-button-details">More</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+
+            
+<tbody>
+    <tr>
+        <td>
+            @Model.Id
+        </td>
+        <td>
+            @Model.User.NickName
+        </td>
+        <td>
+            @Model.Content.Text
+        </td>
+        <td>
+            @if (Model.Content.Text == "automated")
+            {
+                if (Model.IssueType == 1)
+                {
+                    <div>
+                        <a asp-controller="Post" asp-action="Index" asp-route-id="@Model.ContentText" method="Get">Post @Model.ContentText</a>
+                    </div>
+                }
+                else if (Model.IssueType == 2)
+                {
+                    <div>
+                        <a asp-controller="Post" asp-action="Comment" asp-route-id="@Model.ContentText" method="Get">Comment @Model.ContentText</a>
+                    </div>
+                }
+            }
+            else
+            {
+                @Model.ContentText;
+            }
+        </td>
+        <td>
+            <a asp-controller="Administration" asp-action="Hide" method="Post" asp-route-issueId="@Model.Id" class="issue-button-hide">Hide</a>
+        </td>
+        <td>
+            <a asp-controller="Issue" asp-action="Issue" asp-route-id="@Model.Id" class="issue-button-details">More</a>
+        </td>
+    </tr>
+</tbody>
