@@ -1,13 +1,10 @@
 ﻿@model IEnumerable<DatabaseConnector.User>
 
 @{
-    ViewData["Title"] = "Admin";
+    ViewData["Title"] = "Пользователи";
 }
-<h1>Admin</h1>
+<h1>Пользователи</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -64,7 +61,7 @@
                     @Html.DisplayFor(modelItem => item.UserRole)
                 </td>
                 <td>
-                    @Html.CheckBoxFor(modelItem => item.IsBanned)
+                    @Html.ValueFor(modelItem => item.IsBanned)
                 </td>
                 <td>
                     <a asp-controller="Admin" asp-action="Edit" method="Get" asp-route-id="@item.Id">Edit</a> |

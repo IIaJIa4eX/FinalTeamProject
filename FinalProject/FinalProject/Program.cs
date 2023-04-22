@@ -4,9 +4,11 @@ using FinalProject.Interfaces;
 using FinalProject.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NLog.Web;
 using System.Text;
 using System.Text.Json;
 
@@ -17,20 +19,20 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        //builder.Services.AddHttpLogging(logging =>
-        //{
-        //    logging.LoggingFields = HttpLoggingFields.All | HttpLoggingFields.RequestQuery;
-        //    logging.RequestBodyLogLimit = 4096;
-        //    logging.ResponseBodyLogLimit = 4096;
-        //    logging.RequestHeaders.Add("Authorization");
-        //    logging.RequestHeaders.Add("X-Real-IP");
-        //    logging.RequestHeaders.Add("X-Forwared-For");
-        //});
-        //builder.Host.ConfigureLogging(logging =>
-        //{
-        //    logging.ClearProviders();
-        //    logging.AddConsole();
-        //}).UseNLog(new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = true });
+        builder.Services.AddHttpLogging(logging =>
+        {
+            logging.LoggingFields = HttpLoggingFields.All | HttpLoggingFields.RequestQuery;
+            logging.RequestBodyLogLimit = 4096;
+            logging.ResponseBodyLogLimit = 4096;
+            logging.RequestHeaders.Add("Authorization");
+            logging.RequestHeaders.Add("X-Real-IP");
+            logging.RequestHeaders.Add("X-Forwared-For");
+        });
+        builder.Host.ConfigureLogging(logging =>
+        {
+            logging.ClearProviders();
+            logging.AddConsole();
+        }).UseNLog(new NLogAspNetCoreOptions() { RemoveLoggerFactoryFilter = true });
 
         if (File.Exists("dbcstring.json"))
         {
