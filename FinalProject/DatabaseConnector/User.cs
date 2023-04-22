@@ -35,10 +35,10 @@ public class User : IEntity
     public string? Email { get; set; }
 
     [StringLength(100)]
-    public string PasswordSalt { get; set; }
+    public string? PasswordSalt { get; set; }
 
     [StringLength(100)]
-    public string PasswordHash { get; set; }
+    public string? PasswordHash { get; set; }
 
     [Column]
     [StringLength(255)]

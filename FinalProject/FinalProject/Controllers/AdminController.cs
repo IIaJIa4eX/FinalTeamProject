@@ -1,7 +1,10 @@
 ﻿using DatabaseConnector;
+using DatabaseConnector.DTO;
 using FinalProject.DataBaseContext;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
+using System.Net.Http.Headers;
 
 namespace FinalProject.Controllers
 {
@@ -49,6 +52,14 @@ namespace FinalProject.Controllers
                 return Redirect("/Admin");
             }
             return BadRequest();
+        }
+
+        [Route("Details/{id}")]
+        [HttpGet]
+        public ActionResult Details([FromRoute] int id)
+        {
+            var user = _userRepository.Get(g => g.Id == id).FirstOrDefault();
+            return View(user);
         }
     }
 }

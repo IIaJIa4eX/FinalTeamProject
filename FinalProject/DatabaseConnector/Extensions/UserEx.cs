@@ -15,7 +15,8 @@ public static class UserEx
             IsBanned = user.IsBanned,
             LastName = user.LastName,
             NickName = user.NickName,
-            Patronymic = user.Patronymic
+            Patronymic = user.Patronymic,
+            UserRole = user.UserRole
         };
     }
 }
