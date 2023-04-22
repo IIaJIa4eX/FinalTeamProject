@@ -9,3 +9,7 @@
     position: center;
     margin: 25px 10% 25px 10%;
 }
+.post-card-text-fix {
+    overflow-wrap: initial break-word?important;
+    hyphens: initial auto?important;
+}

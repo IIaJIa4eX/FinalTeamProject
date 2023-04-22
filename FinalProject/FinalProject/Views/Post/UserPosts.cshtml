@@ -5,56 +5,8 @@
 <partial name="_AccountNavBarPartial"/>
 <div class="PostInMain">
     <div сlass="PostCard" id="posts-container">
-
-        @foreach (var item in Model)
-        {
-            <a type="button" class="text-decoration-none" asp-controller="Post" asp-action="Index" asp-route-id="@item.Id">
-                <div class="uk-card uk-card-default uk-grid-collapse uk-child-width-1-2@s uk-margin" uk-grid>
-                    <div class="uk-card-media-left uk-cover-container">
-                        <img src="~/imgs/examplephoto.jpeg" alt="" uk-cover>
-                        <canvas width="600" height="400"></canvas>
-                    </div>
-                    <div>
-                        <div class="uk-card-body">
-                            <div class="uk-width-auto">
-                                @*<img class="uk-border-circle" width="40" height="40" src="~/imgs/exampleprofilephoto.jpeg" alt="Avatar" >*@
-                                <h2 style="background-color:darkcyan; border-radius: 199px; width: 43px; height: 43px; text-align:center;">
-                                    👨‍💻
-                                </h2>
-                            </div>
-                            <div class="uk-width-expand">
-                                <h3 class="uk-card-title uk-margin-remove-bottom">@item.User.NickName</h3>
-                                <p class="uk-text-meta uk-margin-remove-top"><time datetime="2023-23-23T23:23">@item.CreationDate.ToString()</time></p>
-                            </div>
-                            <p>@Html.Raw(item.Content.Text)</p>
-                        </div>
-                    </div>
-                    <div class="uk-card-footer">
-                        <div class="CardFooter">
-                            <div class="Likes">
-                                <div>
-                                    <img src="~/icons/heart.png" width="20" height="20" />
-                                </div>
-                                <div>
-                                    <p style="text-align:center">@item.Rating.ToString() likes </p>
-                                </div>
-                            </div>
-                            <div class="Comments">
-                                <div>
-                                    <img src="~/icons/comment.png" width="20" height="20" />
-                                </div>
-                                <div>
-                                    <p style="text-align:center">@item.Comments.Count().ToString() comments </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
-
-        }
+        <partial name="/Views/Post/_UserPostsPartial.cshtml" model="@Model"/>
         <div id="loading-indicator"></div>
-
     </div>
 </div>
 

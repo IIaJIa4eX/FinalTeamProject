@@ -64,7 +64,7 @@ public class PostController : Controller
             content,
             Request.Headers[HeaderNames.Authorization]!
         );
-        return View(content);
+        return Redirect("/");
     }
 
     [HttpGet]
@@ -149,7 +149,7 @@ public class PostController : Controller
         return View(_postDataHandler.GetComment(id));
     }
 
-    [Route("/Hide/{id}")]
+    [Route("comment/Hide/{id}")]
     [UnAuthorizedRedirect]
     public IActionResult HideComment([FromRoute] int id)
     {
@@ -159,5 +159,12 @@ public class PostController : Controller
                 Redirect("/GetIssues") :
                 BadRequest();
     }
-
+    [Route("post/Hide/{id}")]
+    [UnAuthorizedRedirect]
+    public IActionResult HidePost([FromRoute] int id)
+    {
+        return _postDataHandler.HidePost(id)>0 ?
+                Redirect("/GetIssues") :
+                BadRequest();
+    }
 }
