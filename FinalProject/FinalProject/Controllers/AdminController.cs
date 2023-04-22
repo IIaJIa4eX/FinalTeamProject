@@ -61,5 +61,22 @@ namespace FinalProject.Controllers
             var user = _userRepository.Get(g => g.Id == id).FirstOrDefault();
             return View(user);
         }
+
+
+        [Route("Delete/{id}")]
+        [HttpGet]
+        public ActionResult Delete([FromRoute] int id)
+        {
+            var user = _userRepository.Get(g => g.Id == id).FirstOrDefault();
+            return View(user);
+        }
+
+        [Route("Delete/{id}")]
+        [HttpPost]
+        public ActionResult Delete([FromRoute] User user)
+        {
+            var delete = _userRepository.Remove(user);
+            return Redirect("/Admin");
+        }
     }
 }
