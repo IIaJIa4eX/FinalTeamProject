@@ -44,7 +44,7 @@ namespace FinalProject.Controllers
             if (!str.IsNullOrEmpty())
             {
                 var result = _postDataHandler.FindContent(str);
-                return View(result);
+                return result is not null && result.Count() > 0 ? View(result) : Redirect("/");
             }
             return Redirect("/");
         }
