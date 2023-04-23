@@ -1,5 +1,6 @@
 ﻿@model DatabaseConnector.DTO.Post.ContentDTO
 
+<partial name="_AccountNavBarPartial" />
 <h4>Подать жалобу</h4>
 <hr />
 <div class="row">
@@ -7,7 +8,7 @@
         <form asp-action="CreateIssue">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Text" class="control-label">Текст</label>
+                <label asp-for="Text" class="control-label"></label>
                 <input asp-for="Text" class="form-control" />
                 <span asp-validation-for="Text" class="text-danger"></span>
             </div>
@@ -19,6 +20,6 @@
 </div>
 
 <div>
-    <a asp-controller="AccountPage" asp-action="Details">Отмена</a>
+    <a asp-controller="AccountPage" asp-action="Details">Сбросить</a>
 </div>
 

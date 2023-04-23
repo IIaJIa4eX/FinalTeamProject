@@ -4,6 +4,7 @@ using DatabaseConnector.DTO.Post;
 using DatabaseConnector.Extensions;
 using FinalProject.DataBaseContext;
 using FinalProject.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 using System.Net.Http.Headers;
 
 namespace FinalProject.Services;
@@ -50,7 +51,17 @@ public class PostDataHandler
         {
             SessionInfo sessionInfo = _authenticateService.GetSessionInfo(headerValue.Parameter!);
             if (sessionInfo is not null)
+            {
                 postData.UserId = sessionInfo.Account.Id;
+                if (postData.Description.IsNullOrEmpty() ||
+                    postData.Description!.Contains("<script",StringComparison.OrdinalIgnoreCase)||
+                    postData.Description.Contains("<link", StringComparison.OrdinalIgnoreCase)||
+                    postData.Description.Contains("</script", StringComparison.OrdinalIgnoreCase) ||
+                    postData.Description.Contains("</link", StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+            }
             else
                 return false;
         }
@@ -135,22 +146,26 @@ public class PostDataHandler
     {
         try
         {
-            var post = _postRepository.FindById(content.PostId);
-            int commentId = _commentRepository.CreateAndGetId(new Comment
+            if (!string.IsNullOrWhiteSpace(content.Text))
             {
-                PostId = content.PostId,
-                CreationDate = content.CreationDate,
-                IsVisible = true,
-                ContentId = _contentRepository.CreateAndGetId(new Content
+                var post = _postRepository.FindById(content.PostId);
+                int commentId = _commentRepository.CreateAndGetId(new Comment
                 {
-                    CreationDate = DateTime.UtcNow,
+                    PostId = content.PostId,
+                    CreationDate = content.CreationDate,
                     IsVisible = true,
-                    Text = content.Text
-                }),
-                UserId = sessionInfo.Account.Id
-            });
-            post!.Comments.Add(_commentRepository.FindById(commentId)!);
-            return _postRepository.Update(post) > 0;
+                    ContentId = _contentRepository.CreateAndGetId(new Content
+                    {
+                        CreationDate = DateTime.UtcNow,
+                        IsVisible = true,
+                        Text = content.Text
+                    }),
+                    UserId = sessionInfo.Account.Id
+                });
+                post!.Comments.Add(_commentRepository.FindById(commentId)!);
+                return _postRepository.Update(post) > 0;
+            }
+            return false;
         }
         catch
         {
@@ -290,11 +305,7 @@ public class PostDataHandler
 
     public Comment? GetComment(int id)
     {
-        var comment = _commentRepository.FindById(id);
-        if (comment is not null)
-        {
-            comment.Content = _contentRepository.Get(c => c.Id == comment.ContentId).FirstOrDefault();
-        }
+        var comment = _commentRepository.GetWithInclude(i=>i.Id==id,c=>c.Content,u=>u.User).FirstOrDefault();
         return comment;
     }
     public int HidePost(int id)

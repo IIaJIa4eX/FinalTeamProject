@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using FinalProject.DataBaseContext;
 using FinalProject.Services;
 using MarketPracticingPlatform.Attributes;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FinalProject.Controllers
 {
@@ -35,14 +36,17 @@ namespace FinalProject.Controllers
         [Route("/[action]")]
         public IActionResult Categories()
         {
-        
             return View();
         }
 
         public IActionResult Search([FromForm] string str)
         {
-            var result = _postDataHandler.FindContent(str);
-            return View(result);
+            if (!str.IsNullOrEmpty())
+            {
+                var result = _postDataHandler.FindContent(str);
+                return View(result);
+            }
+            return Redirect("/");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

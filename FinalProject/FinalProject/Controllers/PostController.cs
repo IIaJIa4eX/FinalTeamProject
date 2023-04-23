@@ -110,7 +110,7 @@ public class PostController : Controller
         }
         if (_postDataHandler.AddComment(content, sessionInfo))
             return Redirect($"Post/{content.PostId}");
-        return View();
+        return Redirect($"Post/{content.PostId}");
     }
 
     [HttpPost]

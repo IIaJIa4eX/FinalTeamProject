@@ -1,10 +1,7 @@
 ﻿using DatabaseConnector;
-using DatabaseConnector.DTO;
 using FinalProject.DataBaseContext;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
-using System.Net.Http.Headers;
 
 namespace FinalProject.Controllers
 {
@@ -53,7 +50,6 @@ namespace FinalProject.Controllers
             }
             return BadRequest();
         }
-
         [Route("Details/{id}")]
         [HttpGet]
         public ActionResult Details([FromRoute] int id)
