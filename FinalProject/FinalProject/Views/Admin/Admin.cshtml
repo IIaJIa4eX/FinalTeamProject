@@ -3,11 +3,9 @@
 @{
     ViewData["Title"] = "Admin";
 }
-<h1>Admin</h1>
+<partial name="_AccountNavBarPartial" />
+<h1>Администрирование</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -67,9 +65,9 @@
                     @Html.CheckBoxFor(modelItem => item.IsBanned)
                 </td>
                 <td>
-                    <a asp-controller="Admin" asp-action="Edit" method="Get" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-controller="Admin" asp-action="Edit" method="Get" asp-route-id="@item.Id">Редактировать</a> |
+                    <a asp-controller="Admin" asp-action="Details" asp-route-id="@item.Id">Подробности</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
                 </td>
             </tr>
         }
