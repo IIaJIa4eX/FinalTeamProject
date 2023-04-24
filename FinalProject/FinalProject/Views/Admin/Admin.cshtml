@@ -62,7 +62,7 @@
                     @Html.DisplayFor(modelItem => item.UserRole)
                 </td>
                 <td>
-                    @Html.CheckBoxFor(modelItem => item.IsBanned)
+                    @Html.ValueFor(modelItem => item.IsBanned)
                 </td>
                 <td>
                     <a asp-controller="Admin" asp-action="Edit" method="Get" asp-route-id="@item.Id">Редактировать</a> |
