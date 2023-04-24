@@ -18,8 +18,8 @@ namespace FinalProject.Services
         {
  
             using IServiceScope scope = _serviceScopeFactory.CreateScope();
-            Context context = scope.ServiceProvider.GetService<Context>();
-            User email = context.Users.FirstOrDefault(x => x.Email.Equals(registrationRequest.Email));
+            Context context = scope.ServiceProvider.GetService<Context>()!;
+            User email = context.Users.FirstOrDefault(x => x.Email!.Equals(registrationRequest.Email))!;
             if (email != null)
             {
                 return new RegistrationResponse
@@ -28,7 +28,7 @@ namespace FinalProject.Services
                 };
             }
 
-            User nickNamefound = context.Users.FirstOrDefault(x => x.NickName.Equals(registrationRequest.Nickname));
+            User nickNamefound = context.Users.FirstOrDefault(x => x.NickName!.Equals(registrationRequest.Nickname))!;
             if (nickNamefound != null)
             {
                 return new RegistrationResponse
@@ -37,7 +37,7 @@ namespace FinalProject.Services
                 };
             }
 
-            (string passSalt, string passHash) result = PasswordUtils.CreatePasswordHash(registrationRequest.Password);
+            (string passSalt, string passHash) result = PasswordUtils.CreatePasswordHash(registrationRequest.Password!);
             User user = new User
             {
                 NickName = registrationRequest.Nickname,
