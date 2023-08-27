@@ -1,32 +1,46 @@
-﻿using FinalProject.Models;
+using System;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
+using FinalProject.DataBaseContext;
+using FinalProject.Services;
 
 namespace FinalProject.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : Controller  //если удалите, то никакого Index page не будет
     {
-        private readonly ILogger<HomeController> _logger;
+        PostDataHandler _postDataHandler;
 
-        public HomeController(ILogger<HomeController> logger)
+        #region Constructor
+
+        public HomeController(PostDataHandler postDataHandler)
         {
-            _logger = logger;
+            _postDataHandler = postDataHandler;
         }
 
-        public IActionResult Index()
+        #endregion
+
+
+        public IActionResult Index(string creationDate, string category, int skip)
         {
-            return View();
+            var posts = _postDataHandler.GetPostsByCategory(creationDate, category, skip);
+
+            return View(posts);
         }
 
-        public IActionResult Privacy()
+        [Authorize]
+        [HttpGet]
+        [Route("/[action]")]
+        public IActionResult Categories()
         {
             return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error()  //это страница с ошибками, ее можно убрать
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
         }
     }
 }
+
